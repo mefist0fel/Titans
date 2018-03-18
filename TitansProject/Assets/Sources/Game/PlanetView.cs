@@ -43,11 +43,11 @@ public sealed class PlanetView : MonoBehaviour {
     private ResourcePointView SpawnPoint(ResourcePointView resourcePointPrefab) {
         var point = Instantiate(resourcePointPrefab);
         point.transform.parent = transform;
-        point.transform.position = GetRandomPosition(Radius);
+        point.transform.position = GetRandomPosition();
         return point;
     }
 
-    private Vector3 GetRandomPosition(float radius) {
+    public Vector3 GetRandomPosition() {
         Vector3 point;
         do {
             point = new Vector3(
@@ -55,7 +55,7 @@ public sealed class PlanetView : MonoBehaviour {
                 Random.Range(-1f, 1f),
                 Random.Range(-1f, 1f));
         } while (point.magnitude > 1f);
-        return point.normalized * radius;
+        return point.normalized * Radius;
     }
 
     private Dictionary<int, ResourcePointView> GetPointsDistribution(List<GenerationFrequency> generationPreset, out int maxFrequency) {

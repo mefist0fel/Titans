@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class CameraController : MonoBehaviour {
+public sealed class CameraController : MonoBehaviour {
+    private static CameraController Instance;
+
     [SerializeField]
     private float speed = 10f;
     [SerializeField]
@@ -18,9 +21,16 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    private void Start () {
-		
-	}
+    public static void SetViewToTitan(Vector3 position) {
+        if (Instance != null) {
+            Instance.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
+            Instance.SetRotation();
+        }
+    }
+
+    private void Awake () {
+        Instance = this;
+    }
 	
 	private void Update () {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
@@ -41,6 +51,10 @@ public class CameraController : MonoBehaviour {
         if (Input.GetKey(KeyCode.E)) {
             Rotate(Vector3.up, AngularSpeed);
         }
+        SetRotation();
+    }
+
+    private void SetRotation() {
         transform.position = rotation * Vector3.up * planet.Radius;
         transform.rotation = rotation * cameraViewRotation;
     }
