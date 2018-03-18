@@ -36,7 +36,7 @@ public sealed class CameraController : MonoBehaviour {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
             Rotate(Vector3.left, -AngularSpeed);
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.UpArrow)) {
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
             Rotate(Vector3.left, AngularSpeed);
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {

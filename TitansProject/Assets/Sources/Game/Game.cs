@@ -10,6 +10,9 @@ public class Game : MonoBehaviour {
     [SerializeField]
     private PlanetView planet; // Set from editor
 
+    [SerializeField]
+    private Camera mainCamera; // Set from editor
+
     private Faction[] factions;
 
     private void Awake() {
@@ -32,6 +35,11 @@ public class Game : MonoBehaviour {
     }
 
     private void Update () {
-		
+        if (Input.GetMouseButtonDown(0)) {
+            Vector3 clickPosition;
+            if (planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition)) {
+                factions[0].units[0].OnMoveClick(clickPosition);
+            }
+        }
 	}
 }

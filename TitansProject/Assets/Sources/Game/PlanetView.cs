@@ -7,6 +7,8 @@ public sealed class PlanetView : MonoBehaviour {
     [SerializeField]
     private float radius = 10;
     [SerializeField]
+    private SphereCollider sphereCollider;
+    [SerializeField]
     private int resourcePointsCount = 60;
     [SerializeField]
     private List<ResourcePointView> resourcePoints = new List<ResourcePointView>();
@@ -24,6 +26,20 @@ public sealed class PlanetView : MonoBehaviour {
     private void Start() {
         Random.InitState(System.DateTime.UtcNow.Millisecond);
         SpawnPoints(resourcePointsCount);
+        if (sphereCollider == null) {
+            sphereCollider = gameObject.AddComponent<SphereCollider>();
+        }
+        sphereCollider.radius = Radius;
+    }
+
+    public bool GetSurfacePoint(Ray ray, out Vector3 clickPosition) {
+        RaycastHit hit;
+        clickPosition = Vector3.zero;
+        if (sphereCollider.Raycast(ray, out hit, 20)) {
+            clickPosition = hit.point;
+            return true;
+        }
+        return false;
     }
 
     private void SpawnPoints(int count) {
