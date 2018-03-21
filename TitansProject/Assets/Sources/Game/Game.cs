@@ -33,7 +33,7 @@ public class Game : MonoBehaviour {
         var titan = Instantiate(Resources.Load<TitanView>(prefabName), transform);
         return titan;
     }
-
+    
     private void Update () {
         if (Input.GetMouseButtonDown(0)) {
             Vector3 clickPosition;

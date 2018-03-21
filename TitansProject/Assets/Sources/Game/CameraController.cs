@@ -12,6 +12,8 @@ public sealed class CameraController : MonoBehaviour {
     [SerializeField]
     private PlanetView planet; // Set from editor
     [SerializeField]
+    private Camera mainCamera; // Set from editor
+    [SerializeField]
     private Quaternion cameraViewRotation = Quaternion.Euler(60, 0, 0);
 
     private Quaternion rotation = Quaternion.identity;
@@ -31,8 +33,25 @@ public sealed class CameraController : MonoBehaviour {
     private void Awake () {
         Instance = this;
     }
-	
-	private void Update () {
+    
+    Vector3 prevPosition;
+    private void Update () {
+        if (Input.GetMouseButtonDown(1)) {
+            prevPosition = Input.mousePosition;
+        }
+        if (Input.GetMouseButton(1)) {
+            Vector3 prevClickPosition;
+            Vector3 clickPosition;
+            if (
+                planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition) &&
+                planet.GetSurfacePoint(mainCamera.ScreenPointToRay(prevPosition), out prevClickPosition)) {
+                var moveAxe = -Utils.GetNormal(prevClickPosition, clickPosition, Vector3.zero);
+                var angle = Vector3.Angle(prevClickPosition, clickPosition);
+                rotation = Quaternion.AngleAxis(angle, moveAxe) * rotation;
+            }
+            prevPosition = Input.mousePosition;
+        }
+
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
             Rotate(Vector3.left, -AngularSpeed);
         }
