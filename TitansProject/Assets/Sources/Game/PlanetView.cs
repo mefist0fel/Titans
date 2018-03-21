@@ -42,6 +42,18 @@ public sealed class PlanetView : MonoBehaviour {
         return false;
     }
 
+    public bool FindResourcePointClick(Vector3 clickPosition, out ResourcePointView resourcePoint) {
+        const float pointMaxDistance = 0.5f;
+        resourcePoint = null;
+        foreach (var point in resourcePoints) {
+            if (Vector3.Distance(point.transform.position, clickPosition) < pointMaxDistance) {
+                resourcePoint = point;
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void SpawnPoints(int count) {
         foreach (var point in resourcePoints) {
             if (point != null) {
@@ -59,7 +71,8 @@ public sealed class PlanetView : MonoBehaviour {
     private ResourcePointView SpawnPoint(ResourcePointView resourcePointPrefab) {
         var point = Instantiate(resourcePointPrefab);
         point.transform.parent = transform;
-        point.transform.position = GetRandomPosition();
+        point.transform.localPosition = GetRandomPosition();
+        point.transform.localRotation = Quaternion.LookRotation(point.transform.localPosition) * Quaternion.Euler(90, 0, 0);
         return point;
     }
 

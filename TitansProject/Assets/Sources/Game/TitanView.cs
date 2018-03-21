@@ -22,7 +22,6 @@ public sealed class TitanView : MonoBehaviour {
     public interface IAction {
     }
 
-
     public sealed class MoveAction : IAction {
         public readonly Vector3 Position;
         public MoveAction(Vector3 position) {
@@ -30,13 +29,24 @@ public sealed class TitanView : MonoBehaviour {
         }
     }
 
-    public void AddMovePoint(Vector3 position) {
-
+    public sealed class ResourceAction : IAction {
+        public readonly ResourcePointView ResourcePoint;
+        public ResourceAction(ResourcePointView point) {
+            ResourcePoint = point;
+        }
     }
 
-    public void OnMoveClick(Vector3 targetPosition) {
+    public void AddResourceTask(ResourcePointView resourcePoint) {
+        Debug.LogError("Res point!");
+        actions.Add(new MoveAction(resourcePoint.transform.position));
+        actions.Add(new ResourceAction(resourcePoint));
+        if (actions.Count >= 1)
+            StartNewAction(CurrentAction);
+    }
+
+    public void AddMoveTask(Vector3 targetPosition) {
         actions.Add(new MoveAction(targetPosition));
-        if (actions.Count == 1)
+        if (actions.Count >= 1)
             StartNewAction(CurrentAction);
     }
 

@@ -38,7 +38,12 @@ public class Game : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Vector3 clickPosition;
             if (planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition)) {
-                factions[0].units[0].OnMoveClick(clickPosition);
+                ResourcePointView resourcePoint;
+                if (planet.FindResourcePointClick(clickPosition, out resourcePoint)) {
+                    factions[0].units[0].AddResourceTask(resourcePoint);
+                } else {
+                    factions[0].units[0].AddMoveTask(clickPosition);
+                }
             }
         }
 	}
