@@ -13,6 +13,9 @@ public class Game : MonoBehaviour {
     [SerializeField]
     public GameUI gameUI; // Set from editor
 
+    [SerializeField]
+    public TitanMoveMarkers MoveController; // Set from editor
+
     private Faction[] factions;
 
     private void Awake() {
@@ -25,10 +28,13 @@ public class Game : MonoBehaviour {
             new Faction(0),
             new Faction(1)
         };
-        factions[0].AddUnit(CreateTitan("Prefabs/titan"), planet.GetRandomPosition());
+        var position = planet.GetRandomPosition();
+        factions[0].AddUnit(CreateTitan("Prefabs/titan"), position);
+        factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(5f, 0, 0) * position);
         factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
         CameraController.SetViewToTitan(factions[0].units[0].transform.position);
         factions[0].units[0].OnSelect();
+        MoveController.SelectTitan(factions[0].units[0]);
     }
 
     private TitanView CreateTitan(string prefabName) {
