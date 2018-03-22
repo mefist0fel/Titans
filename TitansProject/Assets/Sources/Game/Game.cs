@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour {
@@ -12,6 +9,9 @@ public class Game : MonoBehaviour {
 
     [SerializeField]
     private Camera mainCamera; // Set from editor
+
+    [SerializeField]
+    public GameUI gameUI; // Set from editor
 
     private Faction[] factions;
 

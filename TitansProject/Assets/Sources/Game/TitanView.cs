@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     public float speed = 2;
+    [SerializeField]
+    public float resourceCollectionTime = 1f;
 
     private Faction faction;
     private PlanetView planet;
@@ -37,7 +39,6 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public void AddResourceTask(ResourcePointView resourcePoint) {
-        Debug.LogError("Res point!");
         actions.Add(new MoveAction(resourcePoint.transform.position));
         actions.Add(new ResourceAction(resourcePoint));
         if (actions.Count >= 1)
@@ -67,11 +68,26 @@ public sealed class TitanView : MonoBehaviour {
         if (currentAction is MoveAction) {
             ProcessMove();
         }
+        if (currentAction is ResourceAction) {
+            ProcessResourceCollection();
+        }
+    }
+
+    private void ProcessResourceCollection() {
+        if (actionTimer <= 0) {
+            actions.RemoveAt(0);
+            StartNewAction(CurrentAction);
+            return;
+        }
+        actionTimer -= Time.deltaTime;
     }
 
     private void StartNewAction(IAction currentAction) {
         if (currentAction is MoveAction) {
             CalculateMoveTask(currentAction as MoveAction);
+        }
+        if (currentAction is ResourceAction) {
+            actionTimer = resourceCollectionTime;
         }
     }
 
@@ -82,24 +98,25 @@ public sealed class TitanView : MonoBehaviour {
         angle = Vector3.Angle(startPosition, endPosition);
         float distance = angle / 180f * Mathf.PI * 2f * 10f;
         moveTime = distance / speed;
-        moveTimer = moveTime;
+        actionTimer = moveTime;
     }
 
     Vector3 endPosition;
     Vector3 moveAxe;
-    float moveTimer = 0;
+    float actionTimer = 0;
     float moveTime = 0;
     float angle;
     Quaternion currentPosition;
     Quaternion needPosition;
 
     private void ProcessMove() {
-        if (moveTimer <= 0) {
+        if (actionTimer <= 0) {
             actions.RemoveAt(0);
             StartNewAction(CurrentAction);
+            return;
         }
-        moveTimer -= Time.deltaTime;
-        var rotation = Quaternion.AngleAxis(angle * moveTimer / moveTime, moveAxe);
+        actionTimer -= Time.deltaTime;
+        var rotation = Quaternion.AngleAxis(angle * actionTimer / moveTime, moveAxe);
         transform.localPosition = rotation * endPosition;
         transform.rotation = Quaternion.LookRotation(rotation * endPosition) * Quaternion.Euler(90, 0, 0);
     }
