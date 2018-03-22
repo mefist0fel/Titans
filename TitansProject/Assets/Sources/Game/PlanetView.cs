@@ -46,6 +46,8 @@ public sealed class PlanetView : MonoBehaviour {
         const float pointMaxDistance = 0.5f;
         resourcePoint = null;
         foreach (var point in resourcePoints) {
+            if (point == null)
+                continue; // TODO remove empty points
             if (Vector3.Distance(point.transform.position, clickPosition) < pointMaxDistance) {
                 resourcePoint = point;
                 return true;

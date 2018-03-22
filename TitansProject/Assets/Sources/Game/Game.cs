@@ -20,6 +20,7 @@ public class Game : MonoBehaviour {
     }
 
     private void Start () {
+        gameUI.SetStatusText(string.Empty);
         factions = new Faction[] {
             new Faction(0),
             new Faction(1)
@@ -27,6 +28,7 @@ public class Game : MonoBehaviour {
         factions[0].AddUnit(CreateTitan("Prefabs/titan"), planet.GetRandomPosition());
         factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
         CameraController.SetViewToTitan(factions[0].units[0].transform.position);
+        factions[0].units[0].OnSelect();
     }
 
     private TitanView CreateTitan(string prefabName) {

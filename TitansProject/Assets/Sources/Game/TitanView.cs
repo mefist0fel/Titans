@@ -7,7 +7,10 @@ public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     public float speed = 2;
     [SerializeField]
-    public float resourceCollectionTime = 1f;
+    public float resourceCollectionTime = 0.5f;
+
+    public int Lives = 10;
+    public int ResourceUnits = 0;
 
     private Faction faction;
     private PlanetView planet;
@@ -21,8 +24,11 @@ public sealed class TitanView : MonoBehaviour {
         }
     }
 
-    public interface IAction {
+    public void OnSelect() {
+        UpdateUI();
     }
+
+    public interface IAction {}
 
     public sealed class MoveAction : IAction {
         public readonly Vector3 Position;
@@ -62,19 +68,32 @@ public sealed class TitanView : MonoBehaviour {
         if (CurrentAction != null) {
             ProcessCurrentAction(CurrentAction);
         }
-	}
+    }
+
+    private void UpdateUI() {
+        Game.Instance.gameUI.SetStatusText("M: " + ResourceUnits);
+    }
 
     private void ProcessCurrentAction(IAction currentAction) {
         if (currentAction is MoveAction) {
             ProcessMove();
         }
         if (currentAction is ResourceAction) {
-            ProcessResourceCollection();
+            ProcessResourceCollection(currentAction as ResourceAction);
         }
     }
 
-    private void ProcessResourceCollection() {
+    private void ProcessResourceCollection(ResourceAction data) {
         if (actionTimer <= 0) {
+            if (data.ResourcePoint != null && data.ResourcePoint.Count > 0) {
+                data.ResourcePoint.Collect();
+                ResourceUnits += 1;
+                UpdateUI();
+                actionTimer = resourceCollectionTime;
+                if (data.ResourcePoint.Count > 0) {
+                    return;
+                }
+            }
             actions.RemoveAt(0);
             StartNewAction(CurrentAction);
             return;
@@ -116,7 +135,13 @@ public sealed class TitanView : MonoBehaviour {
             return;
         }
         actionTimer -= Time.deltaTime;
-        var rotation = Quaternion.AngleAxis(angle * actionTimer / moveTime, moveAxe);
+        if (actionTimer < 0)
+            actionTimer = 0;
+        AnimateMove(actionTimer / moveTime);
+    }
+
+    private void AnimateMove(float backTime) {
+        var rotation = Quaternion.AngleAxis(angle * backTime, moveAxe);
         transform.localPosition = rotation * endPosition;
         transform.rotation = Quaternion.LookRotation(rotation * endPosition) * Quaternion.Euler(90, 0, 0);
     }
