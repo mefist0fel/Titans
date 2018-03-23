@@ -17,5 +17,6 @@ public sealed class Faction {
             return;
         units.Add(titanView);
         titanView.Init(this, position);
+        titanView.FactionId = ID;
     }
 }

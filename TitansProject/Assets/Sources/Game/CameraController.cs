@@ -36,10 +36,10 @@ public sealed class CameraController : MonoBehaviour {
     
     Vector3 prevPosition;
     private void Update () {
-        if (Input.GetMouseButtonDown(1)) {
+        if (Input.GetMouseButtonDown(0)) {
             prevPosition = Input.mousePosition;
         }
-        if (Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(0)) {
             Vector3 prevClickPosition;
             Vector3 clickPosition;
             if (

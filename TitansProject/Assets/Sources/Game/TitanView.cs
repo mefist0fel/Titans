@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[SelectionBase]
 public sealed class TitanView : MonoBehaviour {
     [SerializeField]
-    public float speed = 2;
+    public float Speed = 2;
     [SerializeField]
-    public float resourceCollectionTime = 0.5f;
+    public float ResourceCollectionTime = 0.5f;
+    [SerializeField]
+    public Collider TitanCollider; // Set from editor
+    [SerializeField]
+    public int FactionId; // Set from editor
 
     public int Lives = 10;
     public int ResourceUnits = 0;
@@ -15,6 +20,8 @@ public sealed class TitanView : MonoBehaviour {
     private Faction faction;
     private PlanetView planet;
     private List<IAction> actions = new List<IAction>();
+
+    private static TitanView selectedTitan = null;
 
     public IAction CurrentAction {
         get {
@@ -25,7 +32,15 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public void OnSelect() {
+        selectedTitan = this;
+        UpdatePath();
         UpdateUI();
+    }
+
+    private void UpdatePath() {
+        if (selectedTitan != this)
+            return;
+        Game.Instance.MoveController.ShowPathMarkers(this, GetPathPoints());
     }
 
     public interface IAction {}
@@ -35,6 +50,16 @@ public sealed class TitanView : MonoBehaviour {
         public MoveAction(Vector3 position) {
             Position = position;
         }
+    }
+
+    public List<Vector3> GetPathPoints() {
+        var points = new List<Vector3>();
+        foreach (var action in actions) {
+            var moveAction = action as MoveAction;
+            if (moveAction != null)
+                points.Add(moveAction.Position);
+        }
+        return points;
     }
 
     public sealed class ResourceAction : IAction {
@@ -55,6 +80,7 @@ public sealed class TitanView : MonoBehaviour {
         actions.Add(new MoveAction(targetPosition));
         if (actions.Count >= 1)
             StartNewAction(CurrentAction);
+        UpdatePath();
     }
 
     public void Init(PlanetView planetView) {
@@ -71,7 +97,10 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     private void UpdateUI() {
-        Game.Instance.gameUI.SetStatusText("M: " + ResourceUnits);
+        if (selectedTitan != this)
+            return;
+        string statusText = "L: " + Lives + "\n" + "M: " + ResourceUnits;
+        Game.Instance.gameUI.SetStatusText(statusText);
     }
 
     private void ProcessCurrentAction(IAction currentAction) {
@@ -89,7 +118,7 @@ public sealed class TitanView : MonoBehaviour {
                 data.ResourcePoint.Collect();
                 ResourceUnits += 1;
                 UpdateUI();
-                actionTimer = resourceCollectionTime;
+                actionTimer = ResourceCollectionTime;
                 if (data.ResourcePoint.Count > 0) {
                     return;
                 }
@@ -106,8 +135,9 @@ public sealed class TitanView : MonoBehaviour {
             CalculateMoveTask(currentAction as MoveAction);
         }
         if (currentAction is ResourceAction) {
-            actionTimer = resourceCollectionTime;
+            actionTimer = ResourceCollectionTime;
         }
+        UpdatePath();
     }
 
     private void CalculateMoveTask(MoveAction action) {
@@ -116,7 +146,7 @@ public sealed class TitanView : MonoBehaviour {
         moveAxe = -Utils.GetNormal(startPosition, endPosition, Vector3.zero);
         angle = Vector3.Angle(startPosition, endPosition);
         float distance = angle / 180f * Mathf.PI * 2f * 10f;
-        moveTime = distance / speed;
+        moveTime = distance / Speed;
         actionTimer = moveTime;
     }
 

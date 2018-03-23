@@ -157,6 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4907077700188412}
   - component: {fileID: 114969504688148672}
+  - component: {fileID: 135665513337117294}
   m_Layer: 0
   m_Name: titan
   m_TagString: Untagged
@@ -743,5 +744,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab13b4b752e52f43b08b53f74ffc25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  moveMarker: {fileID: 0}
+  Speed: 2
+  ResourceCollectionTime: 0.5
+  TitanCollider: {fileID: 0}
+  FactionId: 0
+  Lives: 10
+  ResourceUnits: 0
+--- !u!135 &135665513337117294
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1918265429243428}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
