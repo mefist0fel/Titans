@@ -29,6 +29,9 @@ public sealed class BulletController : MonoBehaviour {
         bullet.transform.position = from;
         bullet.gameObject.SetActive(true);
         var trail = bullet.GetComponent<TrailRenderer>();
+        if (trail != null) {
+            trail.Clear();
+        }
         Timer.Add(distance / speed,
             (anim) => {
                 float trajectory = (anim * 2f - 1f);
