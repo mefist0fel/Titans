@@ -58,7 +58,7 @@ public class TitanMoveMarkers : MonoBehaviour {
     private void HidePathMarkers() {
         foreach (var pathMarker in pathMarkersCache) {
             if (pathMarker != null) {
-                pathMarker.SetActive(true);
+                pathMarker.SetActive(false);
             }
         }
     }

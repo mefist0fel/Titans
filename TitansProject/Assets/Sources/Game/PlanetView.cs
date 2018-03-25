@@ -43,17 +43,19 @@ public sealed class PlanetView : MonoBehaviour {
     }
 
     public bool FindResourcePointClick(Vector3 clickPosition, out ResourcePointView resourcePoint) {
-        const float pointMaxDistance = 0.5f;
+        const float pointMaxDistance = 0.3f;
         resourcePoint = null;
+        var nearestDistance = 0f;
         foreach (var point in resourcePoints) {
             if (point == null)
                 continue; // TODO remove empty points
-            if (Vector3.Distance(point.transform.position, clickPosition) < pointMaxDistance) {
+            var distance = Vector3.Distance(point.transform.position, clickPosition);
+            if (distance < pointMaxDistance && (distance < nearestDistance || resourcePoint == null)) {
+                nearestDistance = distance;
                 resourcePoint = point;
-                return true;
             }
         }
-        return false;
+        return resourcePoint != null;
     }
 
     private void SpawnPoints(int count) {

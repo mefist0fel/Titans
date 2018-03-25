@@ -69,6 +69,10 @@ public sealed class TitanView : MonoBehaviour {
         }
     }
 
+    public void ClearTasks() {
+        actions.Clear();
+    }
+
     public void AddResourceTask(ResourcePointView resourcePoint) {
         actions.Add(new MoveAction(resourcePoint.transform.position));
         actions.Add(new ResourceAction(resourcePoint));

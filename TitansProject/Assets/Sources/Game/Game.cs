@@ -33,7 +33,7 @@ public class Game : MonoBehaviour {
         };
         var position = planet.GetRandomPosition();
         factions[0].AddUnit(CreateTitan("Prefabs/titan"), position);
-        factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(5f, 0, 0) * position);
+        factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(10f, 0, 0) * position);
         factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
         CameraController.SetViewToTitan(factions[0].units[0].transform.position);
 
@@ -66,6 +66,13 @@ public class Game : MonoBehaviour {
             }
         }
         if (Input.GetMouseButtonUp(1) && SelectedTitan != null) {
+            var isCommandsQueue = false;
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                isCommandsQueue = true;
+            }
+            if (!isCommandsQueue) {
+                SelectedTitan.ClearTasks();
+            }
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             Vector3 clickPosition;
             if (planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition)) {
