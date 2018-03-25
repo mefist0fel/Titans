@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class BulletController : MonoBehaviour {
@@ -29,6 +27,8 @@ public sealed class BulletController : MonoBehaviour {
         float height = distance * 0.3f;
         GameObject bullet = CreateBullon();
         bullet.transform.position = from;
+        bullet.gameObject.SetActive(true);
+        var trail = bullet.GetComponent<TrailRenderer>();
         Timer.Add(distance / speed,
             (anim) => {
                 float trajectory = (anim * 2f - 1f);
@@ -52,12 +52,11 @@ public sealed class BulletController : MonoBehaviour {
                 continue;
             }
             if (!bullet.activeSelf) {
-                bullet.SetActive(true);
                 return bullet;
             }
         }
         var newBullet = Instantiate<GameObject>(bulletPrefab, transform);
-        newBullet.SetActive(true);
+        newBullet.SetActive(false);
         bulletsCache.Add(newBullet);
         return newBullet;
     }
@@ -66,7 +65,6 @@ public sealed class BulletController : MonoBehaviour {
         Instance = this;
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}

@@ -8,7 +8,9 @@ public sealed class CameraController : MonoBehaviour {
     private static CameraController Instance;
 
     [SerializeField]
-    private float speed = 10f;
+    private float moveSpeed = 0.8f;
+    [SerializeField]
+    private float rotationSpeed = 120f;
     [SerializeField]
     private PlanetView planet; // Set from editor
     [SerializeField]
@@ -19,7 +21,7 @@ public sealed class CameraController : MonoBehaviour {
     private Quaternion rotation = Quaternion.identity;
     private float AngularSpeed {
         get {
-            return speed * 2 * Mathf.PI * planet.Radius;
+            return moveSpeed * 2 * Mathf.PI * planet.Radius;
         }
     }
 
@@ -65,10 +67,10 @@ public sealed class CameraController : MonoBehaviour {
             Rotate(Vector3.forward, -AngularSpeed);
         }
         if (Input.GetKey(KeyCode.Q)) {
-            Rotate(Vector3.up, -AngularSpeed);
+            Rotate(Vector3.up, -rotationSpeed);
         }
         if (Input.GetKey(KeyCode.E)) {
-            Rotate(Vector3.up, AngularSpeed);
+            Rotate(Vector3.up, rotationSpeed);
         }
         SetRotation();
     }
