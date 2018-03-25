@@ -111,8 +111,4 @@ public sealed class PlanetView : MonoBehaviour {
         }
         return point;
     }
-
-    void Update () {
-		
-	}
 }

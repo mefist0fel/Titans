@@ -5,8 +5,9 @@ using UnityEngine;
 
 public sealed class Faction {
     public readonly int ID;
-
-    public List<TitanView> units = new List<TitanView>();
+    public Faction EnemyFaction;
+    
+    public List<TitanView> Units = new List<TitanView>();
 
     public Faction(int id) {
         ID = id;
@@ -15,8 +16,7 @@ public sealed class Faction {
     public void AddUnit(TitanView titanView, Vector3 position) {
         if (titanView == null)
             return;
-        units.Add(titanView);
+        Units.Add(titanView);
         titanView.Init(this, position);
-        titanView.FactionId = ID;
     }
 }

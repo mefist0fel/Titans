@@ -31,11 +31,13 @@ public class Game : MonoBehaviour {
             new Faction(0),
             new Faction(1)
         };
+        factions[0].EnemyFaction = factions[1];
+        factions[1].EnemyFaction = factions[0];
         var position = planet.GetRandomPosition();
         factions[0].AddUnit(CreateTitan("Prefabs/titan"), position);
         factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(10f, 0, 0) * position);
-        factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
-        CameraController.SetViewToTitan(factions[0].units[0].transform.position);
+        factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), Quaternion.Euler(-10f, 0, 0) * position); //planet.GetRandomPosition());
+        CameraController.SetViewToTitan(factions[0].Units[0].transform.position);
 
         MoveController.HideSelection();
         //factions[0].units[0].OnSelect();

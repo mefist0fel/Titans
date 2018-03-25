@@ -6,18 +6,25 @@ using Random = UnityEngine.Random;
 [SelectionBase]
 public sealed class TitanView : MonoBehaviour {
     [SerializeField]
+    private Transform fireTransfom;
+    [SerializeField]
+    private Transform hitTransfom;
+    [SerializeField]
     public float Speed = 2;
     [SerializeField]
     public float ResourceCollectionTime = 0.5f;
+
     [SerializeField]
     public Collider TitanCollider; // Set from editor
-    [SerializeField]
-    public int FactionId; // Set from editor
 
-    public int Lives = 10;
-    public int ResourceUnits = 0;
+    public int FactionId;
+    public Faction SelfFaction;
 
-    private Faction faction;
+    public List<ITitanComponent> Components = new List<ITitanComponent>();
+
+    public int Shield = 10;
+    public int EnergyUnits = 0;
+
     private PlanetView planet;
     private List<IAction> actions = new List<IAction>();
 
@@ -28,6 +35,36 @@ public sealed class TitanView : MonoBehaviour {
             if (actions.Count > 0)
                 return actions[0];
             return null;
+        }
+    }
+
+    public Vector3 GetHitPosition() {
+        return hitTransfom.position + Random.insideUnitSphere * 0.1f;
+    }
+
+    public Vector3 GetFirePosition() {
+        return fireTransfom.position;
+    }
+
+    public void Hit(int damage) {
+        Shield -= damage;
+        if (Shield <= 0) {
+            Die();
+        }
+    }
+
+    private void Die() {
+        Debug.LogError("Oh, I'm dying");
+    }
+
+    public Vector3 Position {
+        get {
+            return transform.position;
+        }
+    }
+    public bool IsAlive {
+        get {
+            return Shield > 0;
         }
     }
 
@@ -91,7 +128,16 @@ public sealed class TitanView : MonoBehaviour {
         planet = planetView;
     }
 
+    public void Init(Faction faction, Vector3 position) {
+        SelfFaction = faction;
+        FactionId = faction.ID;
+        transform.localPosition = position;
+        transform.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
+    }
+
     private void Start () {
+        var weapon = TitanComponentFactory.AttachWeapon(this);
+        Components.Add(weapon);
     }
 
 	private void Update () {
@@ -103,7 +149,7 @@ public sealed class TitanView : MonoBehaviour {
     private void UpdateUI() {
         if (selectedTitan != this)
             return;
-        string statusText = "L: " + Lives + "\n" + "M: " + ResourceUnits;
+        string statusText = "Energy: " + EnergyUnits + "\n" + "Shield: " + Shield;
         Game.Instance.gameUI.SetStatusText(statusText);
     }
 
@@ -120,7 +166,7 @@ public sealed class TitanView : MonoBehaviour {
         if (actionTimer <= 0) {
             if (data.ResourcePoint != null && data.ResourcePoint.Count > 0) {
                 data.ResourcePoint.Collect();
-                ResourceUnits += 1;
+                EnergyUnits += 1;
                 UpdateUI();
                 actionTimer = ResourceCollectionTime;
                 if (data.ResourcePoint.Count > 0) {
@@ -178,11 +224,5 @@ public sealed class TitanView : MonoBehaviour {
         var rotation = Quaternion.AngleAxis(angle * backTime, moveAxe);
         transform.localPosition = rotation * endPosition;
         transform.rotation = Quaternion.LookRotation(rotation * endPosition) * Quaternion.Euler(90, 0, 0);
-    }
-
-    public void Init(Faction controlFaction, Vector3 position) {
-        faction = controlFaction;
-        transform.localPosition = position;
-        transform.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
     }
 }
