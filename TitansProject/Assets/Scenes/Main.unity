@@ -952,31 +952,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224094992675775886, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
+    - target: {fileID: 114316646554810416, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
         type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224094992675775886, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224094992675775886, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -50
-      objectReference: {fileID: 0}
-    - target: {fileID: 224815907210442404, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 114717871125771686, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
-        type: 2}
-      propertyPath: rocketsCount
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1492501326}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9287cc86b760ac648ba4ae4ec7b96a90, type: 2}
   m_IsPrefabParent: 0
@@ -1349,12 +1329,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1492501326 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114248108697566538, guid: 9287cc86b760ac648ba4ae4ec7b96a90,
-    type: 2}
-  m_PrefabInternal: {fileID: 1056010957}
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1572003339
 GameObject:
   m_ObjectHideFlags: 0
