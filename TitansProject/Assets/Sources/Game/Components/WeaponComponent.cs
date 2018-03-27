@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
@@ -9,7 +7,13 @@ public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
     [SerializeField]
     private float accuracy = 0.5f;
     [SerializeField]
-    private float reloadTime = 1f;
+    private int salvoCount = 3;
+    [SerializeField]
+    private float delayTime = 0.2f;
+    [SerializeField]
+    private float reloadTime = 1.5f;
+    [SerializeField]
+    private float reloadTimeRandomShift = 0.5f;
     [SerializeField]
     private float fireRadius = 2f;
     [SerializeField]
@@ -31,12 +35,17 @@ public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
 
     public void Fire(TitanView enemyTitan) {
         Vector3 up = (parentTitan.Position + enemyTitan.Position).normalized;
-        BulletController.Fire(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), up, () => {
-            if (UnityEngine.Random.Range(0f, 1f) < accuracy) {
-                enemyTitan.Hit(damage);
-            }
-        });
-        timer = reloadTime;
+        for (int i = 0; i < salvoCount; i++) {
+            float startTime = i * delayTime;
+            Timer.Add(0.001f + startTime, () => {
+                BulletController.Fire(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), up, () => {
+                    if (UnityEngine.Random.Range(0f, 1f) < accuracy) {
+                        enemyTitan.Hit(damage);
+                    }
+                });
+            });
+        }
+        timer = reloadTime + Random.Range(0f, reloadTimeRandomShift);
     }
 
     void Start () {

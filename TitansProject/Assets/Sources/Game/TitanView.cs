@@ -12,6 +12,8 @@ public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     private Material deathMaterial;
     [SerializeField]
+    private MeshRenderer ShieldMesh;
+    [SerializeField]
     public float Speed = 2;
     [SerializeField]
     public float ResourceCollectionTime = 0.5f;
@@ -24,7 +26,8 @@ public sealed class TitanView : MonoBehaviour {
 
     public List<ITitanComponent> Components = new List<ITitanComponent>();
 
-    public int Shield = 10;
+    public int Shield = 20;
+    public int HitPoints = 20;
     public int EnergyUnits = 0;
 
     private PlanetView planet;
@@ -40,6 +43,18 @@ public sealed class TitanView : MonoBehaviour {
         }
     }
 
+    public Vector3 Position {
+        get {
+            return transform.position;
+        }
+    }
+
+    public bool IsAlive {
+        get {
+            return HitPoints > 0;
+        }
+    }
+
     public Vector3 GetHitPosition() {
         return hitTransfom.position + Random.insideUnitSphere * 0.1f;
     }
@@ -49,8 +64,8 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public void Hit(int damage) {
-        Shield -= damage;
-        if (Shield <= 0) {
+        HitPoints -= damage;
+        if (HitPoints <= 0) {
             Die();
         }
         UpdateUI();
@@ -61,23 +76,13 @@ public sealed class TitanView : MonoBehaviour {
         if (this == selectedTitan) {
             selectedTitan = null;
         }
+        if (ShieldMesh != null)
+            ShieldMesh.gameObject.SetActive(false);
         UpdateUI();
         Game.Instance.MoveController.HideSelection();
         var renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (var renderer in renderers) {
             renderer.material = deathMaterial;
-        }
-    }
-
-    public Vector3 Position {
-        get {
-            return transform.position;
-        }
-    }
-
-    public bool IsAlive {
-        get {
-            return Shield > 0;
         }
     }
 
