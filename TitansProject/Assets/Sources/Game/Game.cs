@@ -67,7 +67,7 @@ public class Game : MonoBehaviour {
                 SelectTitan(selectedTitan);
             }
         }
-        if (Input.GetMouseButtonUp(1) && SelectedTitan != null) {
+        if (Input.GetMouseButtonUp(1) && SelectedTitan != null && SelectedTitan.IsAlive) {
             var isCommandsQueue = false;
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
                 isCommandsQueue = true;
@@ -89,11 +89,12 @@ public class Game : MonoBehaviour {
     }
 
     private void SelectTitan(TitanView titan) {
-        SelectedTitan = titan;
-        if (titan == null) {
+        if (titan == null || !titan.IsAlive) {
+            SelectedTitan = null;
             MoveController.HideSelection();
             return;
         }
+        SelectedTitan = titan;
         titan.OnSelect();
         MoveController.SelectTitan(titan);
     }

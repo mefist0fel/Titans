@@ -775,6 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireTransfom: {fileID: 4530818640335124}
   hitTransfom: {fileID: 4530818640335124}
+  deathMaterial: {fileID: 2100000, guid: 78c5bceb303baaa49b69ae0065ada339, type: 2}
   Speed: 2
   ResourceCollectionTime: 0.5
   TitanCollider: {fileID: 0}

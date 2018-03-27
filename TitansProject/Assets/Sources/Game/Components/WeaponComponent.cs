@@ -20,7 +20,7 @@ public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
 
     private float timer = 0;
 
-    public bool IsReady { get { return timer <= 0; } }
+    public bool IsReady { get { return timer <= 0 && parentTitan.IsAlive; } }
 
     public void Attach(TitanView titan) {
         parentTitan = titan;

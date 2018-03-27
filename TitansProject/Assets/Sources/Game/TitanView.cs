@@ -10,6 +10,8 @@ public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     private Transform hitTransfom;
     [SerializeField]
+    private Material deathMaterial;
+    [SerializeField]
     public float Speed = 2;
     [SerializeField]
     public float ResourceCollectionTime = 0.5f;
@@ -51,10 +53,20 @@ public sealed class TitanView : MonoBehaviour {
         if (Shield <= 0) {
             Die();
         }
+        UpdateUI();
     }
 
     private void Die() {
         Debug.LogError("Oh, I'm dying");
+        if (this == selectedTitan) {
+            selectedTitan = null;
+        }
+        UpdateUI();
+        Game.Instance.MoveController.HideSelection();
+        var renderers = GetComponentsInChildren<MeshRenderer>();
+        foreach (var renderer in renderers) {
+            renderer.material = deathMaterial;
+        }
     }
 
     public Vector3 Position {
@@ -62,6 +74,7 @@ public sealed class TitanView : MonoBehaviour {
             return transform.position;
         }
     }
+
     public bool IsAlive {
         get {
             return Shield > 0;
