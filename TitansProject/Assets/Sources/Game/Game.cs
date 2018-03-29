@@ -26,7 +26,7 @@ public class Game : MonoBehaviour {
     }
 
     private void Start () {
-        gameUI.SetStatusText(string.Empty);
+        gameUI.UpdateTitanStatus();
         factions = new Faction[] {
             new Faction(0),
             new Faction(1)
@@ -35,13 +35,29 @@ public class Game : MonoBehaviour {
         factions[1].EnemyFaction = factions[0];
         var position = planet.GetRandomPosition();
         factions[0].AddUnit(CreateTitan("Prefabs/titan"), position);
-        factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(10f, 0, 0) * position);
-        factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), Quaternion.Euler(-10f, 0, 0) * position); //planet.GetRandomPosition());
+        factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(20f, 0, 0) * position);
+        factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), Quaternion.Euler(-20f, 0, 0) * position); //planet.GetRandomPosition());
+        foreach (var faction in factions) {
+            foreach (var unit in faction.Units) {
+                unit.Init(planet);
+            }
+        }
         CameraController.SetViewToTitan(factions[0].Units[0].transform.position);
 
         MoveController.HideSelection();
         //factions[0].units[0].OnSelect();
         // MoveController.SelectTitan(factions[0].units[0]);
+    }
+
+    public static void SelectNextTitan() {
+        Instance.SelectNext();
+    }
+
+    private void SelectNext() {
+        if (SelectedTitan == null) {
+            SelectedTitan = factions[0].Units[0];
+        }
+        CameraController.MoveToTitan(SelectedTitan.Position);
     }
 
     private TitanView CreateTitan(string prefabName) {
@@ -75,7 +91,6 @@ public class Game : MonoBehaviour {
             if (!isCommandsQueue) {
                 SelectedTitan.ClearTasks();
             }
-            var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             Vector3 clickPosition;
             if (planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition)) {
                 ResourcePointView resourcePoint;
@@ -92,10 +107,12 @@ public class Game : MonoBehaviour {
         if (titan == null || !titan.IsAlive) {
             SelectedTitan = null;
             MoveController.HideSelection();
+            gameUI.SelectTitan();
             return;
         }
         SelectedTitan = titan;
-        titan.OnSelect();
         MoveController.SelectTitan(titan);
+        gameUI.SelectTitan(titan);
+        titan.OnSelect();
     }
 }

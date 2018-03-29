@@ -24,16 +24,17 @@ public sealed class TitanView : MonoBehaviour {
     public int FactionId;
     public Faction SelfFaction;
 
-    public List<ITitanComponent> Components = new List<ITitanComponent>();
+    // public List<ITitanComponent> Components = new List<ITitanComponent>();
+    WeaponComponent weapon;
+    RocketComponent rocketLauncher;
 
     public int Shield = 20;
-    public int HitPoints = 20;
+    public int Armor = 20;
     public int EnergyUnits = 0;
 
     private PlanetView planet;
     private List<IAction> actions = new List<IAction>();
-
-    private static TitanView selectedTitan = null;
+    private Action onUpdateAction = null;
 
     public IAction CurrentAction {
         get {
@@ -51,7 +52,7 @@ public sealed class TitanView : MonoBehaviour {
 
     public bool IsAlive {
         get {
-            return HitPoints > 0;
+            return Armor > 0;
         }
     }
 
@@ -63,22 +64,27 @@ public sealed class TitanView : MonoBehaviour {
         return fireTransfom.position;
     }
 
+    public void Subscribe(Action onChangeStateAction) {
+        onUpdateAction += onChangeStateAction;
+    }
+
+    public void UnSubscribe(Action onChangeState) {
+        onUpdateAction -= onChangeState;
+    }
+
     public void Hit(int damage) {
-        HitPoints -= damage;
-        if (HitPoints <= 0) {
+        Armor -= damage;
+        if (Armor <= 0) {
             Die();
         }
-        UpdateUI();
+        UpdateState();
     }
 
     private void Die() {
         Debug.LogError("Oh, I'm dying");
-        if (this == selectedTitan) {
-            selectedTitan = null;
-        }
         if (ShieldMesh != null)
             ShieldMesh.gameObject.SetActive(false);
-        UpdateUI();
+        UpdateState();
         Game.Instance.MoveController.HideSelection();
         var renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (var renderer in renderers) {
@@ -87,15 +93,16 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public void OnSelect() {
-        selectedTitan = this;
         UpdatePath();
-        UpdateUI();
     }
 
     private void UpdatePath() {
-        if (selectedTitan != this)
-            return;
         Game.Instance.MoveController.ShowPathMarkers(this, GetPathPoints());
+    }
+
+    private void UpdateState() {
+        if (onUpdateAction != null)
+            onUpdateAction();
     }
 
     public interface IAction {}
@@ -154,21 +161,15 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     private void Start () {
-        var weapon = TitanComponentFactory.AttachWeapon(this);
-        Components.Add(weapon);
+        //var weapon = TitanComponentFactory.AttachWeapon(this);
+        //Components.Add(weapon);
+        weapon = TitanComponentFactory.AttachWeapon(this);
     }
 
 	private void Update () {
         if (CurrentAction != null) {
             ProcessCurrentAction(CurrentAction);
         }
-    }
-
-    private void UpdateUI() {
-        if (selectedTitan != this)
-            return;
-        string statusText = "Energy: " + EnergyUnits + "\n" + "Shield: " + Shield;
-        Game.Instance.gameUI.SetStatusText(statusText);
     }
 
     private void ProcessCurrentAction(IAction currentAction) {
@@ -185,7 +186,7 @@ public sealed class TitanView : MonoBehaviour {
             if (data.ResourcePoint != null && data.ResourcePoint.Count > 0) {
                 data.ResourcePoint.Collect();
                 EnergyUnits += 1;
-                UpdateUI();
+                UpdateState();
                 actionTimer = ResourceCollectionTime;
                 if (data.ResourcePoint.Count > 0) {
                     return;
@@ -213,7 +214,7 @@ public sealed class TitanView : MonoBehaviour {
         endPosition = action.Position;
         moveAxe = -Utils.GetNormal(startPosition, endPosition, Vector3.zero);
         angle = Vector3.Angle(startPosition, endPosition);
-        float distance = angle / 180f * Mathf.PI * 2f * 10f;
+        float distance = angle / 180f * Mathf.PI * 2f * planet.Radius;
         moveTime = distance / Speed;
         actionTimer = moveTime;
     }

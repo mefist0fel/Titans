@@ -32,6 +32,20 @@ public sealed class CameraController : MonoBehaviour {
         }
     }
 
+    public static void MoveToTitan(Vector3 endPosition) {
+        if (Instance != null) {
+            var startPosition = Instance.transform.position;
+            var startRotation = Instance.rotation;
+            var moveAxe = -Utils.GetNormal(endPosition, startPosition, Vector3.zero);
+            var angle = Vector3.Angle(endPosition, startPosition);
+
+            Timer.Add(0.5f,
+                (anim) => {
+                    Instance.rotation = Quaternion.AngleAxis(angle * anim, moveAxe) * startRotation;
+                });
+        }
+    }
+
     private void Awake () {
         Instance = this;
     }

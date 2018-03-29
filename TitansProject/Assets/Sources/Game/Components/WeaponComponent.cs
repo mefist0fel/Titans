@@ -16,8 +16,6 @@ public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
     private float reloadTimeRandomShift = 0.5f;
     [SerializeField]
     private float fireRadius = 2f;
-    [SerializeField]
-    private float aimTime = 1f;
 
     private TitanView enemyTitan;
     private TitanView parentTitan;
