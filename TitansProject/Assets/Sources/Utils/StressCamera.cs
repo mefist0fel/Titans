@@ -1,7 +1,6 @@
 using UnityEngine;
-using System.Collections;
 
-public class StressCamera : MonoBehaviour {
+public sealed class StressCamera : MonoBehaviour {
 	const float DEFAULT_STRESS_TIME = 1f;
 	public static StressCamera stressCamera;
 	

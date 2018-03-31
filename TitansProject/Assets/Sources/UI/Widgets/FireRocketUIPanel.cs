@@ -1,24 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class FireRocketUIPanel : MonoBehaviour {
     [SerializeField]
     private Button fireRocketButton; // Set from editor
     [SerializeField]
+    private Button cancelRocketButton; // Set from editor
+    [SerializeField]
     private Text rocketsCount; // Set from editor
 
+    private Action selectFireAction;
+    private Action cancelFireAction;
+
     public void OnFireRocketClick() { // Set from editor
-        Debug.LogError("OnFireRocket");
+        if (selectFireAction != null) {
+            selectFireAction();
+        }
     }
 
-	// Use this for initialization
-	private void Start () {
-        fireRocketButton.onClick.RemoveAllListeners();
-        fireRocketButton.onClick.AddListener(OnFireRocketClick);
+    public void OnCancelRocketClick() { // Set from editor
+        if (selectFireAction != null) {
+            selectFireAction();
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void Init(Action onSelectRocketStrike) {
+        selectFireAction = onSelectRocketStrike;
+    }
 }

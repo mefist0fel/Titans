@@ -59,8 +59,8 @@ public sealed class CameraController : MonoBehaviour {
             Vector3 prevClickPosition;
             Vector3 clickPosition;
             if (
-                planet.GetSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition) &&
-                planet.GetSurfacePoint(mainCamera.ScreenPointToRay(prevPosition), out prevClickPosition)) {
+                planet.RaycastSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition) &&
+                planet.RaycastSurfacePoint(mainCamera.ScreenPointToRay(prevPosition), out prevClickPosition)) {
                 var moveAxe = -Utils.GetNormal(prevClickPosition, clickPosition, Vector3.zero);
                 var angle = Vector3.Angle(prevClickPosition, clickPosition);
                 rotation = Quaternion.AngleAxis(angle, moveAxe) * rotation;

@@ -10,7 +10,11 @@ public class GameUI : MonoBehaviour {
     private FireRocketUIPanel fireRocketPanel; // Set from editor
 
     private TitanView selectedTitan;
-    
+
+    private void Start() {
+        fireRocketPanel.Init(Game.OnSelectRocketStrike);
+    }
+
     public void SelectTitan(TitanView titan = null) {
         if (selectedTitan != null) {
             selectedTitan.UnSubscribe(UpdateTitanStatus);

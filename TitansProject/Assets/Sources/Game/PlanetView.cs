@@ -32,7 +32,7 @@ public sealed class PlanetView : MonoBehaviour {
         sphereCollider.radius = Radius;
     }
 
-    public bool GetSurfacePoint(Ray ray, out Vector3 clickPosition) {
+    public bool RaycastSurfacePoint(Ray ray, out Vector3 clickPosition) {
         RaycastHit hit;
         clickPosition = Vector3.zero;
         if (sphereCollider.Raycast(ray, out hit, 20)) {
