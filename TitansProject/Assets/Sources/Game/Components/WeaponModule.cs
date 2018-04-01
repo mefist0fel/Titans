@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class WeaponComponent : MonoBehaviour, ITitanComponent {
+public sealed class WeaponWeaponModule : MonoBehaviour, ITitanModule {
     [SerializeField]
     private int damage = 1;
     [SerializeField]

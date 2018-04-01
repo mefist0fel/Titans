@@ -14,7 +14,17 @@ public sealed class ExplosionView : MonoBehaviour {
     private float radius = 1f;
 
 
-    public static ExplosionView Explode(Vector3 position, float radius, int damage) {
+    public static ExplosionView Explode(Vector3 position, float radius, int damage = 0) {
+        if (damage > 0) {
+            HitUnits(position, radius, damage);
+            StressCamera.Stress();
+        }
+        var explosion = Instantiate(Resources.Load<ExplosionView>("Prefabs/Explosion"));
+        explosion.Init(position, radius);
+        return explosion;
+    }
+
+    private static void HitUnits(Vector3 position, float radius, int damage) {
         foreach (var faction in Game.Instance.Factions) {
             foreach (var unit in faction.Units) {
                 if (unit == null || !unit.IsAlive)
@@ -24,10 +34,6 @@ public sealed class ExplosionView : MonoBehaviour {
                 }
             }
         }
-        StressCamera.Stress();
-        var explosion = Instantiate(Resources.Load<ExplosionView>("Prefabs/Explosion"));
-        explosion.Init(position, radius);
-        return explosion;
     }
 
     private void Init(Vector3 position, float maxRadius) {

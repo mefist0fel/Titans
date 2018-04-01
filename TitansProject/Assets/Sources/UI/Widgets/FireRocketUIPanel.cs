@@ -29,7 +29,7 @@ public class FireRocketUIPanel : MonoBehaviour {
         selectFireAction = onSelectRocketStrike;
     }
 
-    public void UpdatePanel(RocketComponent rocketLauncher) {
+    public void UpdatePanel(RocketLauncherModule rocketLauncher) {
         rocketsCount.text = rocketLauncher.RocketCount.ToString();
     }
 }

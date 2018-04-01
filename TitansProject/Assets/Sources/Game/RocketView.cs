@@ -7,6 +7,8 @@ public sealed class RocketView : MonoBehaviour {
     [SerializeField]
     public float Speed = 20f;
 
+    public int FactionId { get; private set;}
+
     private float radius;
     private int damage;
 
@@ -18,17 +20,21 @@ public sealed class RocketView : MonoBehaviour {
     private Vector3 moveAxe;
     private PlanetView planet;
 
-    public static void Fire(Vector3 startPosition, Vector3 endPosition, PlanetView planet, int damage, float radius) {
+    public Vector3 Position { get { return transform.position; } }
+
+    public static List<RocketView> RocketsList = new List<RocketView>();
+
+    public static void Fire(Vector3 startPosition, Vector3 endPosition, PlanetView planet, int damage, float radius, int factionId) {
         var rocket = Instantiate(Resources.Load<RocketView>("Prefabs/Rocket"));
-        rocket.Init(startPosition, endPosition, planet, damage, radius);
+        rocket.Init(startPosition, endPosition, planet, damage, radius, factionId);
     }
 
-    private void Init(Vector3 startPosition, Vector3 endPosition, PlanetView controlPlanet, int damage, float radius) {
+    private void Init(Vector3 startPosition, Vector3 endPosition, PlanetView controlPlanet, int damage, float radius, int factionId) {
         planet = controlPlanet;
         this.damage = damage;
         this.radius = radius;
-        var start = startPosition;
         this.endPosition = endPosition;
+        FactionId = factionId;
         moveAxe = -Utils.GetNormal(startPosition, endPosition, Vector3.zero);
         angle = Vector3.Angle(startPosition, endPosition);
         maxHeightProportional = Mathf.Min(0.3f, angle / 360f * 1f);
@@ -40,7 +46,7 @@ public sealed class RocketView : MonoBehaviour {
             trail.Clear();
     }
 	
-	void Update () {
+	public void Update () {
         if (timer <= 0)
             return;
         timer -= Time.deltaTime;
@@ -49,6 +55,21 @@ public sealed class RocketView : MonoBehaviour {
             Explode();
         }
         AnimateMove(timer / fullTime);
+    }
+
+    public void Intercept() {
+        Destroy(gameObject, 0.3f);
+        Destroy(GetComponent<MeshFilter>(), 0.01f);
+        timer = -1;
+        ExplosionView.Explode(Position, 0.4f, damage);
+    }
+
+    private void Start() {
+        RocketsList.Add(this);
+    }
+
+    private void OnDestroy() {
+        RocketsList.Remove(this);
     }
 
     private void Explode() {

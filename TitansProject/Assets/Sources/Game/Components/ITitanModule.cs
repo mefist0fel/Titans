@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface ITitanComponent {
+public interface ITitanModule {
     void Attach(TitanView titan);
     IInterfaceController[] GetInterfaceControllers();
     void Detach();

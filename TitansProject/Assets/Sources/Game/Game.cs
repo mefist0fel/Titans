@@ -18,7 +18,7 @@ public class Game : MonoBehaviour {
     public TitanMoveMarkers MoveController; // Set from editor
 
     public TitanView SelectedTitan = null;
-    public ITitanComponent SelectedTitanComponent = null;
+    public ITitanModule SelectedTitanComponent = null;
 
     public Faction[] Factions;
 

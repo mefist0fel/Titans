@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class RocketComponent : MonoBehaviour, ITitanComponent {
+public sealed class RocketLauncherModule : MonoBehaviour, ITitanModule {
     [SerializeField]
     public int Damage = 5;
     [SerializeField]
@@ -18,7 +18,7 @@ public sealed class RocketComponent : MonoBehaviour, ITitanComponent {
             return;
         RocketCount -= 1;
         titan.UpdateState();
-        RocketView.Fire(transform.position, fireCoord, planet, Damage, Radius);
+        RocketView.Fire(transform.position, fireCoord, planet, Damage, Radius, titan.FactionId);
     }
 
     public void Attach(TitanView titanView) {

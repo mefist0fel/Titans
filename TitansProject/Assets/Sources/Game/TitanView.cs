@@ -24,9 +24,12 @@ public sealed class TitanView : MonoBehaviour {
     public int FactionId;
     public Faction SelfFaction;
 
-    // public List<ITitanComponent> Components = new List<ITitanComponent>();
-    public WeaponComponent Weapon;
-    public RocketComponent RocketLauncher;
+    [SerializeField]
+    public WeaponWeaponModule Weapon; // Set from editor
+    [SerializeField]
+    public RocketLauncherModule RocketLauncher; // Set from editor
+    [SerializeField]
+    public AntiAirLaserModule AntiAir; // Set from editor
 
     public int Shield = 20;
     public int Armor = 20;
@@ -158,8 +161,9 @@ public sealed class TitanView : MonoBehaviour {
     private void Start () {
         //var weapon = TitanComponentFactory.AttachWeapon(this);
         //Components.Add(weapon);
-        Weapon = TitanComponentFactory.AttachWeapon(this);
-        RocketLauncher = TitanComponentFactory.AttachRocketLauncher(this);
+        Weapon.Attach(this);
+        RocketLauncher.Attach(this);
+        AntiAir.Attach(this);
     }
 
 	private void Update () {
