@@ -73,6 +73,7 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public void Hit(int damage) {
+        StatusTextView.Create(damage.ToString(), Color.red, hitTransfom.position);
         Armor -= damage;
         if (Armor <= 0) {
             Die();
@@ -85,22 +86,16 @@ public sealed class TitanView : MonoBehaviour {
         if (ShieldMesh != null)
             ShieldMesh.gameObject.SetActive(false);
         UpdateState();
-        Game.Instance.MoveController.HideSelection();
         var renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (var renderer in renderers) {
             renderer.material = deathMaterial;
         }
     }
 
-    public void OnSelect() {
-        UpdatePath();
+    public void OnSelect() { // TODO remove
     }
 
-    private void UpdatePath() {
-        Game.Instance.MoveController.ShowPathMarkers(this, GetPathPoints());
-    }
-
-    private void UpdateState() {
+    public void UpdateState() {
         if (onUpdateAction != null)
             onUpdateAction();
     }
@@ -146,7 +141,7 @@ public sealed class TitanView : MonoBehaviour {
         actions.Add(new MoveAction(targetPosition));
         if (actions.Count >= 1)
             StartNewAction(CurrentAction);
-        UpdatePath();
+        UpdateState();
     }
 
     public void Init(PlanetView planetView) {
@@ -207,7 +202,7 @@ public sealed class TitanView : MonoBehaviour {
         if (currentAction is ResourceAction) {
             actionTimer = ResourceCollectionTime;
         }
-        UpdatePath();
+        UpdateState();
     }
 
     private void CalculateMoveTask(MoveAction action) {

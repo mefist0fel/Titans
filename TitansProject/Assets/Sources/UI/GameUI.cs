@@ -27,10 +27,12 @@ public class GameUI : MonoBehaviour {
     }
 
     public void UpdateTitanStatus() {
-        if (selectedTitan == null) {
+        if (selectedTitan == null || !selectedTitan.IsAlive) {
+            selectedTitan = null;
             statusText.text = "";
             buildPanel.SetActive(false);
             fireRocketPanel.SetActive(false);
+            Game.Instance.MoveController.HideSelection();
             return;
         }
         string status = "Energy: " + selectedTitan.EnergyUnits + "\n" + "Armor: " + selectedTitan.Armor;
@@ -38,6 +40,8 @@ public class GameUI : MonoBehaviour {
         buildPanel.SetActive(true);
         fireRocketPanel.SetActive(true);
         buildPanel.UpdatePanel(selectedTitan);
+        fireRocketPanel.UpdatePanel(selectedTitan.RocketLauncher);
+        Game.Instance.MoveController.ShowPathMarkers(selectedTitan, selectedTitan.GetPathPoints());
     }
 
     public void OnSelectNextTitanClick() {
