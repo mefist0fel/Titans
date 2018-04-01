@@ -5,7 +5,7 @@ public sealed class BulletController : MonoBehaviour {
     private static BulletController Instance;
 
     [SerializeField]
-    private float speed = 10f; // Set from editor
+    private float speed = 2f; // Set from editor
     [SerializeField]
     private GameObject bulletPrefab; // Set from editor
 

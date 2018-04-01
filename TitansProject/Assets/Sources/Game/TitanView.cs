@@ -25,7 +25,7 @@ public sealed class TitanView : MonoBehaviour {
     public Faction SelfFaction;
 
     [SerializeField]
-    public WeaponWeaponModule Weapon; // Set from editor
+    public WeaponModule Weapon; // Set from editor
     [SerializeField]
     public RocketLauncherModule RocketLauncher; // Set from editor
     [SerializeField]

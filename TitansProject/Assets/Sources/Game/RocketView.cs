@@ -37,7 +37,7 @@ public sealed class RocketView : MonoBehaviour {
         FactionId = factionId;
         moveAxe = -Utils.GetNormal(startPosition, endPosition, Vector3.zero);
         angle = Vector3.Angle(startPosition, endPosition);
-        maxHeightProportional = Mathf.Min(0.3f, angle / 360f * 1f);
+        maxHeightProportional = Mathf.Min(0.3f, angle / 360f * 2f);
         float distance = angle / 180f * Mathf.PI * 2f * planet.Radius;
         fullTime = distance / Speed;
         timer = fullTime;
@@ -61,7 +61,7 @@ public sealed class RocketView : MonoBehaviour {
         Destroy(gameObject, 0.3f);
         Destroy(GetComponent<MeshFilter>(), 0.01f);
         timer = -1;
-        ExplosionView.Explode(Position, 0.4f, damage);
+        ExplosionView.Explode(Position, 0.3f);
     }
 
     private void Start() {

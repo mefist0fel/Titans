@@ -971,7 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accuracy: 0.5
   fireCount: 2
-  rocketsCount: 4
+  rocketsCount: 8
   hitRadius: 1.4
 --- !u!114 &114941178142507170
 MonoBehaviour:

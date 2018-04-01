@@ -4,6 +4,8 @@ using Random = UnityEngine.Random;
 
 public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
     [SerializeField]
+    private float waitTime = 0.15f; // hit accuracy
+    [SerializeField]
     private float accuracy = 0.5f; // hit accuracy
     [SerializeField]
     private int fireCount = 1;
@@ -55,15 +57,15 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
             count = rocketsCount;
         rocketsCount -= count;
         for (int i = 0; i < count; i++) {
-            float time = i * 0.1f + 0.001f;
+            float time = i * waitTime + 0.001f;
             Timer.Add(time, () => {
                 if (rocket == null)
                     return;
                 if (Random.Range(0f, 1f) < accuracy) {
-                    Debug.Log("Hit!~");
                     rocket.Intercept();
+                    LaserBeamController.ShowHit(titan.GetFirePosition(), rocket.Position);
                 } else {
-                    Debug.Log("Miss");
+                    LaserBeamController.ShowMiss(titan.GetFirePosition(), rocket.Position);
                 }
             });
         }
