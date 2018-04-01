@@ -62,12 +62,23 @@ public sealed class SphereMesh : MonoBehaviour {
             }
             for (int i = 0; i < details; i++) {
                 for (int j = 0; j < details; j++) {
-                    triangles[(i + j * details) * 6 + 0] = i + j * (details + 1);
-                    triangles[(i + j * details) * 6 + 1] = i + 1 + (j) * (details + 1);
-                    triangles[(i + j * details) * 6 + 2] = i + (j + 1) * (details + 1);
-                    triangles[(i + j * details) * 6 + 3] = i + (j + 1) * (details + 1);
-                    triangles[(i + j * details) * 6 + 4] = i + 1 + (j) * (details + 1);
-                    triangles[(i + j * details) * 6 + 5] = i + 1 + (j + 1) * (details + 1);
+                    var isLeftSide = i < (details / 2);
+                    var isTopSide = j < (details / 2);
+                    if (isLeftSide ^ isTopSide) {
+                        triangles[(i + j * details) * 6 + 0] = i + j * (details + 1);
+                        triangles[(i + j * details) * 6 + 1] = i + 1 + (j) * (details + 1);
+                        triangles[(i + j * details) * 6 + 2] = i + (j + 1) * (details + 1);
+                        triangles[(i + j * details) * 6 + 3] = i + (j + 1) * (details + 1);
+                        triangles[(i + j * details) * 6 + 4] = i + 1 + (j) * (details + 1);
+                        triangles[(i + j * details) * 6 + 5] = i + 1 + (j + 1) * (details + 1);
+                    } else {
+                        triangles[(i + j * details) * 6 + 0] = i + j * (details + 1);
+                        triangles[(i + j * details) * 6 + 1] = i + 1 + (j) * (details + 1);
+                        triangles[(i + j * details) * 6 + 2] = i + 1 + (j + 1) * (details + 1);
+                        triangles[(i + j * details) * 6 + 3] = i + j * (details + 1);
+                        triangles[(i + j * details) * 6 + 4] = i + 1 + (j + 1) * (details + 1);
+                        triangles[(i + j * details) * 6 + 5] = i + (j + 1) * (details + 1);
+                    }
                 }
             }
             meshes[z] = new CombineInstance();
