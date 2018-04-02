@@ -3,13 +3,9 @@ using UnityEngine;
 
 public sealed class WeaponModule : MonoBehaviour, ITitanModule {
     [SerializeField]
-    private int damage = 1;
+    private int damage = 3;
     [SerializeField]
     private float accuracy = 0.5f;
-    [SerializeField]
-    private int salvoCount = 3;
-    [SerializeField]
-    private float delayTime = 0.2f;
     [SerializeField]
     private float reloadTime = 1.5f;
     [SerializeField]
@@ -33,15 +29,9 @@ public sealed class WeaponModule : MonoBehaviour, ITitanModule {
 
     public void Fire(TitanView enemyTitan) {
         Vector3 up = (parentTitan.Position + enemyTitan.Position).normalized;
-        for (int i = 0; i < salvoCount; i++) {
-            float startTime = i * delayTime;
-            Timer.Add(0.001f + startTime, () => {
-                BulletController.Fire(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), up, () => {
-                    if (UnityEngine.Random.Range(0f, 1f) < accuracy) {
-                        enemyTitan.Hit(damage);
-                    }
-                });
-            });
+        LaserBeamController.Show(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), 0.7f);
+        if (UnityEngine.Random.Range(0f, 1f) < accuracy) {
+            enemyTitan.Hit(damage);
         }
         timer = reloadTime + Random.Range(0f, reloadTimeRandomShift);
     }

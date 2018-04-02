@@ -14,27 +14,31 @@ public class LaserBeamController : MonoBehaviour {
     public float liserWifght = 0.1f; // Set from editor
     [SerializeField]
     public AnimationCurve curve = new AnimationCurve(new Keyframe[] { new Keyframe(0, 0), new Keyframe(0.2f, 1f), new Keyframe(1f, 0f) });
-    [SerializeField]
-    public float showTime = 0.3f;
 
     private void Awake() {
         instance = this;
     }
 
+    public static void Show(Vector3 from, Vector3 to, float time) {
+        if (instance != null) {
+            instance.ShowLaser(from, to, Color.red, Color.red, time);
+        }
+    }
+
     public static void ShowHit(Vector3 from, Vector3 to) {
         if (instance != null) {
-            instance.ShowLaser(from, to, Color.white, Color.white);
+            instance.ShowLaser(from, to, Color.blue, Color.blue, 0.3f);
         }
     }
 
     public static void ShowMiss(Vector3 from, Vector3 to) {
         if (instance != null) {
             to += UnityEngine.Random.insideUnitSphere * 0.1f;
-            instance.ShowLaser(from, to + (to - from) * 3f, Color.white, new Color(1, 1, 1, 0));
+            instance.ShowLaser(from, to + (to - from) * 3f, Color.white, new Color(0, 0, 1, 0), 0.3f);
         }
     }
 
-    private void ShowLaser(Vector3 from, Vector3 to, Color start, Color end) {
+    private void ShowLaser(Vector3 from, Vector3 to, Color start, Color end, float showTime) {
         var laser = CreateLaser();
         laser.gameObject.SetActive(true);
         laser.startWidth = 0;
