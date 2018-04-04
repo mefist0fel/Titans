@@ -19,6 +19,10 @@ public class GameUI : MonoBehaviour {
     private Button UpgradeTitanButton; // Set from editor
     [SerializeField]
     private ImageSettings Settings; // Set from editor
+    [SerializeField]
+    private RectTransform BuildContextMenu; // Set from editor
+    [SerializeField]
+    private Button FullScreenHolder; // Set from editor
 
     [Serializable]
     public sealed class ImageSettings {
@@ -35,6 +39,7 @@ public class GameUI : MonoBehaviour {
 
     private void Start() {
         fireRocketPanel.Init(Game.OnSelectRocketStrike);
+        HideContextMenu();
     }
 
     public void SelectTitan(TitanView titan = null) {
@@ -55,6 +60,7 @@ public class GameUI : MonoBehaviour {
             modulesPanel.SetActive(false);
             fireRocketPanel.SetActive(false);
             Game.Instance.MoveController.HideSelection();
+            HideContextMenu();
             return;
         }
         string status = "Energy: " + selectedTitan.EnergyUnits + "\n" + "Armor: " + selectedTitan.Armor;
@@ -106,6 +112,9 @@ public class GameUI : MonoBehaviour {
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
         Debug.LogError("Build module " + moduleId);
+        FullScreenHolder.gameObject.SetActive(true);
+        BuildContextMenu.gameObject.SetActive(true);
+        BuildContextMenu.position = SlotButtons[moduleId].transform.position;
     }
 
     public void OnBuildTitanClick() { // Set from editor
@@ -114,5 +123,34 @@ public class GameUI : MonoBehaviour {
 
     public void OnUpgradeTitanClick() { // Set from editor
         Debug.LogError("Build upgrade click ");
+    }
+
+    public void OnSelectBuildWeaponModuleClick() { // Set from editor
+        Debug.LogError("OnSelectBuildWeaponModuleClick click ");
+        HideContextMenu();
+    }
+
+    public void OnSelectBuildRocketModuleClick() { // Set from editor
+        Debug.LogError("OnSelectBuildRocketModuleClick click ");
+        HideContextMenu();
+    }
+
+    public void OnSelectBuildShieldModuleClick() { // Set from editor
+        Debug.LogError("OnSelectBuildShieldModuleClick click ");
+        HideContextMenu();
+    }
+
+    public void OnSelectBuildAntiAirModuleClick() { // Set from editor
+        Debug.LogError("OnSelectBuildAntiAirModuleClick click ");
+        HideContextMenu();
+    }
+
+    public void CancelContextMenu() { // Set from editor
+        HideContextMenu();
+    }
+
+    private void HideContextMenu() {
+        FullScreenHolder.gameObject.SetActive(false);
+        BuildContextMenu.gameObject.SetActive(false);
     }
 }
