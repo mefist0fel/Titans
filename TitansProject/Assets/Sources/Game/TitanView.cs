@@ -37,13 +37,16 @@ public sealed class TitanView : MonoBehaviour {
     public int Level = 0;
     public const int MaxLevel = 4;
 
+
     private int[] slotLevel = new int[] {
         0, 0, 0, 0,
         1, 1, 2, 2,
         3, 3, 4, 4
     };
+    public int[] SlotLevel { get { return slotLevel; } }
 
     private ITitanModule[] modules = new ITitanModule[12];
+    public ITitanModule[] Modules { get { return modules; } }
 
     private PlanetView planet;
     private List<IAction> actions = new List<IAction>();

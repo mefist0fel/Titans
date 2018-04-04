@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour {
     [SerializeField]
     private Text statusText; // Set from editor
     [SerializeField]
-    private BuildModuleUIPanel buildPanel; // Set from editor
+    private GameObject modulesPanel; // Set from editor
     [SerializeField]
     private FireRocketUIPanel fireRocketPanel; // Set from editor
     [SerializeField]
@@ -13,7 +14,7 @@ public class GameUI : MonoBehaviour {
     [SerializeField]
     private Button[] SlotButtons; // Set from editor
     [SerializeField]
-    private Button LevelButtons; // Set from editor
+    private Button UpgradeTitanButton; // Set from editor
 
     private TitanView selectedTitan;
 
@@ -38,18 +39,31 @@ public class GameUI : MonoBehaviour {
         if (selectedTitan == null || !selectedTitan.IsAlive) {
             selectedTitan = null;
             statusText.text = "";
-            buildPanel.SetActive(false);
+            modulesPanel.SetActive(false);
             fireRocketPanel.SetActive(false);
             Game.Instance.MoveController.HideSelection();
             return;
         }
         string status = "Energy: " + selectedTitan.EnergyUnits + "\n" + "Armor: " + selectedTitan.Armor;
         statusText.text = status;
-        buildPanel.SetActive(true);
+        modulesPanel.SetActive(true);
+        UpdateModules();
         fireRocketPanel.SetActive(true);
-        buildPanel.UpdatePanel(selectedTitan);
         fireRocketPanel.UpdatePanel(selectedTitan.RocketLauncher);
         Game.Instance.MoveController.ShowPathMarkers(selectedTitan, selectedTitan.GetPathPoints());
+    }
+
+    private void UpdateModules() {
+        for (int i = 0; i < SlotButtons.Length; i++) {
+            bool needShow = false;
+            if (selectedTitan.SlotLevel.Length > i)
+                needShow = selectedTitan.SlotLevel[i] <= selectedTitan.Level;
+            if (SlotButtons[i] != null) {
+                SlotButtons[i].gameObject.SetActive(needShow);
+            }
+        }
+        UpgradeTitanButton.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(SlotButtons[0].transform.parent.GetComponent<RectTransform>());
     }
 
     public void OnSelectNextTitanClick() {
@@ -57,7 +71,7 @@ public class GameUI : MonoBehaviour {
     }
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
-
+        Debug.LogError("Build module " + moduleId);
     }
 
     public void OnBuildTitanClick() { // Set from editor
