@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour {
@@ -77,6 +78,8 @@ public class Game : MonoBehaviour {
 
     private Vector3 prevMousePosition;
     private void Update() {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
         if (Input.GetMouseButtonDown(0)) {
             prevMousePosition = Input.mousePosition;
         }

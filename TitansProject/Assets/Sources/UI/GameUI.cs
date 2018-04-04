@@ -14,7 +14,20 @@ public class GameUI : MonoBehaviour {
     [SerializeField]
     private Button[] SlotButtons; // Set from editor
     [SerializeField]
+    private Image[] SlotImages; // Set from editor
+    [SerializeField]
     private Button UpgradeTitanButton; // Set from editor
+    [SerializeField]
+    private ImageSettings Settings; // Set from editor
+
+    [Serializable]
+    public sealed class ImageSettings {
+        public Sprite NewModuleSprite; // Set from editor
+        public Sprite WeaponModuleSprite; // Set from editor
+        public Sprite ShieldModuleSprite; // Set from editor
+        public Sprite RocketModuleSprite; // Set from editor
+        public Sprite AntiAirModuleSprite; // Set from editor
+    }
 
     private TitanView selectedTitan;
 
@@ -61,9 +74,30 @@ public class GameUI : MonoBehaviour {
             if (SlotButtons[i] != null) {
                 SlotButtons[i].gameObject.SetActive(needShow);
             }
+            ITitanModule module = null;
+            if (selectedTitan.Modules.Length > i)
+                module = selectedTitan.Modules[i];
+            if (SlotImages[i] != null) {
+                SlotImages[i].sprite = SetSprite(module);
+            }
         }
         UpgradeTitanButton.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
         LayoutRebuilder.ForceRebuildLayoutImmediate(SlotButtons[0].transform.parent.GetComponent<RectTransform>());
+    }
+
+    private Sprite SetSprite(ITitanModule module) {
+        if (module == null)
+            return Settings.NewModuleSprite;
+        if (module is WeaponModule)
+            return Settings.WeaponModuleSprite;
+        if (module is RocketLauncherModule)
+            return Settings.RocketModuleSprite;
+        if (module is AntiAirLaserModule)
+            return Settings.AntiAirModuleSprite;
+        // if (module is ShieldModule)
+        //     return Settings.ShieldModuleSprite;
+
+        return null;
     }
 
     public void OnSelectNextTitanClick() {
@@ -75,8 +109,10 @@ public class GameUI : MonoBehaviour {
     }
 
     public void OnBuildTitanClick() { // Set from editor
+        Debug.LogError("Build titan click ");
     }
 
     public void OnUpgradeTitanClick() { // Set from editor
+        Debug.LogError("Build upgrade click ");
     }
 }
