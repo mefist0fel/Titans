@@ -8,8 +8,16 @@ public class GameUI : MonoBehaviour {
     private BuildModuleUIPanel buildPanel; // Set from editor
     [SerializeField]
     private FireRocketUIPanel fireRocketPanel; // Set from editor
+    [SerializeField]
+    private Button BuildTitanButton; // Set from editor
+    [SerializeField]
+    private Button[] SlotButtons; // Set from editor
+    [SerializeField]
+    private Button LevelButtons; // Set from editor
 
     private TitanView selectedTitan;
+
+    public enum ModuleType {}
 
     private void Start() {
         fireRocketPanel.Init(Game.OnSelectRocketStrike);
@@ -46,5 +54,15 @@ public class GameUI : MonoBehaviour {
 
     public void OnSelectNextTitanClick() {
         Game.SelectNextTitan();
-    } 
+    }
+
+    public void OnBuildModuleClick(int moduleId) { // Set from editor
+
+    }
+
+    public void OnBuildTitanClick() { // Set from editor
+    }
+
+    public void OnUpgradeTitanClick() { // Set from editor
+    }
 }
