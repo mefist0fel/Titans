@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 
 public interface ITitanModule {
-    void Attach(TitanView titan);
-    IInterfaceController[] GetInterfaceControllers();
-    void Detach();
+    void OnAttach(TitanView titan);
+    void OnDetach();
 }
 
 public enum InterfaceType {

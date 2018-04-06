@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Configs;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,15 +26,12 @@ public sealed class TitanView : MonoBehaviour {
     public Faction SelfFaction;
 
     [SerializeField]
-    public WeaponModule Weapon; // Set from editor
-    [SerializeField]
     public RocketLauncherModule RocketLauncher; // Set from editor
-    [SerializeField]
-    public AntiAirLaserModule AntiAir; // Set from editor
 
     public int Shield = 20;
     public int Armor = 20;
-    public int EnergyUnits = 0;
+    private int resourceUnits = 10;
+    public int ResourceUnits { get { return resourceUnits; } }
     public int Level = 0;
     public const int MaxLevel = 4;
 
@@ -172,14 +170,38 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     private void Start () {
-        //var weapon = TitanComponentFactory.AttachWeapon(this);
-        //Components.Add(weapon);
-        Weapon.Attach(this);
-        RocketLauncher.Attach(this);
-        AntiAir.Attach(this);
+       // RocketLauncher.OnAttach(this);
     }
 
-	private void Update () {
+    public void BuildModule(ModuleData module, int slotId) {
+        if (module == null) {
+            Debug.LogError("Module data is empty");
+            return;
+        }
+        if (module.Cost > ResourceUnits) {
+            Debug.LogError("Not enought RU for build");
+            return;
+        }
+        resourceUnits -= module.Cost;
+        Attach(ModulesFactory.CreateBuildModule(module, slotId), slotId);
+    }
+
+    public void Attach(ITitanModule module, int slotId) {
+        if (slotId < 0 || slotId >= modules.Length) {
+            Debug.LogError("Slot id is out of range " + slotId);
+            return;
+        }
+        if (modules[slotId] != null) {
+            modules[slotId].OnDetach();
+        }
+        modules[slotId] = module;
+        if (modules[slotId] != null) {
+            modules[slotId].OnAttach(this);
+        }
+        UpdateState();
+    }
+
+    private void Update () {
         if (CurrentAction != null) {
             ProcessCurrentAction(CurrentAction);
         }
@@ -198,7 +220,7 @@ public sealed class TitanView : MonoBehaviour {
         if (actionTimer <= 0) {
             if (data.ResourcePoint != null && data.ResourcePoint.Count > 0) {
                 data.ResourcePoint.Collect();
-                EnergyUnits += 1;
+                resourceUnits += 1;
                 UpdateState();
                 actionTimer = ResourceCollectionTime;
                 if (data.ResourcePoint.Count > 0) {

@@ -18,11 +18,12 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
 
     private List<RocketView> aimRockets = new List<RocketView>();
 
-    public void Attach(TitanView parentTitan) {
+    public void OnAttach(TitanView parentTitan) {
         titan = parentTitan;
     }
 
-    public void Detach() {
+    public void OnDetach() {
+        titan = null;
     }
 
     public IInterfaceController[] GetInterfaceControllers() {
@@ -34,6 +35,8 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
 	}
 
     public void Update () {
+        if (titan == null)
+            return;
         if (!titan.IsAlive)
             return;
         if (rocketsCount == 0)

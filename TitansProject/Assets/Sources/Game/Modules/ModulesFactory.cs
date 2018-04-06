@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Configs;
+using UnityEngine;
+
+public static class ModulesFactory {
+    public static ITitanModule CreateBuildModule(ModuleData module, int slotId) {
+        return BuildModule.Create(module, slotId);
+    }
+
+    public static ITitanModule CreateModule(ModuleData moduleData, TitanView titan) {
+        var moduleName = "Prefabs/Modules/" + moduleData.Id;
+        var modulePrefab = Resources.Load<GameObject>(moduleName);
+        if (modulePrefab == null) {
+            Debug.LogError("Cant find module " + moduleName);
+            return null;
+        }
+        var module = GameObject.Instantiate(modulePrefab, titan.transform);
+        return module.GetComponent<ITitanModule>();
+    }
+}

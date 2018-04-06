@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameUI : MonoBehaviour {
+public sealed class GameUI : MonoBehaviour {
     [SerializeField]
     private Text statusText; // Set from editor
     [SerializeField]
@@ -12,28 +12,16 @@ public class GameUI : MonoBehaviour {
     [SerializeField]
     private Button BuildTitanButton; // Set from editor
     [SerializeField]
-    private Button[] SlotButtons; // Set from editor
-    [SerializeField]
-    private Image[] SlotImages; // Set from editor
+    private ModuleUIPanel[] modules = new ModuleUIPanel[12]; // Set from editor
     [SerializeField]
     private Button UpgradeTitanButton; // Set from editor
-    [SerializeField]
-    private ImageSettings Settings; // Set from editor
     [SerializeField]
     private RectTransform BuildContextMenu; // Set from editor
     [SerializeField]
     private Button FullScreenHolder; // Set from editor
 
-    [Serializable]
-    public sealed class ImageSettings {
-        public Sprite NewModuleSprite; // Set from editor
-        public Sprite WeaponModuleSprite; // Set from editor
-        public Sprite ShieldModuleSprite; // Set from editor
-        public Sprite RocketModuleSprite; // Set from editor
-        public Sprite AntiAirModuleSprite; // Set from editor
-    }
-
     private TitanView selectedTitan;
+    private int selectedSlot = 0;
 
     public enum ModuleType {}
 
@@ -63,47 +51,32 @@ public class GameUI : MonoBehaviour {
             HideContextMenu();
             return;
         }
-        string status = "Energy: " + selectedTitan.EnergyUnits + "\n" + "Armor: " + selectedTitan.Armor;
+        string status = "Energy: " + selectedTitan.ResourceUnits + "\n" + "Armor: " + selectedTitan.Armor;
         statusText.text = status;
         modulesPanel.SetActive(true);
         UpdateModules();
         fireRocketPanel.SetActive(true);
-        fireRocketPanel.UpdatePanel(selectedTitan.RocketLauncher);
+        fireRocketPanel.UpdatePanel(0);
         Game.Instance.MoveController.ShowPathMarkers(selectedTitan, selectedTitan.GetPathPoints());
     }
 
     private void UpdateModules() {
-        for (int i = 0; i < SlotButtons.Length; i++) {
+        for (int i = 0; i < modules.Length; i++) {
             bool needShow = false;
             if (selectedTitan.SlotLevel.Length > i)
                 needShow = selectedTitan.SlotLevel[i] <= selectedTitan.Level;
-            if (SlotButtons[i] != null) {
-                SlotButtons[i].gameObject.SetActive(needShow);
+            if (modules[i] != null) {
+                modules[i].SetActive(needShow);
             }
             ITitanModule module = null;
             if (selectedTitan.Modules.Length > i)
                 module = selectedTitan.Modules[i];
-            if (SlotImages[i] != null) {
-                SlotImages[i].sprite = SetSprite(module);
+            if (modules[i] != null) {
+                modules[i].SetModule(module);
             }
         }
         UpgradeTitanButton.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(SlotButtons[0].transform.parent.GetComponent<RectTransform>());
-    }
-
-    private Sprite SetSprite(ITitanModule module) {
-        if (module == null)
-            return Settings.NewModuleSprite;
-        if (module is WeaponModule)
-            return Settings.WeaponModuleSprite;
-        if (module is RocketLauncherModule)
-            return Settings.RocketModuleSprite;
-        if (module is AntiAirLaserModule)
-            return Settings.AntiAirModuleSprite;
-        // if (module is ShieldModule)
-        //     return Settings.ShieldModuleSprite;
-
-        return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
     }
 
     public void OnSelectNextTitanClick() {
@@ -111,10 +84,10 @@ public class GameUI : MonoBehaviour {
     }
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
-        Debug.LogError("Build module " + moduleId);
+        selectedSlot = moduleId;
         FullScreenHolder.gameObject.SetActive(true);
         BuildContextMenu.gameObject.SetActive(true);
-        BuildContextMenu.position = SlotButtons[moduleId].transform.position;
+        BuildContextMenu.position = modules[moduleId].transform.position;
     }
 
     public void OnBuildTitanClick() { // Set from editor
@@ -126,22 +99,26 @@ public class GameUI : MonoBehaviour {
     }
 
     public void OnSelectBuildWeaponModuleClick() { // Set from editor
-        Debug.LogError("OnSelectBuildWeaponModuleClick click ");
+        var module = Config.Modules["weapon"];
+        selectedTitan.BuildModule(module, selectedSlot);
         HideContextMenu();
     }
 
     public void OnSelectBuildRocketModuleClick() { // Set from editor
-        Debug.LogError("OnSelectBuildRocketModuleClick click ");
+        var module = Config.Modules["rocket"];
+        selectedTitan.BuildModule(module, selectedSlot);
         HideContextMenu();
     }
 
     public void OnSelectBuildShieldModuleClick() { // Set from editor
-        Debug.LogError("OnSelectBuildShieldModuleClick click ");
+        var module = Config.Modules["shield"];
+        selectedTitan.BuildModule(module, selectedSlot);
         HideContextMenu();
     }
 
     public void OnSelectBuildAntiAirModuleClick() { // Set from editor
-        Debug.LogError("OnSelectBuildAntiAirModuleClick click ");
+        var module = Config.Modules["anti_air"];
+        selectedTitan.BuildModule(module, selectedSlot);
         HideContextMenu();
     }
 

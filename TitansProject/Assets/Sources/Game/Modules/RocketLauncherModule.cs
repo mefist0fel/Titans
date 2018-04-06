@@ -21,11 +21,11 @@ public sealed class RocketLauncherModule : MonoBehaviour, ITitanModule {
         RocketView.Fire(transform.position, fireCoord, planet, Damage, Radius, titan.FactionId);
     }
 
-    public void Attach(TitanView titanView) {
+    public void OnAttach(TitanView titanView) {
         titan = titanView;
     }
 
-    public void Detach() {
+    public void OnDetach() {
     }
 
     public IInterfaceController[] GetInterfaceControllers() {

@@ -20,11 +20,11 @@ public sealed class WeaponModule : MonoBehaviour, ITitanModule {
 
     public bool IsReady { get { return timer <= 0 && parentTitan.IsAlive; } }
 
-    public void Attach(TitanView titan) {
+    public void OnAttach(TitanView titan) {
         parentTitan = titan;
     }
 
-    public void Detach() {
+    public void OnDetach() {
     }
 
     public void Fire(TitanView enemyTitan) {
