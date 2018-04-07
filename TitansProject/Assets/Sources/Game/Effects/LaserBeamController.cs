@@ -55,6 +55,8 @@ public class LaserBeamController : MonoBehaviour {
             },
             () => {
                 laser.gameObject.SetActive(false);
+                laser.startWidth = 0;
+                laser.endWidth = 0;
             });
     }
 
