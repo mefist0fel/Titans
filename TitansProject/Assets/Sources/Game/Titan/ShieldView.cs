@@ -16,7 +16,8 @@ public sealed class ShieldView : MonoBehaviour {
         shieldDome.gameObject.SetActive(false);
     }
 
-    public void UpdateState(int shieldValue) {
+    public void UpdateState(int value) {
+        int shieldValue = Mathf.CeilToInt(value / 10f);
         if (shieldValue == currentShieldValue)
             return;
 

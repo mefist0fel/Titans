@@ -109,6 +109,7 @@ public sealed class TitanView : MonoBehaviour {
     private void Die() {
         Debug.LogError("Oh, I'm dying");
         UpdateState();
+        ClearTasks();
         var renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (var renderer in renderers) {
             renderer.material = deathMaterial;
@@ -121,7 +122,7 @@ public sealed class TitanView : MonoBehaviour {
     public void UpdateState() {
         if (onUpdateAction != null)
             onUpdateAction();
-        shieldView.UpdateState(shield.Value / 10);
+        shieldView.UpdateState(shield.Value);
         if (livesView != null)
             livesView.UpdateState(Armor, MaxArmor, shield.Value, shield.MaxValue);
     }

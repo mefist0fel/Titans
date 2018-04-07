@@ -7,7 +7,7 @@ public sealed class Shield {
     public int MaxValue { get; private set; }
     public float NormalizedRestoreTime { get { return timer / reloadTime; } }
 
-    private int restoreValue = 10;
+    private int restoreValue = 5;
 
     public const float reloadTime = 10f;
     private float timer = 0;
