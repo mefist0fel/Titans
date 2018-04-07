@@ -38,12 +38,18 @@ public class ModuleUIPanel : MonoBehaviour {
             var buildModule = module as BuildModule;
             progressImage.fillAmount = buildModule.NormalizedTime;
         }
+        if (module is ShieldModule) {
+            var shieldModule = module as ShieldModule;
+            progressImage.fillAmount = 1f - shieldModule.NormalizedTime;
+        }
     }
 
     private Sprite GetSprite(ITitanModule module) {
         if (module == null)
             return settings.NewModuleSprite;
         if (module is BuildModule) {
+            progressImage.fillClockwise = false;
+            progressImage.color = settings.BuildColor;
             var buildModule = module as BuildModule;
             switch (buildModule.ConstructionModule.Id) {
                 case "weapon":
@@ -62,8 +68,11 @@ public class ModuleUIPanel : MonoBehaviour {
             return settings.RocketModuleSprite;
         if (module is AntiAirLaserModule)
             return settings.AntiAirModuleSprite;
-        if (module is ShieldModule)
+        if (module is ShieldModule) {
+            progressImage.fillClockwise = true;
+            progressImage.color = settings.ShieldRestoreColor;
             return settings.ShieldModuleSprite;
+        }
 
         return null;
     }

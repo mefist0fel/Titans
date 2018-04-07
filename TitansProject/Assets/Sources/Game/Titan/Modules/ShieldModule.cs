@@ -9,6 +9,14 @@ public sealed class ShieldModule : MonoBehaviour, ITitanModule, Shield.IShieldMo
 
     private TitanView titan;
 
+    public float NormalizedTime {
+        get {
+            if (titan == null)
+                return 0;
+            return titan.ShieldGenerator.NormalizedRestoreTime;
+        }
+    }
+
     public int GetShieldPoints() {
         return shield;
     }

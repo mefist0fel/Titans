@@ -21,9 +21,9 @@ public sealed class ShieldView : MonoBehaviour {
             return;
 
         if (currentShieldValue == 0) {
+            shieldDome.gameObject.SetActive(true);
             ShowShieldAnimation(viewSettings.AppearAnimation);
         } else {
-            shieldDome.gameObject.SetActive(true);
             if (shieldValue == 0) {
                 ShowShieldAnimation(viewSettings.DissapearAnimation);
             } else {

@@ -9,4 +9,6 @@ public sealed class UISettings : ScriptableObject {
     public Sprite ShieldModuleSprite; // Set from editor
     public Sprite RocketModuleSprite; // Set from editor
     public Sprite AntiAirModuleSprite; // Set from editor
+    public Color BuildColor = Color.gray; // Set from editor
+    public Color ShieldRestoreColor = Color.blue; // Set from editor
 }

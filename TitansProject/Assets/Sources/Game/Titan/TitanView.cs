@@ -18,6 +18,8 @@ public sealed class TitanView : MonoBehaviour {
     public float ResourceCollectionTime = 0.5f;
     [SerializeField]
     private ShieldView shieldView; // Set from editor
+    [SerializeField]
+    public LivesView livesView; // Set from editor
 
     [SerializeField]
     public Collider TitanCollider; // Set from editor
@@ -29,8 +31,12 @@ public sealed class TitanView : MonoBehaviour {
     public RocketLauncherModule RocketLauncher; // Set from editor
 
     private Shield shield;
+    public Shield ShieldGenerator { get { return shield; } }
     public int MaxShield = 20;
-    public int Armor = 10;
+    private int armor = 10;
+    public int Armor { get { return armor; } }
+    private int maxArmor = 10;
+    public int MaxArmor { get { return maxArmor; } }
     private int resourceUnits = 10;
     public int ResourceUnits { get { return resourceUnits; } }
     public int Level = 0;
@@ -92,8 +98,9 @@ public sealed class TitanView : MonoBehaviour {
     public void Hit(int damage) {
         StatusTextView.Create(damage.ToString(), Color.red, hitTransfom.position);
         damage = shield.Hit(damage);
-        Armor -= damage;
-        if (Armor <= 0) {
+        armor -= damage;
+        if (armor <= 0) {
+            armor = 0;
             Die();
         }
         UpdateState();
@@ -115,6 +122,8 @@ public sealed class TitanView : MonoBehaviour {
         if (onUpdateAction != null)
             onUpdateAction();
         shieldView.UpdateState(shield.Value / 10);
+        if (livesView != null)
+            livesView.UpdateState(Armor, MaxArmor, shield.Value, shield.MaxValue);
     }
 
     public interface IAction {}

@@ -5,6 +5,7 @@ using UnityEngine;
 public sealed class Shield {
     public int Value { get; private set; }
     public int MaxValue { get; private set; }
+    public float NormalizedRestoreTime { get { return timer / reloadTime; } }
 
     private int restoreValue = 10;
 
@@ -21,12 +22,12 @@ public sealed class Shield {
             return;
         if (!titan.IsAlive)
             return;
+        timer -= deltaTime;
         if (timer < 0) {
             Value = Mathf.Min(MaxValue, Value + restoreValue);
             timer = reloadTime;
             titan.UpdateState();
         }
-        timer -= deltaTime;
     }
 
     public int Hit(int damage) {
@@ -41,6 +42,7 @@ public sealed class Shield {
 
     public void UpdateModificators(List<IModificator> modificators) {
         MaxValue = 0;
+        timer = reloadTime;
         if (modificators == null)
             return;
         foreach (var modificator in modificators) {
