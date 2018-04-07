@@ -10,6 +10,8 @@ public sealed class SelectionMarkerView : MonoBehaviour {
     [SerializeField]
     private LineRendererRing fireRing; // Set from editor
     [SerializeField]
+    private Vector3 fireRingOffcet = new Vector3(0, -0.18f); // Set from editor
+    [SerializeField]
     private float defaultRadius = 0.54f;
     [SerializeField]
     private float showTime = 0.2f;
@@ -28,6 +30,7 @@ public sealed class SelectionMarkerView : MonoBehaviour {
         transform.localRotation = Quaternion.identity;
         transform.localPosition = Vector3.zero;
         fireRing.gameObject.SetActive(needShowWeaponRange);
+        UpdateMarker(0);
     }
 
     public void HideSelection() {
@@ -52,6 +55,7 @@ public sealed class SelectionMarkerView : MonoBehaviour {
         if (needShowWeaponRange) {
             fireRing.SetColor(color);
             fireRing.SetRadius(fireRadius * showAnimation.Evaluate(anim));
+            fireRing.transform.localPosition = fireRingOffcet * anim * anim;
         }
     }
 }
