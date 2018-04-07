@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 33262349988462784}
   - component: {fileID: 23366119682338646}
   - component: {fileID: 114252215799282194}
+  - component: {fileID: 114964411803615054}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -849,6 +850,20 @@ MonoBehaviour:
   radius: 0.1
   details: 4
   meshFilter: {fileID: 33796707047831896}
+--- !u!114 &114964411803615054
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1664888306345282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334040e0f2358ea44a69865a62531181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldDome: {fileID: 23366119682338646}
+  shieldColor: {r: 1, g: 0.24574023, b: 0.6046638, a: 0.14117648}
+  appearTime: 0.3
 --- !u!114 &114969504688148672
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -863,17 +878,14 @@ MonoBehaviour:
   fireTransfom: {fileID: 4570086840736638}
   hitTransfom: {fileID: 4570086840736638}
   deathMaterial: {fileID: 2100000, guid: 78c5bceb303baaa49b69ae0065ada339, type: 2}
-  ShieldMesh: {fileID: 23366119682338646}
   Speed: 2
   ResourceCollectionTime: 0.5
+  shieldView: {fileID: 114964411803615054}
   TitanCollider: {fileID: 135646982664589030}
   FactionId: 0
-  Weapon: {fileID: 0}
   RocketLauncher: {fileID: 0}
-  AntiAir: {fileID: 0}
-  Shield: 10
+  MaxShield: 20
   Armor: 20
-  ResourceUnits: 0
   Level: 0
 --- !u!135 &135646982664589030
 SphereCollider:

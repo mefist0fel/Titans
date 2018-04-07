@@ -5,6 +5,9 @@ public interface ITitanModule {
     void OnDetach();
 }
 
+public interface IModificator {
+}
+
 public enum InterfaceType {
     Module,
     Skill

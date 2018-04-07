@@ -13,11 +13,11 @@ public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     private Material deathMaterial;
     [SerializeField]
-    private MeshRenderer ShieldMesh;
-    [SerializeField]
     public float Speed = 2;
     [SerializeField]
     public float ResourceCollectionTime = 0.5f;
+    [SerializeField]
+    private ShieldView shieldView; // Set from editor
 
     [SerializeField]
     public Collider TitanCollider; // Set from editor
@@ -28,7 +28,8 @@ public sealed class TitanView : MonoBehaviour {
     [SerializeField]
     public RocketLauncherModule RocketLauncher; // Set from editor
 
-    public int Shield = 20;
+    private Shield shield;
+    public int MaxShield = 20;
     public int Armor = 20;
     private int resourceUnits = 10;
     public int ResourceUnits { get { return resourceUnits; } }
@@ -45,6 +46,8 @@ public sealed class TitanView : MonoBehaviour {
 
     private ITitanModule[] modules = new ITitanModule[12];
     public ITitanModule[] Modules { get { return modules; } }
+
+    private List<IModificator> modificators = new List<IModificator>();
 
     private PlanetView planet;
     private List<IAction> actions = new List<IAction>();
@@ -88,6 +91,7 @@ public sealed class TitanView : MonoBehaviour {
 
     public void Hit(int damage) {
         StatusTextView.Create(damage.ToString(), Color.red, hitTransfom.position);
+        damage = shield.Hit(damage);
         Armor -= damage;
         if (Armor <= 0) {
             Die();
@@ -97,8 +101,6 @@ public sealed class TitanView : MonoBehaviour {
 
     private void Die() {
         Debug.LogError("Oh, I'm dying");
-        if (ShieldMesh != null)
-            ShieldMesh.gameObject.SetActive(false);
         UpdateState();
         var renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (var renderer in renderers) {
@@ -112,6 +114,7 @@ public sealed class TitanView : MonoBehaviour {
     public void UpdateState() {
         if (onUpdateAction != null)
             onUpdateAction();
+        shieldView.UpdateState(shield);
     }
 
     public interface IAction {}
@@ -170,7 +173,9 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     private void Start () {
-       // RocketLauncher.OnAttach(this);
+        shield = new Shield(this);
+        UpdateState();
+        // RocketLauncher.OnAttach(this);
     }
 
     public void BuildModule(ModuleData module, int slotId) {
@@ -201,7 +206,22 @@ public sealed class TitanView : MonoBehaviour {
         UpdateState();
     }
 
+    public void AddModificator(IModificator modificator) {
+        modificators.Add(modificator);
+        UpdateModificators();
+    }
+
+    public void RemoveModificator(IModificator modificator) {
+        modificators.Remove(modificator);
+        UpdateModificators();
+    }
+
+    private void UpdateModificators() {
+        shield.UpdateModificators(modificators);
+    }
+
     private void Update () {
+        shield.Update(Time.deltaTime);
         if (CurrentAction != null) {
             ProcessCurrentAction(CurrentAction);
         }
