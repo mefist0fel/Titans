@@ -23,6 +23,13 @@ public sealed class LineRendererRing : MonoBehaviour {
         SetRadius();
     }
 
+    public void SetColor(Color color) {
+        if (line == null)
+            return;
+        line.startColor = color;
+        line.endColor = color;
+    }
+
     [ContextMenu("Set radius")]
     private void SetRadius() {
         if (line == null)
