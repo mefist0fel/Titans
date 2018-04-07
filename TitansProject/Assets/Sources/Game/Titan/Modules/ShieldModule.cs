@@ -5,7 +5,7 @@ using UnityEngine;
 
 public sealed class ShieldModule : MonoBehaviour, ITitanModule, Shield.IShieldModificator {
     [SerializeField]
-    private int shield = 1;
+    private int shield = 10;
 
     private TitanView titan;
 

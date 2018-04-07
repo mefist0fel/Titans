@@ -85,8 +85,8 @@ public class Timer : MonoBehaviour {
 	void Update () {
 		for (int i = 0; i < timers.Length; i++) {
 			if (timers[i] > 0) {
-				timers[i] -= Time.deltaTime;
-				if (timers[i] <= 0) {
+                timers[i] -= Time.deltaTime;
+                if (timers[i] <= 0) {
 					timers[i] = 0;
 				}
 				if (timers[i] <= animationTime[i]) {

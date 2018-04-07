@@ -30,7 +30,7 @@ public sealed class TitanView : MonoBehaviour {
 
     private Shield shield;
     public int MaxShield = 20;
-    public int Armor = 20;
+    public int Armor = 10;
     private int resourceUnits = 10;
     public int ResourceUnits { get { return resourceUnits; } }
     public int Level = 0;
@@ -114,7 +114,7 @@ public sealed class TitanView : MonoBehaviour {
     public void UpdateState() {
         if (onUpdateAction != null)
             onUpdateAction();
-        shieldView.UpdateState(shield);
+        shieldView.UpdateState(shield.Value / 10);
     }
 
     public interface IAction {}
@@ -175,6 +175,7 @@ public sealed class TitanView : MonoBehaviour {
     private void Start () {
         shield = new Shield(this);
         UpdateState();
+        Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
         // RocketLauncher.OnAttach(this);
     }
 

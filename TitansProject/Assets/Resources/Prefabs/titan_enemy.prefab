@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 114252215799282194}
   - component: {fileID: 114964411803615054}
   m_Layer: 0
-  m_Name: Shield
+  m_Name: ShieldVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -863,7 +863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldDome: {fileID: 23366119682338646}
   shieldColor: {r: 1, g: 0.24574023, b: 0.6046638, a: 0.14117648}
-  appearTime: 0.3
+  viewSettings: {fileID: 11400000, guid: 96cb9fc605c984c4ea7a57aeaad175d3, type: 2}
 --- !u!114 &114969504688148672
 MonoBehaviour:
   m_ObjectHideFlags: 1

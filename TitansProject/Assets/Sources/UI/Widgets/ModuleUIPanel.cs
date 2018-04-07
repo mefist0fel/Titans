@@ -62,8 +62,8 @@ public class ModuleUIPanel : MonoBehaviour {
             return settings.RocketModuleSprite;
         if (module is AntiAirLaserModule)
             return settings.AntiAirModuleSprite;
-        // if (module is ShieldModule)
-        //     return Settings.ShieldModuleSprite;
+        if (module is ShieldModule)
+            return settings.ShieldModuleSprite;
 
         return null;
     }

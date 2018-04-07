@@ -6,6 +6,8 @@ public sealed class Shield {
     public int Value { get; private set; }
     public int MaxValue { get; private set; }
 
+    private int restoreValue = 10;
+
     public const float reloadTime = 10f;
     private float timer = 0;
     private TitanView titan;
@@ -20,7 +22,7 @@ public sealed class Shield {
         if (!titan.IsAlive)
             return;
         if (timer < 0) {
-            Value += 1;
+            Value = Mathf.Min(MaxValue, Value + restoreValue);
             timer = reloadTime;
             titan.UpdateState();
         }
