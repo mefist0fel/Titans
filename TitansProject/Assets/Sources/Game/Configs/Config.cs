@@ -13,7 +13,8 @@ public static class Config {
             new ModuleData("anti_air", 4, 2f),
             new ModuleData("level_up", 10, 2f),
             new ModuleData("titan", 20, 15f),
-            new ModuleData("enemy_titan", 20, 15f)
+            new ModuleData("enemy_titan", 20, 15f),
+            new ModuleData("titan_upgrade", 10, 10f)
         };
 
         public ModuleData this[string id] {

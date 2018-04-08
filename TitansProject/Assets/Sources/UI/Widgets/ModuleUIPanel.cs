@@ -43,6 +43,10 @@ public class ModuleUIPanel : MonoBehaviour {
             var buildModule = module as BuildTitanModule;
             progressImage.fillAmount = buildModule.NormalizedTime;
         }
+        if (module is BuildUpgradeModule) {
+            var buildModule = module as BuildUpgradeModule;
+            progressImage.fillAmount = buildModule.NormalizedTime;
+        }
         if (module is ShieldModule) {
             var shieldModule = module as ShieldModule;
             progressImage.fillAmount = 1f - shieldModule.NormalizedTime;
@@ -68,6 +72,10 @@ public class ModuleUIPanel : MonoBehaviour {
             }
         }
         if (module is BuildTitanModule) {
+            progressImage.fillClockwise = false;
+            progressImage.color = settings.BuildColor;
+        }
+        if (module is BuildUpgradeModule) {
             progressImage.fillClockwise = false;
             progressImage.color = settings.BuildColor;
         }

@@ -10,13 +10,11 @@ public sealed class GameUI : MonoBehaviour {
     [SerializeField]
     private FireRocketUIPanel fireRocketPanel; // Set from editor
     [SerializeField]
-    private Button BuildTitanButton; // Set from editor
-    [SerializeField]
     private ModuleUIPanel[] modules = new ModuleUIPanel[12]; // Set from editor
     [SerializeField]
     private ModuleUIPanel buildTitanModule; // Set from editor
     [SerializeField]
-    private Button UpgradeTitanButton; // Set from editor
+    private ModuleUIPanel upgradeTitanModule; // Set from editor
     [SerializeField]
     private RectTransform BuildContextMenu; // Set from editor
     [SerializeField]
@@ -53,7 +51,7 @@ public sealed class GameUI : MonoBehaviour {
             HideContextMenu();
             return;
         }
-        string status = "Energy: " + selectedTitan.ResourceUnits + "\n" + "Armor: " + selectedTitan.Armor;
+        string status = "Energy: " + selectedTitan.ResourceUnits;
         statusText.text = status;
         modulesPanel.SetActive(true);
         UpdateModules();
@@ -78,7 +76,8 @@ public sealed class GameUI : MonoBehaviour {
             }
         }
         buildTitanModule.SetModule(selectedTitan.Modules[12]);
-        UpgradeTitanButton.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
+        upgradeTitanModule.SetModule(selectedTitan.Modules[13]);
+        upgradeTitanModule.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
         LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
     }
 
@@ -98,7 +97,7 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnUpgradeTitanClick() { // Set from editor
-        Debug.LogError("Build upgrade click ");
+        selectedTitan.BuildUpgrade(Config.Modules["titan_upgrade"]);
     }
 
     public void OnSelectBuildWeaponModuleClick() { // Set from editor

@@ -52,7 +52,7 @@ public sealed class TitanView : MonoBehaviour {
     };
     public int[] SlotLevel { get { return slotLevel; } }
 
-    private ITitanModule[] modules = new ITitanModule[13];
+    private ITitanModule[] modules = new ITitanModule[14];
     public ITitanModule[] Modules { get { return modules; } }
 
     private List<IModificator> modificators = new List<IModificator>();
@@ -202,6 +202,19 @@ public sealed class TitanView : MonoBehaviour {
         }
         resourceUnits -= module.Cost;
         Attach(ModulesFactory.CreateTitanBuildModule(module), 12);
+    }
+
+    public void BuildUpgrade(ModuleData module) {
+        if (module == null) {
+            Debug.LogError("Module data is empty");
+            return;
+        }
+        if (module.Cost > ResourceUnits) {
+            Debug.LogError("Not enought RU for build");
+            return;
+        }
+        resourceUnits -= module.Cost;
+        Attach(ModulesFactory.CreateTitanUpgradeModule(module), 13);
     }
 
     public void BuildModule(ModuleData module, int slotId) {
