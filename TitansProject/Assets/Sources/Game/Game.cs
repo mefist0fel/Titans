@@ -37,13 +37,8 @@ public class Game : MonoBehaviour {
         Factions[1].EnemyFaction = Factions[0];
         var position = planet.GetRandomPosition();
         Factions[0].AddUnit(CreateTitan("Prefabs/titan"), position);
-        Factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(20f, 0, 0) * position);
+        //Factions[0].AddUnit(CreateTitan("Prefabs/titan"), Quaternion.Euler(20f, 0, 0) * position);
         Factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), Quaternion.Euler(-20f, 0, 0) * position); //planet.GetRandomPosition());
-        foreach (var faction in Factions) {
-            foreach (var unit in faction.Units) {
-                unit.Init(planet);
-            }
-        }
         CameraController.SetViewToTitan(Factions[0].Units[0].transform.position);
 
         MoveController.HideSelection();
@@ -60,8 +55,9 @@ public class Game : MonoBehaviour {
         CameraController.MoveToTitan(SelectedTitan.Position);
     }
 
-    private TitanView CreateTitan(string prefabName) {
+    public TitanView CreateTitan(string prefabName) {
         var titan = Instantiate(Resources.Load<TitanView>(prefabName), transform);
+        titan.Init(planet);
         return titan;
     }
 

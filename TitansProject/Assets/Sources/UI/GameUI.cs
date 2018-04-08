@@ -14,6 +14,8 @@ public sealed class GameUI : MonoBehaviour {
     [SerializeField]
     private ModuleUIPanel[] modules = new ModuleUIPanel[12]; // Set from editor
     [SerializeField]
+    private ModuleUIPanel buildTitanModule; // Set from editor
+    [SerializeField]
     private Button UpgradeTitanButton; // Set from editor
     [SerializeField]
     private RectTransform BuildContextMenu; // Set from editor
@@ -75,6 +77,7 @@ public sealed class GameUI : MonoBehaviour {
                 modules[i].SetModule(module);
             }
         }
+        buildTitanModule.SetModule(selectedTitan.Modules[12]);
         UpgradeTitanButton.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
         LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
     }
@@ -91,7 +94,7 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnBuildTitanClick() { // Set from editor
-        Debug.LogError("Build titan click ");
+        selectedTitan.BuildTitan(Config.Modules["titan"]);
     }
 
     public void OnUpgradeTitanClick() { // Set from editor

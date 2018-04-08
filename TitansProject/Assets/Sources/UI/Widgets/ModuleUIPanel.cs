@@ -11,13 +11,13 @@ public class ModuleUIPanel : MonoBehaviour {
     [SerializeField]
     private Image progressImage; // Set from editor
     [SerializeField]
-    private UnityEvent slotEvent; // Set from editor
-    [SerializeField]
     private UISettings settings; // Set from editor
+    [SerializeField]
+    private UnityEvent slotEvent; // Set from editor
 
     private ITitanModule module;
 
-    public void OnModuleClick() {
+    public void OnModuleClick() { // Set from editor
         slotEvent.Invoke();
     }
 
@@ -29,13 +29,18 @@ public class ModuleUIPanel : MonoBehaviour {
     }
 
     private void UpdatePanel() {
-        image.sprite = GetSprite(module);
+        if (image != null)
+            image.sprite = GetSprite(module);
         progressImage.fillAmount = 0;
     }
 
     private void Update() {
         if (module is BuildModule) {
             var buildModule = module as BuildModule;
+            progressImage.fillAmount = buildModule.NormalizedTime;
+        }
+        if (module is BuildTitanModule) {
+            var buildModule = module as BuildTitanModule;
             progressImage.fillAmount = buildModule.NormalizedTime;
         }
         if (module is ShieldModule) {
@@ -61,6 +66,10 @@ public class ModuleUIPanel : MonoBehaviour {
                 case "anti_air":
                     return settings.AntiAirModuleSprite;
             }
+        }
+        if (module is BuildTitanModule) {
+            progressImage.fillClockwise = false;
+            progressImage.color = settings.BuildColor;
         }
         if (module is WeaponModule)
             return settings.WeaponModuleSprite;

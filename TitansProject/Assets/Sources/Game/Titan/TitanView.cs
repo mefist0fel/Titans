@@ -46,11 +46,13 @@ public sealed class TitanView : MonoBehaviour {
     private int[] slotLevel = new int[] {
         0, 0, 0, 0,
         1, 1, 2, 2,
-        3, 3, 4, 4
+        3, 3, 4, 4,
+        0, // titan build module
+        0  // Level Up
     };
     public int[] SlotLevel { get { return slotLevel; } }
 
-    private ITitanModule[] modules = new ITitanModule[12];
+    private ITitanModule[] modules = new ITitanModule[13];
     public ITitanModule[] Modules { get { return modules; } }
 
     private List<IModificator> modificators = new List<IModificator>();
@@ -187,6 +189,19 @@ public sealed class TitanView : MonoBehaviour {
         UpdateState();
         Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
         // RocketLauncher.OnAttach(this);
+    }
+
+    public void BuildTitan(ModuleData module) {
+        if (module == null) {
+            Debug.LogError("Module data is empty");
+            return;
+        }
+        if (module.Cost > ResourceUnits) {
+            Debug.LogError("Not enought RU for build");
+            return;
+        }
+        resourceUnits -= module.Cost;
+        Attach(ModulesFactory.CreateTitanBuildModule(module), 12);
     }
 
     public void BuildModule(ModuleData module, int slotId) {

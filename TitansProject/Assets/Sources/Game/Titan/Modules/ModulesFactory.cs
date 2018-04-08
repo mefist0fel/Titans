@@ -8,6 +8,9 @@ public static class ModulesFactory {
     public static ITitanModule CreateBuildModule(ModuleData module, int slotId) {
         return BuildModule.Create(module, slotId);
     }
+    public static ITitanModule CreateTitanBuildModule(ModuleData titanModule) {
+        return BuildTitanModule.Create(titanModule);
+    }
 
     public static ITitanModule CreateModule(ModuleData moduleData, TitanView titan) {
         var moduleName = "Prefabs/Modules/" + moduleData.Id;
