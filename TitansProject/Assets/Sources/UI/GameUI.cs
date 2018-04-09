@@ -62,6 +62,15 @@ public sealed class GameUI : MonoBehaviour {
         }
         string status = "Energy: " + selectedTitan.ResourceUnits;
         statusText.text = status;
+        // enemy
+        if (selectedTitan.FactionId == 1 || !selectedTitan.IsAlive) {
+            modulesPanel.SetActive(true);
+            skillPanel.SetActive(false);
+            Game.Instance.MoveController.HideSelection();
+            HideContextMenu();
+            UpdateModules();
+            return;
+        }
         modulesPanel.SetActive(true);
         UpdateModules();
         var maxRocket = selectedTitan.GetComponentMaxRocketsCount();
@@ -103,6 +112,8 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
+        if (selectedTitan.FactionId == 1)
+            return;
         if (selectedTitan.Modules[moduleId] != null)
             return;
         selectedSlot = moduleId;
@@ -112,12 +123,16 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnBuildTitanClick() { // Set from editor
+        if (selectedTitan.FactionId == 1)
+            return;
         if (selectedTitan.Modules[12] != null)
             return;
         selectedTitan.BuildTitan(Config.Modules["titan"]);
     }
 
     public void OnUpgradeTitanClick() { // Set from editor
+        if (selectedTitan.FactionId == 1)
+            return;
         if (selectedTitan.Modules[13] != null)
             return;
         selectedTitan.BuildUpgrade(Config.Modules["titan_upgrade"]);

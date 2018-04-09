@@ -84,7 +84,7 @@ public class Game : MonoBehaviour {
             TitanView selectedTitan = null;
             if (Physics.Raycast(ray, out hit, 20f)) {
                 selectedTitan = hit.collider.GetComponent<TitanView>();
-                if (selectedTitan != null && (SelectedTitan == selectedTitan || selectedTitan.FactionId != 0)) {
+                if (selectedTitan != null && (SelectedTitan == selectedTitan)) {
                     selectedTitan = null;
                 }
                 SelectTitan(selectedTitan);

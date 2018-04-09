@@ -237,8 +237,7 @@ public sealed class TitanView : MonoBehaviour {
     private void Start () {
         shield = new Shield(this);
         UpdateState();
-        Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
-        // RocketLauncher.OnAttach(this);
+        // Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
     }
 
     public void BuildTitan(ModuleData module) {
