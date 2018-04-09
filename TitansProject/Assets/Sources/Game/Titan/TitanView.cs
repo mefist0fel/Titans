@@ -339,6 +339,9 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     private void ProcessResourceCollection(ResourceAction data) {
+        if (data.ResourcePoint == null) {
+            actionTimer = 0;
+        }
         if (actionTimer <= 0) {
             if (data.ResourcePoint != null && data.ResourcePoint.Count > 0) {
                 data.ResourcePoint.Collect();

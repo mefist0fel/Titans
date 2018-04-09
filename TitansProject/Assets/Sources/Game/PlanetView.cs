@@ -42,12 +42,11 @@ public sealed class PlanetView : MonoBehaviour {
         return false;
     }
 
-    public bool FindResourcePointClick(Vector3 clickPosition, out ResourcePointView resourcePoint) {
-        const float pointMaxDistance = 0.3f;
+    public bool FindResourcePointClick(Vector3 clickPosition, out ResourcePointView resourcePoint, float pointMaxDistance = 0.3f) {
         resourcePoint = null;
         var nearestDistance = 0f;
         foreach (var point in resourcePoints) {
-            if (point == null)
+            if (point == null || point.Count == 0)
                 continue; // TODO remove empty points
             var distance = Vector3.Distance(point.transform.position, clickPosition);
             if (distance < pointMaxDistance && (distance < nearestDistance || resourcePoint == null)) {

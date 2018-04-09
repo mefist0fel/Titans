@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 4907077700188412}
   - component: {fileID: 114969504688148672}
   - component: {fileID: 135646982664589030}
+  - component: {fileID: 114885726876288932}
   m_Layer: 0
   m_Name: titan_enemy
   m_TagString: Untagged
@@ -909,8 +910,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spritePrefab: {fileID: 212768196364849262}
-  sprites: []
-  size: {x: 0.2, y: 0.3}
   livePoint: 10
   armor: 20
   maxArmor: 20
@@ -943,6 +942,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCameraTransform: {fileID: 0}
+--- !u!114 &114885726876288932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1918265429243428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c2fcc0fe4927449b5339a6c097b697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlledTitan: {fileID: 114969504688148672}
+  target: 0
+  NearestResource: {fileID: 0}
+  timer: 0
+  updateTime: 1
 --- !u!114 &114964411803615054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -977,7 +992,6 @@ MonoBehaviour:
   livesView: {fileID: 114423751636100130}
   TitanCollider: {fileID: 135646982664589030}
   FactionId: 0
-  RocketLauncher: {fileID: 0}
   MaxShield: 20
   Level: 0
 --- !u!135 &135646982664589030

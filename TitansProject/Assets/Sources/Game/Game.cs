@@ -9,6 +9,8 @@ public class Game : MonoBehaviour {
     [SerializeField]
     private PlanetView planet; // Set from editor
 
+    public PlanetView Planet { get { return planet; } }
+
     [SerializeField]
     private Camera mainCamera; // Set from editor
 
@@ -36,7 +38,7 @@ public class Game : MonoBehaviour {
         Factions[1].EnemyFaction = Factions[0];
         Factions[0].AddUnit(CreateTitan("Prefabs/titan"), planet.GetRandomPosition());
         Factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
-        CameraController.SetViewToTitan(Factions[0].Units[0].transform.position);
+        CameraController.SetViewToTitan(Factions[1].Units[0].transform.position);
 
         MoveController.HideSelection();
     }
