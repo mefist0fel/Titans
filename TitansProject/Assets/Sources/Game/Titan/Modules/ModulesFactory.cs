@@ -14,6 +14,9 @@ public static class ModulesFactory {
     public static ITitanModule CreateTitanUpgradeModule(ModuleData upgradeModule) {
         return BuildUpgradeModule.Create(upgradeModule);
     }
+    public static ITitanModule CreateRocketModule(ModuleData upgradeModule) {
+        return BuildRocketModule.Create(upgradeModule);
+    }
 
     public static ITitanModule CreateModule(ModuleData moduleData, TitanView titan) {
         var moduleName = "Prefabs/Modules/" + moduleData.Id;
@@ -23,6 +26,7 @@ public static class ModulesFactory {
             return null;
         }
         var module = GameObject.Instantiate(modulePrefab, titan.transform);
+        module.transform.localPosition = Vector3.zero;
         return module.GetComponent<ITitanModule>();
     }
 }

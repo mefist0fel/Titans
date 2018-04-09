@@ -19,7 +19,6 @@ public class Game : MonoBehaviour {
     public TitanMoveMarkers MoveController; // Set from editor
 
     public TitanView SelectedTitan = null;
-    public ITitanModule SelectedTitanComponent = null;
 
     public Faction[] Factions;
 
@@ -60,14 +59,13 @@ public class Game : MonoBehaviour {
     }
 
     public static void OnSelectRocketStrike() {
-        Instance.SelectedTitanComponent = Instance.SelectedTitan.RocketLauncher;
         RocketAimView.Show(OnSelectRocketStrike, 1f);
     }
 
     private static void OnSelectRocketStrike(Vector3 fireCoord) {
         if (Instance.SelectedTitan == null)
             return;
-        Instance.SelectedTitan.RocketLauncher.Fire(fireCoord, Instance.planet);
+        Instance.SelectedTitan.FireRocket(fireCoord, Instance.planet);
     }
 
     private Vector3 prevMousePosition;
@@ -90,7 +88,7 @@ public class Game : MonoBehaviour {
                 SelectTitan(selectedTitan);
             }
         }
-        if (Input.GetMouseButtonUp(1) && SelectedTitan != null && SelectedTitan.IsAlive && SelectedTitanComponent == null) {
+        if (Input.GetMouseButtonUp(1) && SelectedTitan != null && SelectedTitan.IsAlive && !RocketAimView.IsActive()) {
             var isCommandsQueue = false;
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
                 isCommandsQueue = true;
@@ -113,14 +111,12 @@ public class Game : MonoBehaviour {
     private void SelectTitan(TitanView titan) {
         if (titan == null || !titan.IsAlive) {
             SelectedTitan = null;
-            SelectedTitanComponent = null;
             MoveController.HideSelection();
             gameUI.SelectTitan();
             RocketAimView.Hide();
             return;
         }
         SelectedTitan = titan;
-        SelectedTitanComponent = null;
         RocketAimView.Hide();
         MoveController.SelectTitan(titan);
         gameUI.SelectTitan(titan);

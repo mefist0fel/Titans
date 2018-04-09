@@ -27,15 +27,13 @@ public sealed class TitanView : MonoBehaviour {
     public int FactionId;
     public Faction SelfFaction;
 
-    [SerializeField]
-    public RocketLauncherModule RocketLauncher; // Set from editor
-
     private Shield shield;
     public Shield ShieldGenerator { get { return shield; } }
     public int MaxShield = 20;
     private int armor = 10;
     public int Armor { get { return armor; } }
     private int maxArmor = 10;
+
     public int MaxArmor { get { return maxArmor; } }
     private int resourceUnits = 10;
     public int ResourceUnits { get { return resourceUnits; } }
@@ -48,11 +46,12 @@ public sealed class TitanView : MonoBehaviour {
         1, 1, 2, 2,
         3, 3, 4, 4,
         0, // titan build module
-        0  // Level Up
+        0,  // Level Up
+        0   // Rocket
     };
     public int[] SlotLevel { get { return slotLevel; } }
 
-    private ITitanModule[] modules = new ITitanModule[14];
+    private ITitanModule[] modules = new ITitanModule[15];
     public ITitanModule[] Modules { get { return modules; } }
 
     private List<IModificator> modificators = new List<IModificator>();
@@ -79,6 +78,56 @@ public sealed class TitanView : MonoBehaviour {
         get {
             return Armor > 0;
         }
+    }
+
+    public void FireRocket(Vector3 fireCoord, PlanetView planet) {
+        RocketLauncherModule maximal = null;
+        foreach (var module in modules) {
+            var rocketModule = module as RocketLauncherModule;
+            if (rocketModule != null && (maximal == null || rocketModule.RocketCount < maximal.RocketCount)) {
+                maximal = rocketModule;
+            }
+        }
+        if (maximal != null) {
+            maximal.Fire(fireCoord, planet);
+        }
+        UpdateState();
+    }
+
+    public int GetComponentMaxRocketsCount() {
+        var count = 0;
+        foreach (var module in modules) {
+            var rocketModule = module as RocketLauncherModule;
+            if (rocketModule != null) {
+                count += rocketModule.MaxRocketCount;
+            }
+        }
+        return count;
+    }
+
+    public int GetComponentRocketsCount() {
+        var count = 0;
+        foreach (var module in modules) {
+            var rocketModule = module as RocketLauncherModule;
+            if (rocketModule != null) {
+                count += rocketModule.RocketCount;
+            }
+        }
+        return count;
+    }
+
+    public void AddRocket(int count) {
+        RocketLauncherModule minimal = null;
+        foreach (var module in modules) {
+            var rocketModule = module as RocketLauncherModule;
+            if (rocketModule != null && (minimal == null || rocketModule.RocketCount < minimal.RocketCount)) {
+                minimal = rocketModule;
+            }
+        }
+        if (minimal != null) {
+            minimal.RocketCount += count;
+        }
+        UpdateState();
     }
 
     public Vector3 GetHitPosition() {
@@ -110,6 +159,7 @@ public sealed class TitanView : MonoBehaviour {
 
     private void Die() {
         Debug.LogError("Oh, I'm dying");
+        livesView.gameObject.SetActive(false);
         UpdateState();
         ClearTasks();
         var renderers = GetComponentsInChildren<MeshRenderer>();
@@ -228,6 +278,19 @@ public sealed class TitanView : MonoBehaviour {
         }
         resourceUnits -= module.Cost;
         Attach(ModulesFactory.CreateBuildModule(module, slotId), slotId);
+    }
+
+    public void BuildRocket(ModuleData module) {
+        if (module == null) {
+            Debug.LogError("Module data is empty");
+            return;
+        }
+        if (module.Cost > ResourceUnits) {
+            Debug.LogError("Not enought RU for build");
+            return;
+        }
+        resourceUnits -= module.Cost;
+        Attach(ModulesFactory.CreateRocketModule(module), 14);
     }
 
     public void Attach(ITitanModule module, int slotId) {

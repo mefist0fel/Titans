@@ -35,6 +35,10 @@ public sealed class RocketAimView : MonoBehaviour {
         instance.needShow = true;
     }
 
+    public static bool IsActive() {
+        return instance.gameObject.activeSelf;
+    }
+
     public static void Hide() {
         instance.gameObject.SetActive(false);
     }

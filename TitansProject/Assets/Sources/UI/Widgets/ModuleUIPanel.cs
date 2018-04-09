@@ -47,6 +47,10 @@ public class ModuleUIPanel : MonoBehaviour {
             var buildModule = module as BuildUpgradeModule;
             progressImage.fillAmount = buildModule.NormalizedTime;
         }
+        if (module is BuildRocketModule) {
+            var buildModule = module as BuildRocketModule;
+            progressImage.fillAmount = buildModule.NormalizedTime;
+        }
         if (module is ShieldModule) {
             var shieldModule = module as ShieldModule;
             progressImage.fillAmount = 1f - shieldModule.NormalizedTime;
@@ -76,6 +80,10 @@ public class ModuleUIPanel : MonoBehaviour {
             progressImage.color = settings.BuildColor;
         }
         if (module is BuildUpgradeModule) {
+            progressImage.fillClockwise = false;
+            progressImage.color = settings.BuildColor;
+        }
+        if (module is BuildRocketModule) {
             progressImage.fillClockwise = false;
             progressImage.color = settings.BuildColor;
         }

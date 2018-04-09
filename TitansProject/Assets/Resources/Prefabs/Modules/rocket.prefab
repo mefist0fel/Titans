@@ -53,5 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 5
   Radius: 2
-  RocketCount: 10
-  MaxRocketCount: 10
+  RocketCount: 1
+  MaxRocketCount: 2

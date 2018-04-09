@@ -10,8 +10,8 @@ public sealed class RocketLauncherModule : MonoBehaviour, ITitanModule {
     public float Radius = 2f;
     private TitanView titan;
 
-    public int RocketCount = 10;
-    public int MaxRocketCount = 10;
+    public int RocketCount = 1;
+    public int MaxRocketCount = 2;
 
     public void Fire(Vector3 fireCoord, PlanetView planet) {
         if (RocketCount <= 0)

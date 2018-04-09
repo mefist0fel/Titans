@@ -8,8 +8,6 @@ public sealed class GameUI : MonoBehaviour {
     [SerializeField]
     private GameObject modulesPanel; // Set from editor
     [SerializeField]
-    private FireRocketUIPanel fireRocketPanel; // Set from editor
-    [SerializeField]
     private ModuleUIPanel[] modules = new ModuleUIPanel[12]; // Set from editor
     [SerializeField]
     private ModuleUIPanel buildTitanModule; // Set from editor
@@ -20,13 +18,24 @@ public sealed class GameUI : MonoBehaviour {
     [SerializeField]
     private Button FullScreenHolder; // Set from editor
 
+    // Rockets panel
+    [SerializeField]
+    private GameObject skillPanel; // Set from editor
+    [SerializeField]
+    private ModuleUIPanel OnBuildRocketButton; // Set from editor
+    [SerializeField]
+    private Button OnFireRocketButton; // Set from editor
+    [SerializeField]
+    private Button OnCancelRocketButton; // Set from editor
+    [SerializeField]
+    private Text RocketsCount; // Set from editor
+
     private TitanView selectedTitan;
     private int selectedSlot = 0;
 
     public enum ModuleType {}
 
     private void Start() {
-        fireRocketPanel.Init(Game.OnSelectRocketStrike);
         HideContextMenu();
     }
 
@@ -46,7 +55,7 @@ public sealed class GameUI : MonoBehaviour {
             selectedTitan = null;
             statusText.text = "";
             modulesPanel.SetActive(false);
-            fireRocketPanel.SetActive(false);
+            skillPanel.SetActive(false);
             Game.Instance.MoveController.HideSelection();
             HideContextMenu();
             return;
@@ -55,8 +64,15 @@ public sealed class GameUI : MonoBehaviour {
         statusText.text = status;
         modulesPanel.SetActive(true);
         UpdateModules();
-        fireRocketPanel.SetActive(true);
-        fireRocketPanel.UpdatePanel(0);
+        var maxRocket = selectedTitan.GetComponentMaxRocketsCount();
+        skillPanel.SetActive(maxRocket > 0);
+        if (maxRocket > 0) {
+            OnFireRocketButton.gameObject.SetActive(!RocketAimView.IsActive());
+            OnCancelRocketButton.gameObject.SetActive(RocketAimView.IsActive());
+            var rocketCount = selectedTitan.GetComponentRocketsCount();
+            RocketsCount.text = rocketCount + "/" + maxRocket;
+            OnFireRocketButton.interactable = rocketCount > 0;
+        }
         Game.Instance.MoveController.ShowPathMarkers(selectedTitan, selectedTitan.GetPathPoints());
     }
 
@@ -78,6 +94,7 @@ public sealed class GameUI : MonoBehaviour {
         buildTitanModule.SetModule(selectedTitan.Modules[12]);
         upgradeTitanModule.SetModule(selectedTitan.Modules[13]);
         upgradeTitanModule.gameObject.SetActive(selectedTitan.Level < TitanView.MaxLevel);
+        OnBuildRocketButton.SetModule(selectedTitan.Modules[14]);
         LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
     }
 
@@ -86,6 +103,8 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
+        if (selectedTitan.Modules[moduleId] != null)
+            return;
         selectedSlot = moduleId;
         FullScreenHolder.gameObject.SetActive(true);
         BuildContextMenu.gameObject.SetActive(true);
@@ -93,10 +112,14 @@ public sealed class GameUI : MonoBehaviour {
     }
 
     public void OnBuildTitanClick() { // Set from editor
+        if (selectedTitan.Modules[12] != null)
+            return;
         selectedTitan.BuildTitan(Config.Modules["titan"]);
     }
 
     public void OnUpgradeTitanClick() { // Set from editor
+        if (selectedTitan.Modules[13] != null)
+            return;
         selectedTitan.BuildUpgrade(Config.Modules["titan_upgrade"]);
     }
 
@@ -122,6 +145,26 @@ public sealed class GameUI : MonoBehaviour {
         var module = Config.Modules["anti_air"];
         selectedTitan.BuildModule(module, selectedSlot);
         HideContextMenu();
+    }
+
+    public void OnSelectRocketFireButton() {
+        Game.OnSelectRocketStrike();
+        OnFireRocketButton.gameObject.SetActive(false);
+        OnCancelRocketButton.gameObject.SetActive(true);
+    }
+    public void OnCancelRocketFireButton() {
+        RocketAimView.Hide();
+        OnFireRocketButton.gameObject.SetActive(true);
+        OnCancelRocketButton.gameObject.SetActive(false);
+    }
+    public void OnAddRocketButton() {
+        if (selectedTitan.Modules[14] != null)
+            return;
+        var rocketCount = selectedTitan.GetComponentRocketsCount();
+        var maxRocketCount = selectedTitan.GetComponentMaxRocketsCount();
+        if (rocketCount >= maxRocketCount)
+            return;
+        selectedTitan.BuildRocket(Config.Modules["add_rocket"]);
     }
 
     public void CancelContextMenu() { // Set from editor
