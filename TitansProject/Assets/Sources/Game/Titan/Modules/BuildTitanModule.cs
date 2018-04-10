@@ -35,10 +35,12 @@ public class BuildTitanModule : MonoBehaviour, ITitanModule {
     }
 
     private void BuildTitan() {
+        var pos = controlledTitan.Position;
+        var newPosition = (controlledTitan.Position + Quaternion.LookRotation(controlledTitan.Position) * Vector3.up).normalized * Game.Instance.Planet.Radius;
         if (titanData.Id == "titan") {
-            Game.Instance.Factions[0].AddUnit(Game.Instance.CreateTitan("Prefabs/titan"), Quaternion.Euler(3f, 0, 0) * controlledTitan.Position);
+            Game.Instance.Factions[0].AddUnit(Game.Instance.CreateTitan("Prefabs/titan"), newPosition);
         } else {
-            Game.Instance.Factions[0].AddUnit(Game.Instance.CreateTitan("Prefabs/titan_enemy"), Quaternion.Euler(20f, 0, 0) * controlledTitan.Position);
+            Game.Instance.Factions[1].AddUnit(Game.Instance.CreateTitan("Prefabs/titan_enemy"), newPosition);
         }
         controlledTitan.Attach(null, 12);
     }

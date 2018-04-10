@@ -14,6 +14,7 @@ public sealed class PlanetView : MonoBehaviour {
     private List<ResourcePointView> resourcePoints = new List<ResourcePointView>();
     [SerializeField]
     private List<GenerationFrequency> generationPreset = new List<GenerationFrequency>();
+    public List<ResourcePointView> ResourcePoins { get { return resourcePoints; } }
 
     [System.Serializable]
     public sealed class GenerationFrequency {

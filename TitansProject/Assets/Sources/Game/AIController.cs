@@ -16,6 +16,7 @@ public class AIController : MonoBehaviour {
         "rocket",
         "anti_air",
         "enemy_titan",
+        "titan_upgrade",
         "shield",
         "rocket",
         "anti_air"
@@ -35,6 +36,9 @@ public class AIController : MonoBehaviour {
 
     public BaseTarget target = BaseTarget.CollectResources;
     public ResourcePointView NearestResource = null;
+    public TitanView NearestEnemy = null;
+
+    private static List<ResourcePointView> CollectedResources = new List<ResourcePointView>();
 
     public float timer = 0;
     [SerializeField]
@@ -77,11 +81,11 @@ public class AIController : MonoBehaviour {
             return;
         }
         if (module.Id == "titan_upgrade") {
-            Debug.Log("Build titan_upgrade - not implemented");
+            controlledTitan.BuildUpgrade(module);
             return;
         }
         if (module.Id == "add_rocket") {
-            Debug.Log("Build roclet - not implemented");
+            controlledTitan.BuildRocket(module);
             return;
         }
         int emptySlotId = FindEmptySlotId();
@@ -106,15 +110,47 @@ public class AIController : MonoBehaviour {
                 TryCollectResources();
                 break;
             case BaseTarget.KillAllEnemy:
-                Debug.Log("Kill al humans!");
+                Debug.Log("Kill all humans!");
+                TryKillEnemy();
                 break;
         }
+    }
+
+    private void TryKillEnemy() {
+        if (NearestEnemy == null || !NearestEnemy.IsAlive) {
+            NearestEnemy = FindNearestEnemy();
+        }
+        MoveTo(NearestEnemy);
+    }
+
+    private void MoveTo(TitanView nearestEnemy) {
+        if (nearestEnemy == null)
+            return;
+        var delta = (controlledTitan.Position - nearestEnemy.Position).normalized;
+        var needPosition = (nearestEnemy.Position + delta).normalized * controlledPlanet.Radius;
+        controlledTitan.ClearTasks();
+        controlledTitan.AddMoveTask(needPosition);
+    }
+
+    private TitanView FindNearestEnemy() {
+        TitanView nearest = null;
+        float nearestDistance = 0;
+        foreach (var enemy in Game.Instance.Factions[0].Units) {
+            if (enemy != null && enemy.IsAlive) {
+                var distance = Vector3.Distance(controlledTitan.Position, enemy.Position);
+                if (nearest == null || nearestDistance > distance) {
+                    nearest = enemy;
+                    nearestDistance = distance;
+                }
+            }
+        }
+        return nearest;
     }
 
     private void TryCollectResources() {
         if (NearestResource == null || NearestResource.Count == 0) {
             ResourcePointView res;
-            if (controlledPlanet.FindResourcePointClick(transform.position, out res, 5)) {
+            if (FindNearestResource(transform.position, out res)) {
                 if (NearestResource != res) {
                     Debug.Log("To Next Point!");
                     NearestResource = res;
@@ -127,9 +163,28 @@ public class AIController : MonoBehaviour {
         }
         if (NearestResource != null && NearestResource.Count > 0) {
             controlledTitan.AddResourceTask(NearestResource);
+            CollectedResources.Add(NearestResource);
+            CollectedResources.RemoveAll((res) => res == null);
         } else {
             NearestResource = null;
             Debug.Log("To Next Point!");
         }
+    }
+
+    public bool FindNearestResource(Vector3 titanPosition, out ResourcePointView resourcePoint) {
+        resourcePoint = null;
+        var nearestDistance = 0f;
+        foreach (var point in controlledPlanet.ResourcePoins) {
+            if (point == null || point.Count == 0)
+                continue; // TODO remove empty points
+            if (CollectedResources.Contains(point))
+                continue;
+            var distance = Vector3.Distance(point.transform.position, titanPosition);
+            if (distance < nearestDistance || resourcePoint == null) {
+                nearestDistance = distance;
+                resourcePoint = point;
+            }
+        }
+        return resourcePoint != null;
     }
 }
