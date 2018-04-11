@@ -6,12 +6,19 @@ using UnityEngine;
 public sealed class PrysmMeshFilter: MonoBehaviour {
 	[System.Serializable]
 	public class Settings {
-		[SerializeField]public int edgeCount = 6;
-		[SerializeField]public float radius = 1f;
-		[SerializeField]public float startAngle = 0;
-		[SerializeField]public float depth = 10;
-		public override int GetHashCode () {
-			return startAngle.GetHashCode() + edgeCount.GetHashCode() + radius.GetHashCode() + depth.GetHashCode();
+        [SerializeField]
+        public int edgeCount = 6;
+        [SerializeField]
+        public float radius = 1f;
+        [SerializeField]
+        public float startAngle = 0;
+        [SerializeField]
+        public float depth = 1;
+        [SerializeField]
+        public bool smoothNormals = false;
+
+        public override int GetHashCode () {
+			return startAngle.GetHashCode() + edgeCount.GetHashCode() + radius.GetHashCode() + depth.GetHashCode() + smoothNormals.GetHashCode();
 		}
 	}
 	[SerializeField] Settings settings = new Settings();
@@ -24,9 +31,14 @@ public sealed class PrysmMeshFilter: MonoBehaviour {
     private void FindComponents() {
 		if (meshFilter == null)
 			meshFilter = GetComponent<MeshFilter> ();
-	}
+    }
 
-	[ContextMenu("Regenerate mesh")]
+    private void Start() {
+        FindComponents();
+        RegenerateMesh();
+    }
+
+    [ContextMenu("Regenerate mesh")]
     private void RegenerateMesh () {
 		controlMesh = GenerateMesh ();
 		meshFilter.mesh = controlMesh;
@@ -44,7 +56,12 @@ public sealed class PrysmMeshFilter: MonoBehaviour {
         Vector3[] bottomPoints = new Vector3[segments + 1];
         for (int i = 0; i < topPoints.Length; i++) {
             float angleInRad = 2f * Mathf.PI / (float)segments * (float)i;
-            float angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i + 0.5f);
+            float angleOfNormalInRad;
+            if (settings.smoothNormals) {
+                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i);
+            } else {
+                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i + 0.5f);
+            }
             topPoints[i] = new Vector3(Mathf.Sin(angleInRad), 0, Mathf.Cos(angleInRad)) * settings.radius + shift;
             bottomPoints[i] = topPoints[i] + new Vector3(0, -settings.depth);
             sideNormals[i] = new Vector3(Mathf.Sin(angleOfNormalInRad), 0, Mathf.Cos(angleOfNormalInRad));
@@ -56,13 +73,26 @@ public sealed class PrysmMeshFilter: MonoBehaviour {
         }
         if (settings.depth != 0) {
             for (int i = 0; i < segments; i++) {
-                mesh.AddQuad(
-                    topPoints[i + 1],
-                    topPoints[i],
-                    bottomPoints[i],
-                    bottomPoints[i + 1],
-                    sideNormals[i]
-                );
+                if (settings.smoothNormals) {
+                    mesh.AddQuad(
+                        topPoints[i + 1],
+                        topPoints[i],
+                        bottomPoints[i],
+                        bottomPoints[i + 1],
+                        sideNormals[i + 1],
+                        sideNormals[i],
+                        sideNormals[i],
+                        sideNormals[i + 1]
+                    );
+                } else {
+                    mesh.AddQuad(
+                        topPoints[i + 1],
+                        topPoints[i],
+                        bottomPoints[i],
+                        bottomPoints[i + 1],
+                        sideNormals[i]
+                    );
+                }
             }
         }
 		for (int i = 0; i < segments; i++) {
