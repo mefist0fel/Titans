@@ -51,8 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d113ffb2a5943143b20e396042d0d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  accuracy: 0.5
+  damage: 2
+  accuracy: 0.7
   reloadTime: 1
   reloadTimeRandomShift: 0.5
   fireRadius: 2

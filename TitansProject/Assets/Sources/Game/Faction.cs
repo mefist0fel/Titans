@@ -9,6 +9,17 @@ public sealed class Faction {
     
     public List<TitanView> Units = new List<TitanView>();
 
+    public int ActiveUnitsCount { get {
+            int count = 0;
+            foreach (var unit in Units) {
+                if (unit != null && unit.IsAlive) {
+                    count += 1;
+                }
+            }
+            return count;
+        }
+    }
+
     public Faction(int id) {
         ID = id;
     }

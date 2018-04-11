@@ -60,6 +60,20 @@ public class Game : MonoBehaviour {
         return titan;
     }
 
+    internal static bool CheckWinConditions() {
+        if (Instance.Factions[1].ActiveUnitsCount <= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    internal static bool CheckLoseConditions() {
+        if (Instance.Factions[0].ActiveUnitsCount <= 0) {
+            return true;
+        }
+        return false;
+    }
+
     public static void OnSelectRocketStrike() {
         RocketAimView.Show(OnSelectRocketStrike, 1f);
     }

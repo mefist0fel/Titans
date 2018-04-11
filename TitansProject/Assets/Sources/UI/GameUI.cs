@@ -29,6 +29,12 @@ public sealed class GameUI : MonoBehaviour {
     private Button OnCancelRocketButton; // Set from editor
     [SerializeField]
     private Text RocketsCount; // Set from editor
+    [SerializeField]
+    private PauseMenuUI pauseMenu; // Set from editor
+    [SerializeField]
+    private WinUI winUI; // Set from editor
+    [SerializeField]
+    private LoseUI loseUI; // Set from editor
 
     private TitanView selectedTitan;
     private int selectedSlot = 0;
@@ -37,6 +43,26 @@ public sealed class GameUI : MonoBehaviour {
 
     private void Start() {
         HideContextMenu();
+        pauseMenu.Hide();
+        winUI.Hide();
+        loseUI.Hide();
+    }
+
+    float winTimer = 0;
+    private void Update() {
+        winTimer -= Time.deltaTime;
+        if (winTimer < 0) {
+            winTimer = 0.5f;
+            if (Game.CheckWinConditions()) {
+                winUI.Show();
+            }
+            if (Game.CheckLoseConditions()) {
+                loseUI.Show();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.gameObject.activeSelf) {
+            pauseMenu.Show();
+        }
     }
 
     public void SelectTitan(TitanView titan = null) {
