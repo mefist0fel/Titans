@@ -31,7 +31,8 @@ public class AIController : MonoBehaviour {
 
     public enum BaseTarget {
         CollectResources,
-        KillAllEnemy
+        KillAllEnemy,
+        DoNothing
     }
 
     public BaseTarget target = BaseTarget.CollectResources;
@@ -113,10 +114,16 @@ public class AIController : MonoBehaviour {
                 Debug.Log("Kill all humans!");
                 TryKillEnemy();
                 break;
+            case BaseTarget.DoNothing:
+                break;
         }
     }
 
     private void TryKillEnemy() {
+        if (!controlledTitan.IsAlive) {
+            target = BaseTarget.DoNothing;
+            return;
+        }
         if (NearestEnemy == null || !NearestEnemy.IsAlive) {
             NearestEnemy = FindNearestEnemy();
         }
