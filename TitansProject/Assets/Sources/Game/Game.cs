@@ -1,7 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour {
     public static Game Instance { get; private set; }
@@ -20,7 +18,6 @@ public class Game : MonoBehaviour {
     public TitanView SelectedTitan = null;
 
     public Faction[] Factions;
-
     private GameUI gameUI; // Set from editor
 
     private void Awake() {

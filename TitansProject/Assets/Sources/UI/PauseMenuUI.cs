@@ -2,28 +2,26 @@
 using UnityEngine.SceneManagement;
 
 public sealed class PauseMenuUI : UILayer {
-    public void Show() {
+    protected override void OnShow() {
         Time.timeScale = 0;
-        gameObject.SetActive(true);
     }
 
-    public void Hide() {
+    protected override void OnHide() {
         Time.timeScale = 1f;
-        gameObject.SetActive(false);
     }
 
     public void OnContinueButtonClick() {
-        Hide();
+        Hide<PauseMenuUI>();
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Hide();
+        if (Input.GetKeyUp(KeyCode.Escape)) {
+            Hide<PauseMenuUI>();
         }
     }
 
     public void OnExitButtonClick() {
-        Hide();
+        Hide<PauseMenuUI>();
         SceneManager.LoadScene("Main");
     }
 }

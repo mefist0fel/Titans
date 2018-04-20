@@ -51,7 +51,7 @@ public sealed class GameUI : UILayer {
                 UILayer.Show<LoseUI>();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && !UILayer.IsLayerShowed<PauseMenuUI>()) {
+        if (Input.GetKeyUp(KeyCode.Escape) && !UILayer.IsLayerShowed<PauseMenuUI>()) {
             UILayer.ShowModal<PauseMenuUI>();
         }
     }

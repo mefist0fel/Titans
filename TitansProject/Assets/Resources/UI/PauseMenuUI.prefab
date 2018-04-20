@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f1cf57a498ced448a0e03cc5781514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer: 0
+  layer: 1
   isNeedDestroyUIBetweenScenes: 1
 --- !u!114 &114160842557406700
 MonoBehaviour:
