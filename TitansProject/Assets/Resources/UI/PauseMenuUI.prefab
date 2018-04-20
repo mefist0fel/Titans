@@ -88,9 +88,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224912538121239534}
+  - component: {fileID: 114102579096557580}
   - component: {fileID: 222924918955601006}
   - component: {fileID: 114616179080910986}
-  - component: {fileID: 114102579096557580}
   m_Layer: 5
   m_Name: PauseMenuUI
   m_TagString: Untagged

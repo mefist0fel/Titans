@@ -21,7 +21,6 @@ public sealed class MainMenuUI : UILayer {
     }
 
     private void ExitApplication() {
-        Debug.Log("On exit game click");
         Application.Quit();
     }
 }

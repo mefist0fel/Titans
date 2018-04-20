@@ -15,20 +15,20 @@ public class Game : MonoBehaviour {
     private Camera mainCamera; // Set from editor
 
     [SerializeField]
-    public GameUI gameUI; // Set from editor
-
-    [SerializeField]
     public TitanMoveMarkers MoveController; // Set from editor
 
     public TitanView SelectedTitan = null;
 
     public Faction[] Factions;
 
+    private GameUI gameUI; // Set from editor
+
     private void Awake() {
         Instance = this;
     }
 
     private void Start () {
+        gameUI = UILayer.Show<GameUI>();
         gameUI.UpdateTitanStatus();
         Factions = new Faction[] {
             new Faction(0),

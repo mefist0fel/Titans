@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public sealed class GameUI : MonoBehaviour {
+public sealed class GameUI : UILayer {
     [SerializeField]
     private Text statusText; // Set from editor
     [SerializeField]
@@ -29,12 +29,6 @@ public sealed class GameUI : MonoBehaviour {
     private Button OnCancelRocketButton; // Set from editor
     [SerializeField]
     private Text RocketsCount; // Set from editor
-    [SerializeField]
-    private PauseMenuUI pauseMenu; // Set from editor
-    [SerializeField]
-    private WinUI winUI; // Set from editor
-    [SerializeField]
-    private LoseUI loseUI; // Set from editor
 
     private TitanView selectedTitan;
     private int selectedSlot = 0;
@@ -43,9 +37,6 @@ public sealed class GameUI : MonoBehaviour {
 
     private void Start() {
         HideContextMenu();
-        pauseMenu.Hide();
-        winUI.Hide();
-        loseUI.Hide();
     }
 
     float winTimer = 0;
@@ -54,14 +45,14 @@ public sealed class GameUI : MonoBehaviour {
         if (winTimer < 0) {
             winTimer = 0.5f;
             if (Game.CheckWinConditions()) {
-                winUI.Show();
+                UILayer.Show<WinUI>();
             }
             if (Game.CheckLoseConditions()) {
-                loseUI.Show();
+                UILayer.Show<LoseUI>();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.gameObject.activeSelf) {
-            pauseMenu.Show();
+        if (Input.GetKeyDown(KeyCode.Escape) && !UILayer.IsLayerShowed<PauseMenuUI>()) {
+            UILayer.ShowModal<PauseMenuUI>();
         }
     }
 

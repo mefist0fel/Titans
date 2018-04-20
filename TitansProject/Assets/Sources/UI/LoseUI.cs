@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoseUI : MonoBehaviour {
+public sealed class LoseUI : UILayer {
 
     public void Show() {
         Time.timeScale = 0;

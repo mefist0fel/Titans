@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class WinUI : MonoBehaviour {
+public sealed class WinUI : UILayer {
 
     public void Show() {
         Time.timeScale = 0;
