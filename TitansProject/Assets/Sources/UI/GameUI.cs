@@ -29,11 +29,18 @@ public sealed class GameUI : UILayer {
     private Button OnCancelRocketButton; // Set from editor
     [SerializeField]
     private Text RocketsCount; // Set from editor
+    [SerializeField]
+    private UIMarkerController markerControllerPrefab; // Set from editor
 
     private TitanView selectedTitan;
     private int selectedSlot = 0;
 
     public enum ModuleType {}
+
+    public void AddMarker(TitanView titan) {
+        var marker = Instantiate(markerControllerPrefab, transform);
+        marker.Init(titan);
+    }
 
     private void Start() {
         HideContextMenu();

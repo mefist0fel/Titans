@@ -28,6 +28,7 @@ public sealed class TitanView : MonoBehaviour {
     public Faction SelfFaction;
 
     private Shield shield;
+
     public Shield ShieldGenerator { get { return shield; } }
     public int MaxShield = 20;
     private int armor = 10;
@@ -72,6 +73,10 @@ public sealed class TitanView : MonoBehaviour {
         get {
             return transform.position;
         }
+    }
+
+    public Vector3 GetMarkerPosition() {
+        return Position + transform.rotation * new Vector3(0, 0.3f);
     }
 
     public bool IsAlive {
@@ -232,6 +237,10 @@ public sealed class TitanView : MonoBehaviour {
         FactionId = faction.ID;
         transform.localPosition = position;
         transform.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
+        GameUI gameUI = UILayer.Get<GameUI>();
+        if (gameUI != null) {
+            gameUI.AddMarker(this);
+        }
     }
 
     private void Start () {

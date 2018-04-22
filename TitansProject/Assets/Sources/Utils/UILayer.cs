@@ -63,6 +63,15 @@ public class UILayer : MonoBehaviour {
         return false;
     }
 
+    public static T Get<T>() where T : UILayer {
+        if (registeredUI.ContainsKey(typeof(T))) {
+            UILayer layer = registeredUI[typeof(T)];
+            if (displayedUILayers.Contains(layer))
+                return (T)layer;
+        }
+        return null;
+    }
+
     public static T ShowModal<T>(System.Action showingDelegate = null) where T : UILayer {
         if (registeredUI.ContainsKey(typeof(T))) {
             UILayer layer = registeredUI[typeof(T)];

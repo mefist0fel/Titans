@@ -3714,6 +3714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e6ca1c0dbf20c44904d096f2f7763a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layer: 0
+  isNeedDestroyUIBetweenScenes: 1
   statusText: {fileID: 114105411005378482}
   modulesPanel: {fileID: 1349238139684042}
   modules:
@@ -3738,9 +3740,8 @@ MonoBehaviour:
   OnFireRocketButton: {fileID: 114449497759020014}
   OnCancelRocketButton: {fileID: 114148447222677834}
   RocketsCount: {fileID: 114248108697566538}
-  pauseMenu: {fileID: 0}
-  winUI: {fileID: 0}
-  loseUI: {fileID: 0}
+  markerControllerPrefab: {fileID: 114830137941878778, guid: 9a5acf4669312a040ab0a82a8b8f7aa0,
+    type: 2}
 --- !u!114 &114592250410735126
 MonoBehaviour:
   m_ObjectHideFlags: 1
