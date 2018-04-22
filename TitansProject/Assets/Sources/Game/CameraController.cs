@@ -17,6 +17,31 @@ public sealed class CameraController : MonoBehaviour {
     private Camera mainCamera; // Set from editor
     [SerializeField]
     private Quaternion cameraViewRotation = Quaternion.Euler(60, 0, 0);
+    [SerializeField]
+    private VisualLevelData[] levels = new VisualLevelData[] {
+        new VisualLevelData() { Distance = 5 }
+    };
+    [SerializeField]
+    private float timeToChangeLevel = 0.6f;
+
+    [Serializable]
+    public sealed class VisualLevelData {
+        public float Distance = 10;
+        public Vector3 Rotation = new Vector3(60, 0, 0);
+        public float FieldOfView = 70;
+    }
+
+    private int cameraLevel = 1;
+    private float changeLevelTimer = 0;
+    private float needCameraDistance = 5;
+    private Vector3 needCameraRotation = new Vector3(60, 0, 0);
+    private Vector3 currentCameraRotation = new Vector3(60, 0, 0);
+    private float currentFieldOfView = 70;
+    private float needFieldOfView = 70;
+
+    [SerializeField]
+    private Vector2 inertionAttenuation = new Vector2(4f, 4f); // Per second
+    private Vector2 rotationInertionVelocity = Vector2.zero;
 
     private Quaternion rotation = Quaternion.identity;
     private float AngularSpeed {
@@ -49,28 +74,27 @@ public sealed class CameraController : MonoBehaviour {
     private void Awake () {
         Instance = this;
     }
-    
+
+    private void Start() {
+        SetLevel(levels[1]);
+    }
+ 
     Vector3 prevPosition;
     private void Update () {
         if (Input.GetMouseButtonDown(0)) {
             prevPosition = Input.mousePosition;
         }
         if (Input.GetMouseButton(0)) {
-            // Vector3 prevClickPosition;
-            // Vector3 clickPosition;
-            // if (
-            //     planet.RaycastSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition) &&
-            //     planet.RaycastSurfacePoint(mainCamera.ScreenPointToRay(prevPosition), out prevClickPosition)) {
-            //     var moveAxe = -Utils.GetNormal(prevClickPosition, clickPosition, Vector3.zero);
-            //     var angle = Vector3.Angle(prevClickPosition, clickPosition);
-            //     rotation = Quaternion.AngleAxis(angle, moveAxe) * rotation;
-            // }
-            const float unitScaleFactor = 50f;
+            const float unitScaleFactor = 2000f;
             var delta = (Input.mousePosition - prevPosition);
-            Rotate(Vector3.forward, delta.x / Screen.width * unitScaleFactor * AngularSpeed);
-            Rotate(Vector3.left, delta.y / Screen.width * unitScaleFactor * AngularSpeed);
+            rotationInertionVelocity.x = delta.x / Screen.height * unitScaleFactor;
+            rotationInertionVelocity.y = delta.y / Screen.height * unitScaleFactor;
             prevPosition = Input.mousePosition;
+        } else {
+            rotationInertionVelocity.Scale(Vector2.one - inertionAttenuation * Time.deltaTime);
         }
+        Rotate(Vector3.forward, rotationInertionVelocity.x);
+        Rotate(Vector3.left, rotationInertionVelocity.y);
 
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
             Rotate(Vector3.left, -AngularSpeed);
@@ -90,7 +114,36 @@ public sealed class CameraController : MonoBehaviour {
         if (Input.GetKey(KeyCode.E)) {
             Rotate(Vector3.up, rotationSpeed);
         }
+        if (changeLevelTimer > 0) {
+            changeLevelTimer -= Time.deltaTime;
+        } else {
+            if (Input.mouseScrollDelta != Vector2.zero) {
+                if (Input.mouseScrollDelta.y > 0) {
+                    cameraLevel -= 1;
+                }
+                if (Input.mouseScrollDelta.y < 0) {
+                    cameraLevel += 1;
+                }
+                if (cameraLevel < 0)
+                    cameraLevel = 0;
+                if (cameraLevel >= levels.Length)
+                    cameraLevel = levels.Length - 1;
+                SetLevel(levels[cameraLevel]);
+            }
+        }
+        mainCamera.transform.localPosition = new Vector3(0, 0, -needCameraDistance * 0.05f + mainCamera.transform.localPosition.z * 0.95f);
+        currentCameraRotation = Vector3.Lerp(currentCameraRotation, needCameraRotation, 0.05f);
+        cameraViewRotation = Quaternion.Euler(currentCameraRotation);
+        currentFieldOfView = needFieldOfView * 0.05f + currentFieldOfView * 0.95f;
+        mainCamera.fieldOfView = currentFieldOfView;
         SetRotation();
+    }
+
+    private void SetLevel(VisualLevelData visualLevelData) {
+        changeLevelTimer = timeToChangeLevel;
+        needCameraDistance = visualLevelData.Distance;
+        needCameraRotation = visualLevelData.Rotation;
+        needFieldOfView = visualLevelData.FieldOfView;
     }
 
     private void SetRotation() {
