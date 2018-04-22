@@ -201,7 +201,7 @@ public sealed class CameraController : MonoBehaviour {
         if (positionA == prevPositionA && positionB == prevPositionB) {
             prevDistance = Vector2.Distance(prevPositionA, prevPositionB);
         }
-        const float precision = 1.05f; // 5%
+        const float precision = 1.1f; // 10% of screen
         if (distance > prevDistance * precision) {
             prevDistance = distance;
             cameraLevel -= 1;
