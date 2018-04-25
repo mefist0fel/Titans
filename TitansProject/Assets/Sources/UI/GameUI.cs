@@ -37,9 +37,9 @@ public sealed class GameUI : UILayer {
 
     public enum ModuleType {}
 
-    public void AddMarker(TitanView titan) {
+    public void AddMarker(TitanView titan, PlanetView planet) {
         var marker = Instantiate(markerControllerPrefab, transform);
-        marker.Init(titan);
+        marker.Init(titan, planet);
     }
 
     private void Start() {

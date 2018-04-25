@@ -33,7 +33,7 @@ public class Game : MonoBehaviour {
         };
         Factions[0].EnemyFaction = Factions[1];
         Factions[1].EnemyFaction = Factions[0];
-        Factions[0].AddUnit(CreateTitan("Prefabs/titan"), planet.GetRandomPosition());
+        Factions[0].AddUnit(CreateTitan("Prefabs/titan"), new Vector3(0, planet.Radius, 0)); // planet.GetRandomPosition());
         Factions[1].AddUnit(CreateTitan("Prefabs/titan_enemy"), planet.GetRandomPosition());
         CameraController.SetViewToTitan(Factions[0].Units[0].transform.position);
 

@@ -76,7 +76,7 @@ public sealed class TitanView : MonoBehaviour {
     }
 
     public Vector3 GetMarkerPosition() {
-        return Position + transform.rotation * new Vector3(0, 0.3f);
+        return Position;
     }
 
     public bool IsAlive {
@@ -239,7 +239,7 @@ public sealed class TitanView : MonoBehaviour {
         transform.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
         GameUI gameUI = UILayer.Get<GameUI>();
         if (gameUI != null) {
-            gameUI.AddMarker(this);
+            gameUI.AddMarker(this, planet);
         }
     }
 
