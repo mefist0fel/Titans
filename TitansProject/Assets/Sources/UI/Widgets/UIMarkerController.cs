@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public sealed class UIMarkerController : MonoBehaviour {
     [SerializeField]
-    private GameObject controlArrow;
+    private RectTransform controlArrow;
     private TitanView controlledTitan;
     private PlanetView controlledPlanet;
     private RectTransform rectTransform;
@@ -40,10 +40,12 @@ public sealed class UIMarkerController : MonoBehaviour {
             return;
         if (canvas == null)
             return;
+        const float markerHeight = 0.35f;
         var camera = Camera.main;
-        var radius = controlledPlanet.Radius;
+        var radius = controlledPlanet.Radius + markerHeight;
         var planetPosition = controlledPlanet.transform.position;
-        var markerPosition = controlledTitan.GetMarkerPosition();
+        var markerPosition = controlledTitan.Position.normalized * radius;
+        var directionMarkerPosition = markerPosition * 0.99f;
         var cameraPosition = camera.transform.position;
         var normalToCamera = Vector3.Normalize(cameraPosition - markerPosition);
         Plane markerPlane = new Plane(normalToCamera, markerPosition);
@@ -66,12 +68,18 @@ public sealed class UIMarkerController : MonoBehaviour {
             }
         }
         pos = horizonMarkerPosition;
-        // if (controlArrow != null) {
-        //     controlArrow.SetActive(needShowArrow);
-        // }
         Vector2 border = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f);
         Vector2 centerPosition = ((Vector2)camera.WorldToScreenPoint(Vector3.zero) - border) * (1f / canvas.scaleFactor);
         Vector2 position = ((Vector2)camera.WorldToScreenPoint(horizonMarkerPosition) - border) * (1f / canvas.scaleFactor);
+        Vector2 angleStartPosition = ((Vector2)camera.WorldToScreenPoint(markerPosition) - border) * (1f / canvas.scaleFactor);
+        Vector2 angleDirectionPosition = ((Vector2)camera.WorldToScreenPoint(directionMarkerPosition) - border) * (1f / canvas.scaleFactor);
+        if (controlArrow != null) {
+            controlArrow.localEulerAngles = new Vector3(0, 0, - Utils.GetAngle(angleStartPosition, angleDirectionPosition));
+        }
+        // if (controlArrow != null) {
+        //     controlArrow.SetActive(needShowArrow);
+        // }
+
         float screenBorderPixels = 32f;
         float aspect = Screen.width / (float)Screen.height;
         if (position.x > referenceScreenSize.x * aspect - screenBorderPixels) {

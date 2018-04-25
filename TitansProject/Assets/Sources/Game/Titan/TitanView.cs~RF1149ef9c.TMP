@@ -75,6 +75,10 @@ public sealed class TitanView : MonoBehaviour {
         }
     }
 
+    public Vector3 GetMarkerPosition() {
+        return Position;
+    }
+
     public bool IsAlive {
         get {
             return Armor > 0;
