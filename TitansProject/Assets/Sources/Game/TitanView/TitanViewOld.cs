@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Configs;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Model;
 
 [SelectionBase]
 public sealed class TitanViewOld : MonoBehaviour {

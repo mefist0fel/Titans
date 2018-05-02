@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/// <summary>
-/// Main class for control battle (units, resources) on single planet
-/// </summary>
 namespace Model {
+    /// <summary>
+    /// Main class for control battle (units, resources) on single planet
+    /// </summary>
     public sealed class Battle {
         public Planet Planet { get; private set; }
 

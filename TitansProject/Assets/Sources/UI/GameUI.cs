@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using View;
 
 public sealed class GameUI : UILayer {
@@ -37,7 +36,7 @@ public sealed class GameUI : UILayer {
 
 
     private TitanView selectedTitan;
-    private int selectedSlot = 0;
+    private ModuleSlot selectedSlot;
 
     public enum ModuleType {}
 
@@ -111,24 +110,32 @@ public sealed class GameUI : UILayer {
     }
 
     private void UpdateModules() {
-      //  for (int i = 0; i < modules.Length; i++) {
-      //      bool needShow = false;
-      //      if (selectedTitan.SlotLevel.Length > i)
-      //          needShow = selectedTitan.SlotLevel[i] <= selectedTitan.Level;
-      //      if (modules[i] != null) {
-      //          modules[i].SetActive(needShow);
-      //      }
-      //      ITitanModule module = null;
-      //      if (selectedTitan.Modules.Length > i)
-      //          module = selectedTitan.Modules[i];
-      //      if (modules[i] != null) {
-      //          modules[i].SetModule(module);
-      //      }
-      //  }
-      //  buildTitanModule.SetModule(selectedTitan.Modules[12]);
-      //  upgradeTitanModule.SetModule(selectedTitan.Modules[13]);
-      //  upgradeTitanModule.gameObject.SetActive(selectedTitan.Level < TitanViewOld.MaxLevel);
-      //  OnBuildRocketButton.SetModule(selectedTitan.Modules[14]);
+        for (int i = 0; i < modules.Length; i++) {
+            if (modules[i] == null)
+                throw new NullReferenceException("Module slot dont set in interface");
+            ModuleSlot slot = null;
+            if (selectedTitan.Titan.ModuleSlots.Length > i)
+                slot = selectedTitan.Titan.ModuleSlots[i];
+            modules[i].SetModule(slot);
+        }
+        //  for (int i = 0; i < modules.Length; i++) {
+        //      bool needShow = false;
+        //      if (selectedTitan.SlotLevel.Length > i)
+        //          needShow = selectedTitan.SlotLevel[i] <= selectedTitan.Level;
+        //      if (modules[i] != null) {
+        //          modules[i].SetActive(needShow);
+        //      }
+        //      ITitanModule module = null;
+        //      if (selectedTitan.Modules.Length > i)
+        //          module = selectedTitan.Modules[i];
+        //      if (modules[i] != null) {
+        //          modules[i].SetModule(module);
+        //      }
+        //  }
+        //  buildTitanModule.SetModule(selectedTitan.Modules[12]);
+        //  upgradeTitanModule.SetModule(selectedTitan.Modules[13]);
+        //  upgradeTitanModule.gameObject.SetActive(selectedTitan.Level < TitanViewOld.MaxLevel);
+        //  OnBuildRocketButton.SetModule(selectedTitan.Modules[14]);
         LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
     }
 
@@ -137,11 +144,16 @@ public sealed class GameUI : UILayer {
     }
 
     public void OnBuildModuleClick(int moduleId) { // Set from editor
-       // if (selectedTitan.Faction.ID == 1)
-       //     return;
-       // if (selectedTitan.Modules[moduleId] != null)
-       //     return;
-       // selectedSlot = moduleId;
+        if (selectedTitan == null)
+            return;
+        if (selectedTitan.Titan.Faction.ID == 1)
+            return;
+        if (selectedTitan.Titan.ModuleSlots.Length <= moduleId || selectedTitan.Titan.ModuleSlots[moduleId] == null)
+            return;
+        selectedSlot = selectedTitan.Titan.ModuleSlots[moduleId];
+        var module = new ModuleData("weapon", 5, 2f);
+        selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
+        UpdateModules();
        // FullScreenHolder.gameObject.SetActive(true);
        // BuildContextMenu.gameObject.SetActive(true);
        // BuildContextMenu.position = modules[moduleId].transform.position;
@@ -164,6 +176,8 @@ public sealed class GameUI : UILayer {
     }
 
     public void OnSelectBuildWeaponModuleClick() { // Set from editor
+        var module = new ModuleData("weapon", 5, 2f);
+        selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
      //   var module = Config.Modules["weapon"];
      //   selectedTitan.BuildModule(module, selectedSlot);
      //   HideContextMenu();

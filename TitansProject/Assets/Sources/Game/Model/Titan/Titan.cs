@@ -17,6 +17,8 @@ namespace Model {
         public int ResourceUnits { get; private set; }
         public float Speed { get; private set; }
 
+        public readonly ModuleSlot[] ModuleSlots;
+
         private readonly Battle battle;
 
         private TitanMover mover;
@@ -38,6 +40,10 @@ namespace Model {
             Speed = 2;
             Armor = 10;
             mover = new TitanMover(battleContext.Planet, position, Speed);
+            ModuleSlots = new ModuleSlot[12];
+            for (int i = 0; i < ModuleSlots.Length; i++) {
+                ModuleSlots[i] = new ModuleSlot(this);
+            }
         }
 
         public void SetView(IView titanView) {
@@ -54,6 +60,9 @@ namespace Model {
                     taskList.RemoveAt(0);
                     view.OnUpdateTaskList();
                 }
+            }
+            for (int i = 0; i < ModuleSlots.Length; i++) {
+                ModuleSlots[i].Update(deltaTime);
             }
         }
 
