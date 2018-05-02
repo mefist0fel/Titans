@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using View;
 
 public class TitanMoveMarkers : MonoBehaviour {
     [SerializeField]
@@ -23,7 +24,7 @@ public class TitanMoveMarkers : MonoBehaviour {
         HidePathMarkers();
     }
 
-    public void ShowPathMarkers(TitanView titan, List<Vector3> pathPoints) {
+    public void ShowPathMarkers(List<Vector3> pathPoints) {
         HidePathMarkers();
         CreatePoints(pathPoints.Count);
         for (int i = 0; i < pathPoints.Count; i++) {

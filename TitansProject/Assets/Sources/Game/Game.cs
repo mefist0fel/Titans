@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using Model;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Game : MonoBehaviour {
     public static Game Instance { get; private set; }
 
     [SerializeField]
-    private PlanetView planet; // Set from editor
+    private PlanetViewOld planet; // Set from editor
 
-    public PlanetView Planet { get { return planet; } }
+    public PlanetViewOld Planet { get { return planet; } }
 
     [SerializeField]
     private Camera mainCamera; // Set from editor
@@ -15,9 +16,9 @@ public class Game : MonoBehaviour {
     [SerializeField]
     public TitanMoveMarkers MoveController; // Set from editor
 
-    public TitanView SelectedTitan = null;
+    public TitanViewOld SelectedTitan = null;
 
-    public Faction[] Factions;
+    public OldFaction[] Factions;
     private GameUI gameUI; // Set from editor
 
     private void Awake() {
@@ -27,9 +28,9 @@ public class Game : MonoBehaviour {
     private void Start () {
         gameUI = UILayer.Show<GameUI>();
         gameUI.UpdateTitanStatus();
-        Factions = new Faction[] {
-            new Faction(0),
-            new Faction(1)
+        Factions = new OldFaction[] {
+            new OldFaction(0),
+            new OldFaction(1)
         };
         Factions[0].EnemyFaction = Factions[1];
         Factions[1].EnemyFaction = Factions[0];
@@ -51,16 +52,16 @@ public class Game : MonoBehaviour {
         CameraController.MoveToTitan(SelectedTitan.Position);
     }
 
-    public TitanView CreateTitan(string prefabName) {
-        var titan = Instantiate(Resources.Load<TitanView>(prefabName), transform);
+    public TitanViewOld CreateTitan(string prefabName) {
+        var titan = Instantiate(Resources.Load<TitanViewOld>(prefabName), transform);
         titan.Init(planet);
         return titan;
     }
 
     internal static bool CheckWinConditions() {
-        if (Instance.Factions[1].ActiveUnitsCount <= 0) {
-            return true;
-        }
+      //  if (Instance.Factions[1].ActiveUnitsCount <= 0) {
+      //      return true;
+      //  }
         return false;
     }
 
@@ -92,9 +93,9 @@ public class Game : MonoBehaviour {
         if (Input.GetMouseButtonUp(0) && (prevMousePosition - Input.mousePosition).sqrMagnitude < minAccuracyPixels * minAccuracyPixels) {
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            TitanView selectedTitan = null;
+            TitanViewOld selectedTitan = null;
             if (Physics.Raycast(ray, out hit, 20f)) {
-                selectedTitan = hit.collider.GetComponent<TitanView>();
+                selectedTitan = hit.collider.GetComponent<TitanViewOld>();
                 if (selectedTitan != null && (SelectedTitan == selectedTitan)) {
                     selectedTitan = null;
                 }
@@ -111,7 +112,7 @@ public class Game : MonoBehaviour {
             }
             Vector3 clickPosition;
             if (planet.RaycastSurfacePoint(mainCamera.ScreenPointToRay(Input.mousePosition), out clickPosition)) {
-                ResourcePointView resourcePoint;
+                ResourcePointViewOld resourcePoint;
                 if (planet.FindResourcePointClick(clickPosition, out resourcePoint)) {
                     SelectedTitan.AddResourceTask(resourcePoint);
                 } else {
@@ -121,7 +122,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private void SelectTitan(TitanView titan) {
+    private void SelectTitan(TitanViewOld titan) {
         if (titan == null || !titan.IsAlive) {
             SelectedTitan = null;
             MoveController.HideSelection();
@@ -131,8 +132,8 @@ public class Game : MonoBehaviour {
         }
         SelectedTitan = titan;
         RocketAimView.Hide();
-        MoveController.SelectTitan(titan);
-        gameUI.SelectTitan(titan);
+       // MoveController.SelectTitan(titan);
+       // gameUI.SelectTitan(titan);
         titan.OnSelect();
     }
 }

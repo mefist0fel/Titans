@@ -7,7 +7,7 @@ public sealed class RocketAimView : MonoBehaviour {
     private static RocketAimView instance;
 
     [SerializeField]
-    private PlanetView planet; // Set from editor
+    private PlanetViewOld planet; // Set from editor
     [SerializeField]
     private LineRendererRing fireZoneRing; // Set from editor
     [SerializeField]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using View;
 
 public sealed class UIMarkerController : MonoBehaviour {
     [SerializeField]
@@ -24,7 +25,7 @@ public sealed class UIMarkerController : MonoBehaviour {
         controlledPlanet = planet;
         var image = GetComponentInChildren<Image>();
         if (image != null) {
-            image.color = titan.SelfFaction.ID == 0 ? Color.blue : Color.red;
+            image.color = titan.Titan.Faction.ID == 0 ? Color.blue : Color.red;
         }
 	}
 
@@ -42,9 +43,9 @@ public sealed class UIMarkerController : MonoBehaviour {
             return;
         const float markerHeight = 0.35f;
         var camera = Camera.main;
-        var radius = controlledPlanet.Radius + markerHeight;
+        var radius = controlledPlanet.Planet.Radius + markerHeight;
         var planetPosition = controlledPlanet.transform.position;
-        var markerPosition = controlledTitan.Position.normalized * radius;
+        var markerPosition = controlledTitan.Titan.Position.normalized * radius;
         var directionMarkerPosition = markerPosition * 0.99f;
         var cameraPosition = camera.transform.position;
         var normalToCamera = Vector3.Normalize(cameraPosition - markerPosition);
@@ -76,9 +77,6 @@ public sealed class UIMarkerController : MonoBehaviour {
         if (controlArrow != null) {
             controlArrow.localEulerAngles = new Vector3(0, 0, - Utils.GetAngle(angleStartPosition, angleDirectionPosition));
         }
-        // if (controlArrow != null) {
-        //     controlArrow.SetActive(needShowArrow);
-        // }
 
         float screenBorderPixels = 32f;
         float aspect = Screen.width / (float)Screen.height;

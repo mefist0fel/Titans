@@ -3,18 +3,20 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof (MeshFilter))]
-[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof (MeshRenderer))]
 public sealed class SphereMesh : MonoBehaviour {
 	[SerializeField]
     private float radius = 1;
 	[SerializeField]
     private int details = 18;
+    [SerializeField]
+    private bool generateOnStart = true;
 
     [SerializeField]
     [HideInInspector]
     private MeshFilter meshFilter;
 
-    static Quaternion[] sides = new Quaternion[] {
+    private readonly static Quaternion[] sides = new Quaternion[] {
 		Quaternion.Euler(0,0,0),
 		Quaternion.Euler(180,0,0),
 		Quaternion.Euler(0, 90,0),
@@ -23,19 +25,34 @@ public sealed class SphereMesh : MonoBehaviour {
 		Quaternion.Euler(-90,0,0)
 	};
 
+    public void Regenerate(float newRadius) {
+        Regenerate(newRadius, details);
+    }
+
+    public void Regenerate(float newRadius, int newDetails) {
+        radius = newRadius;
+        details = newDetails;
+        GenerateMesh();
+    }
+
     private void Awake () {
+        FindControlComponents();
+	}
+
+    private void FindControlComponents() {
         if (meshFilter == null) {
             meshFilter = Utils.GetOrCreateComponent<MeshFilter>(gameObject);
         }
-	}
-		
-	private void Start () {
-        GenerateMesh();
+    }
+
+    private void Start () {
+        if (generateOnStart)
+            GenerateMesh();
     }
 
 	[ContextMenu("regenerate planet")]
     private void GenerateMesh() {
-        Awake();
+        FindControlComponents();
         meshFilter.mesh = CreateMesh(radius, details);
     }
 

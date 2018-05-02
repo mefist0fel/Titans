@@ -12,7 +12,7 @@ public sealed class CameraController : MonoBehaviour {
     [SerializeField]
     private float rotationSpeed = 120f;
     [SerializeField]
-    private PlanetView planet; // Set from editor
+    private PlanetViewOld planet; // Set from editor
     [SerializeField]
     private Camera mainCamera; // Set from editor
     [SerializeField]

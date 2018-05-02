@@ -18,18 +18,18 @@ public sealed class RocketView : MonoBehaviour {
     private float maxHeightProportional = 0;
     private Vector3 endPosition;
     private Vector3 moveAxe;
-    private PlanetView planet;
+    private PlanetViewOld planet;
 
     public Vector3 Position { get { return transform.position; } }
 
     public static List<RocketView> RocketsList = new List<RocketView>();
 
-    public static void Fire(Vector3 startPosition, Vector3 endPosition, PlanetView planet, int damage, float radius, int factionId) {
+    public static void Fire(Vector3 startPosition, Vector3 endPosition, PlanetViewOld planet, int damage, float radius, int factionId) {
         var rocket = Instantiate(Resources.Load<RocketView>("Prefabs/Rocket"));
         rocket.Init(startPosition, endPosition, planet, damage, radius, factionId);
     }
 
-    private void Init(Vector3 startPosition, Vector3 endPosition, PlanetView controlPlanet, int damage, float radius, int factionId) {
+    private void Init(Vector3 startPosition, Vector3 endPosition, PlanetViewOld controlPlanet, int damage, float radius, int factionId) {
         planet = controlPlanet;
         this.damage = damage;
         this.radius = radius;

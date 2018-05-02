@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour {
     [SerializeField]
-    public TitanView controlledTitan; // Set from editor
+    public TitanViewOld controlledTitan; // Set from editor
     [SerializeField]
-    public PlanetView controlledPlanet; // Set from editor
+    public PlanetViewOld controlledPlanet; // Set from editor
     [SerializeField]
     public List<string> projectsList = new List<string>() {
         "weapon",
@@ -36,10 +36,10 @@ public class AIController : MonoBehaviour {
     }
 
     public BaseTarget target = BaseTarget.CollectResources;
-    public ResourcePointView NearestResource = null;
-    public TitanView NearestEnemy = null;
+    public ResourcePointViewOld NearestResource = null;
+    public TitanViewOld NearestEnemy = null;
 
-    private static List<ResourcePointView> CollectedResources = new List<ResourcePointView>();
+    private static List<ResourcePointViewOld> CollectedResources = new List<ResourcePointViewOld>();
 
     public float timer = 0;
     [SerializeField]
@@ -130,7 +130,7 @@ public class AIController : MonoBehaviour {
         MoveTo(NearestEnemy);
     }
 
-    private void MoveTo(TitanView nearestEnemy) {
+    private void MoveTo(TitanViewOld nearestEnemy) {
         if (nearestEnemy == null)
             return;
         var delta = (controlledTitan.Position - nearestEnemy.Position).normalized;
@@ -139,8 +139,8 @@ public class AIController : MonoBehaviour {
         controlledTitan.AddMoveTask(needPosition);
     }
 
-    private TitanView FindNearestEnemy() {
-        TitanView nearest = null;
+    private TitanViewOld FindNearestEnemy() {
+        TitanViewOld nearest = null;
         float nearestDistance = 0;
         foreach (var enemy in Game.Instance.Factions[0].Units) {
             if (enemy != null && enemy.IsAlive) {
@@ -156,7 +156,7 @@ public class AIController : MonoBehaviour {
 
     private void TryCollectResources() {
         if (NearestResource == null || NearestResource.Count == 0) {
-            ResourcePointView res;
+            ResourcePointViewOld res;
             if (FindNearestResource(transform.position, out res)) {
                 if (NearestResource != res) {
                     Debug.Log("To Next Point!");
@@ -178,7 +178,7 @@ public class AIController : MonoBehaviour {
         }
     }
 
-    public bool FindNearestResource(Vector3 titanPosition, out ResourcePointView resourcePoint) {
+    public bool FindNearestResource(Vector3 titanPosition, out ResourcePointViewOld resourcePoint) {
         resourcePoint = null;
         var nearestDistance = 0f;
         foreach (var point in controlledPlanet.ResourcePoins) {

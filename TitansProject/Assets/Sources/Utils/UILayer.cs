@@ -144,7 +144,7 @@ public class UILayer : MonoBehaviour {
             interfaceObject = new GameObject();
             interfaceComponent = interfaceObject.AddComponent<T>();
         } else {
-            interfaceObject = Instantiate<GameObject>(UIprefab);
+            interfaceObject = Instantiate(UIprefab);
             interfaceComponent = interfaceObject.GetComponent<T>();
         }
 

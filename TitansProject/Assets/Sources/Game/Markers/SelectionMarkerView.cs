@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using View;
 
 public sealed class SelectionMarkerView : MonoBehaviour {
     [SerializeField]
@@ -25,7 +26,7 @@ public sealed class SelectionMarkerView : MonoBehaviour {
     public void SelectTitan(TitanView titan) {
         timer = 0;
         gameObject.SetActive(true);
-        needShowWeaponRange = titan.Modules.Any((module) => module is WeaponModule);
+        needShowWeaponRange = false;// titan.Modules.Any((module) => module is WeaponModule);
         transform.parent = titan.transform;
         transform.localRotation = Quaternion.identity;
         transform.localPosition = Vector3.zero;

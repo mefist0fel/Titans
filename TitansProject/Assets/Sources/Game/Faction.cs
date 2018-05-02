@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Faction {
+public sealed class OldFaction {
     public readonly int ID;
-    public Faction EnemyFaction;
-    
-    public List<TitanView> Units = new List<TitanView>();
+    public OldFaction EnemyFaction;
 
-    public int ActiveUnitsCount { get {
+    public List<TitanViewOld> Units = new List<TitanViewOld>();
+
+    public int ActiveUnitsCount {
+        get {
             int count = 0;
             foreach (var unit in Units) {
                 if (unit != null && unit.IsAlive) {
@@ -20,11 +21,11 @@ public sealed class Faction {
         }
     }
 
-    public Faction(int id) {
+    public OldFaction(int id) {
         ID = id;
     }
 
-    public void AddUnit(TitanView titanView, Vector3 position) {
+    public void AddUnit(TitanViewOld titanView, Vector3 position) {
         if (titanView == null)
             return;
         Units.Add(titanView);
