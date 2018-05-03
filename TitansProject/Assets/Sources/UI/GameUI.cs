@@ -151,7 +151,7 @@ public sealed class GameUI : UILayer {
         if (selectedTitan.Titan.ModuleSlots.Length <= moduleId || selectedTitan.Titan.ModuleSlots[moduleId] == null)
             return;
         selectedSlot = selectedTitan.Titan.ModuleSlots[moduleId];
-        var module = new ModuleData("weapon", 5, 2f);
+        var module = new ModuleData("laser", 5, 2f);
         selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
         UpdateModules();
        // FullScreenHolder.gameObject.SetActive(true);

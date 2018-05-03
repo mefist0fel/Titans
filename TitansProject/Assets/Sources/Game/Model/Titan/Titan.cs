@@ -46,6 +46,13 @@ namespace Model {
             }
         }
 
+        public void Hit(int damage) {
+            Debug.Log("I'm hit! on " + damage);
+        }
+
+        public void Die(int damage) {
+        }
+
         public void SetView(IView titanView) {
             if (view == null)
                 throw new NullReferenceException("Try set titan view but view is null");

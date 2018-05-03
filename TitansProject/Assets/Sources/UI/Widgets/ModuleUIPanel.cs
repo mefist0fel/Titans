@@ -65,21 +65,21 @@ public class ModuleUIPanel : MonoBehaviour {
             return settings.NewModuleSprite;
         if (slot.Module == null)
             return settings.NewModuleSprite;
-       // if (slot.Module is BuilderModule) {
-       //     progressImage.fillClockwise = false;
-       //     progressImage.color = settings.BuildColor;
-       //     var buildModule = module as BuildModule;
-       //     switch (buildModule.ConstructionModule.Id) {
-       //         case "weapon":
-       //             return settings.WeaponModuleSprite;
-       //         case "rocket":
-       //             return settings.RocketModuleSprite;
-       //         case "shield":
-       //             return settings.ShieldModuleSprite;
-       //         case "anti_air":
-       //             return settings.AntiAirModuleSprite;
-       //     }
-       // }
+        if (slot.Module is BuilderModule) {
+            progressImage.fillClockwise = false;
+            progressImage.color = settings.BuildColor;
+            var buildModule = slot.Module as BuilderModule;
+            switch (buildModule.ConstructionModule.Id) {
+                case "laser":
+                    return settings.WeaponModuleSprite;
+                //case "rocket":
+                //    return settings.RocketModuleSprite;
+                //case "shield":
+                //    return settings.ShieldModuleSprite;
+                //case "anti_air":
+                //    return settings.AntiAirModuleSprite;
+            }
+        }
        //if (module is BuildTitanModule) {
        //    progressImage.fillClockwise = false;
        //    progressImage.color = settings.BuildColor;
@@ -92,8 +92,8 @@ public class ModuleUIPanel : MonoBehaviour {
        //    progressImage.fillClockwise = false;
        //    progressImage.color = settings.BuildColor;
        //}
-       //if (module is WeaponModule)
-       //    return settings.WeaponModuleSprite;
+       if (slot.Module is LaserModule)
+           return settings.WeaponModuleSprite;
        //if (module is RocketLauncherModule)
        //    return settings.RocketModuleSprite;
        //if (module is AntiAirLaserModule)

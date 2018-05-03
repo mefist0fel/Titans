@@ -9,9 +9,18 @@ namespace Model {
         }
 
         public static IModule CreateModule(ModuleData moduleData, Titan titan) {
-            //switch
-            //var moduleName = "Prefabs/Modules/" + moduleData.Id;
-            Debug.LogError("Create module test " + moduleData.Id);
+            Debug.Log("Try create module " + moduleData.Id);
+            switch (moduleData.Id) {
+                case "laser":
+                    return new LaserModule();
+                case "rocket":
+                    return null;
+                case "shield":
+                    return null;
+                case "anti_air":
+                    return null;
+            }
+            Debug.LogError("Error creating module " + moduleData.Id);
             return null;
         }
     }
