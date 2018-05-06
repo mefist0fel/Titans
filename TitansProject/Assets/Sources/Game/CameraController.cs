@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public sealed class CameraController : MonoBehaviour {
@@ -120,6 +121,10 @@ public sealed class CameraController : MonoBehaviour {
                 rotationInertionVelocity.Scale(Vector2.one - inertionAttenuation * Time.deltaTime);
             }
         } else {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) {
+                // TODO make normal
+                return;
+            }
             if (Input.GetMouseButtonDown(0)) {
                 prevPosition = Input.mousePosition;
             }

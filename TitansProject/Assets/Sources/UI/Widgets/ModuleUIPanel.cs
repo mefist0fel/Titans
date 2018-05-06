@@ -17,6 +17,7 @@ namespace UI {
         [SerializeField]
         private UnityEvent slotEvent; // Set from editor
 
+        public RectTransform RectTransform { get; private set; }
         private ModuleSlot slot;
 
         public void OnModuleClick() { // Set from editor
@@ -29,6 +30,10 @@ namespace UI {
             slot = controlSlot;
             UpdatePanel();
         }
+
+        private void Start() {
+            RectTransform = GetComponent<RectTransform>();
+        } 
 
         private void UpdatePanel() {
             if (image != null)

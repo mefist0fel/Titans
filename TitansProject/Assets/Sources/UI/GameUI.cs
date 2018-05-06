@@ -152,28 +152,33 @@ namespace UI {
             if (selectedTitan.Titan.ModuleSlots.Length <= moduleId || selectedTitan.Titan.ModuleSlots[moduleId] == null)
                 return;
             selectedSlot = selectedTitan.Titan.ModuleSlots[moduleId];
-            var module = new ModuleData("laser", 5, 2f);
-            selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
-            UpdateModules();
+            var selectModule = UILayer.ShowModal<SelectModuleUI>();
+            selectModule.SetCancelPosition(modules[moduleId].RectTransform.anchoredPosition + new Vector2(0, 800));
+            // var module = new ModuleData("laser", 5, 2f);
+            // selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
+            // UpdateModules();
+
             // FullScreenHolder.gameObject.SetActive(true);
             // BuildContextMenu.gameObject.SetActive(true);
             // BuildContextMenu.position = modules[moduleId].transform.position;
         }
 
         public void OnBuildTitanClick() { // Set from editor
-                                          //  if (selectedTitan.FactionId == 1)
-                                          //      return;
-                                          //  if (selectedTitan.Modules[12] != null)
-                                          //      return;
-                                          //  selectedTitan.BuildTitan(Config.Modules["titan"]);
+
+            //  if (selectedTitan.FactionId == 1)
+            //      return;
+            //  if (selectedTitan.Modules[12] != null)
+            //      return;
+            //  selectedTitan.BuildTitan(Config.Modules["titan"]);
         }
 
         public void OnUpgradeTitanClick() { // Set from editor
-                                            //  if (selectedTitan.FactionId == 1)
-                                            //      return;
-                                            //  if (selectedTitan.Modules[13] != null)
-                                            //      return;
-                                            //  selectedTitan.BuildUpgrade(Config.Modules["titan_upgrade"]);
+
+            //  if (selectedTitan.FactionId == 1)
+            //      return;
+            //  if (selectedTitan.Modules[13] != null)
+            //      return;
+            //  selectedTitan.BuildUpgrade(Config.Modules["titan_upgrade"]);
         }
 
         public void OnSelectBuildWeaponModuleClick() { // Set from editor
