@@ -7,9 +7,9 @@ public class BuildTitanModule : MonoBehaviour, ITitanModule {
 
     private float timer;
     private TitanViewOld controlledTitan;
-    private ModuleData titanData;
+    private ModuleDataOld titanData;
 
-    public static BuildTitanModule Create(ModuleData titanModule) {
+    public static BuildTitanModule Create(ModuleDataOld titanModule) {
         GameObject buildObject = new GameObject();
         var module = buildObject.AddComponent<BuildTitanModule>();
         module.FullTime = titanModule.BuildTime;

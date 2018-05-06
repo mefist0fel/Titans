@@ -242,7 +242,7 @@ public sealed class TitanViewOld : MonoBehaviour {
         // Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
     }
 
-    public void BuildTitan(ModuleData module) {
+    public void BuildTitan(ModuleDataOld module) {
         if (module == null) {
             Debug.LogError("Module data is empty");
             return;
@@ -255,7 +255,7 @@ public sealed class TitanViewOld : MonoBehaviour {
         Attach(ModulesFactory.CreateTitanBuildModule(module), 12);
     }
 
-    public void BuildUpgrade(ModuleData module) {
+    public void BuildUpgrade(ModuleDataOld module) {
         if (module == null) {
             Debug.LogError("Module data is empty");
             return;
@@ -268,7 +268,7 @@ public sealed class TitanViewOld : MonoBehaviour {
         Attach(ModulesFactory.CreateTitanUpgradeModule(module), 13);
     }
 
-    public void BuildModule(ModuleData module, int slotId) {
+    public void BuildModule(ModuleDataOld module, int slotId) {
         if (module == null) {
             Debug.LogError("Module data is empty");
             return;
@@ -281,7 +281,7 @@ public sealed class TitanViewOld : MonoBehaviour {
         Attach(ModulesFactory.CreateBuildModule(module, slotId), slotId);
     }
 
-    public void BuildRocket(ModuleData module) {
+    public void BuildRocket(ModuleDataOld module) {
         if (module == null) {
             Debug.LogError("Module data is empty");
             return;

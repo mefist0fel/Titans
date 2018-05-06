@@ -5,20 +5,20 @@ using Configs;
 using UnityEngine;
 
 public static class ModulesFactory {
-    public static ITitanModule CreateBuildModule(ModuleData module, int slotId) {
+    public static ITitanModule CreateBuildModule(ModuleDataOld module, int slotId) {
         return BuildModule.Create(module, slotId);
     }
-    public static ITitanModule CreateTitanBuildModule(ModuleData titanModule) {
+    public static ITitanModule CreateTitanBuildModule(ModuleDataOld titanModule) {
         return BuildTitanModule.Create(titanModule);
     }
-    public static ITitanModule CreateTitanUpgradeModule(ModuleData upgradeModule) {
+    public static ITitanModule CreateTitanUpgradeModule(ModuleDataOld upgradeModule) {
         return BuildUpgradeModule.Create(upgradeModule);
     }
-    public static ITitanModule CreateRocketModule(ModuleData upgradeModule) {
+    public static ITitanModule CreateRocketModule(ModuleDataOld upgradeModule) {
         return BuildRocketModule.Create(upgradeModule);
     }
 
-    public static ITitanModule CreateModule(ModuleData moduleData, TitanViewOld titan) {
+    public static ITitanModule CreateModule(ModuleDataOld moduleData, TitanViewOld titan) {
         var moduleName = "Prefabs/Modules/" + moduleData.Id;
         var modulePrefab = Resources.Load<GameObject>(moduleName);
         if (modulePrefab == null) {

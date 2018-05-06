@@ -63,7 +63,7 @@ public class AIController : MonoBehaviour {
             target = BaseTarget.KillAllEnemy;
             return;
         }
-        var module = Config.Modules[projectsList[0]];
+        var module = ConfigOld.Modules[projectsList[0]];
         if (module == null) {
             Debug.Log("Error module " + projectsList[0] + " - to next step");
             projectsList.RemoveAt(0);
@@ -75,7 +75,7 @@ public class AIController : MonoBehaviour {
         }
     }
 
-    private void TryBuildModule(ModuleData module) {
+    private void TryBuildModule(ModuleDataOld module) {
         if (module.Id == "enemy_titan") {
             Debug.Log("Build titan");
             controlledTitan.BuildTitan(module);

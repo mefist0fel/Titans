@@ -10,13 +10,13 @@ using System;
 public sealed class BuildModule : MonoBehaviour, ITitanModule {
     public float FullTime { get; private set; }
     public float NormalizedTime { get { return timer / FullTime; } }
-    public ModuleData ConstructionModule { get; private set; }
+    public ModuleDataOld ConstructionModule { get; private set; }
 
     private float timer;
     private int slotId;
     private TitanViewOld controlledTitan;
 
-    public static BuildModule Create (ModuleData buildModule, int slot) {
+    public static BuildModule Create (ModuleDataOld buildModule, int slot) {
         GameObject buildObject = new GameObject();
         var module = buildObject.AddComponent<BuildModule>();
         module.ConstructionModule = buildModule;
@@ -42,7 +42,7 @@ public sealed class BuildModule : MonoBehaviour, ITitanModule {
         }
     }
 
-    private void BuildSelectedModule(ModuleData module) {
+    private void BuildSelectedModule(ModuleDataOld module) {
         controlledTitan.Attach(ModulesFactory.CreateModule(module, controlledTitan), slotId);
     }
 }
