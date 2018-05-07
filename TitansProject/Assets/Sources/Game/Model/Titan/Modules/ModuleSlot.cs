@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Model {
     /// <summary>
@@ -14,7 +13,7 @@ namespace Model {
         }
 
         public bool CanBuild(ModuleData moduleData) {
-            return moduleData.Cost >= titan.ResourceUnits;
+            return moduleData.Cost <= titan.ResourceUnits;
         }
 
         public void Build(ModuleData moduleData) {
@@ -35,6 +34,7 @@ namespace Model {
             if (Module != null) {
                 Module.OnAttach(titan);
             }
+            titan.UpdateModules();
         }
 
         public void Update(float deltaTime) {

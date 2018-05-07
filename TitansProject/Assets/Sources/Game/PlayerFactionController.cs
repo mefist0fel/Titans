@@ -99,9 +99,14 @@ public sealed class PlayerFactionController : MonoBehaviour {
         selectedTitan = titanView;
         selectedTitan.UpdateTaskList += UpdateTaskList;
         selectedTitan.UpdateResources += UpdateResources;
+        selectedTitan.UpdateModules += UpdateModules;
         moveMarkers.SelectTitan(titanView);
         //RocketAimView.Hide();
         gameUI.SelectTitan(selectedTitan);
+    }
+
+    private void UpdateModules() {
+        gameUI.UpdateTitanStatus();
     }
 
     private void UpdateResources(int count) {

@@ -18,16 +18,16 @@ namespace UI {
         private UnityEvent slotEvent; // Set from editor
 
         public RectTransform RectTransform { get; private set; }
-        private ModuleSlot slot;
+        private IModule module;
 
         public void OnModuleClick() { // Set from editor
             slotEvent.Invoke();
         }
 
         public void SetModule(ModuleSlot controlSlot) {
-            if (slot == controlSlot)
+            if (module == controlSlot.Module)
                 return;
-            slot = controlSlot;
+            module = controlSlot.Module;
             UpdatePanel();
         }
 
@@ -37,15 +37,15 @@ namespace UI {
 
         private void UpdatePanel() {
             if (image != null)
-                image.sprite = GetSprite(slot);
+                image.sprite = GetSprite(module);
             progressImage.fillAmount = 0;
         }
 
         private void Update() {
-            if (slot == null)
+            if (module == null)
                 return;
-            if (slot.Module is BuilderModule) {
-                var buildModule = slot.Module as BuilderModule;
+            if (module is BuilderModule) {
+                var buildModule = module as BuilderModule;
                 progressImage.fillAmount = buildModule.NormalizedTime;
             }
             //   if (slot is BuildTitanModule) {
@@ -66,15 +66,13 @@ namespace UI {
             //   }
         }
 
-        private Sprite GetSprite(ModuleSlot slot) {
-            if (slot == null)
+        private Sprite GetSprite(IModule module) {
+            if (module == null)
                 return settings.NewModuleSprite;
-            if (slot.Module == null)
-                return settings.NewModuleSprite;
-            if (slot.Module is BuilderModule) {
+            if (module is BuilderModule) {
                 progressImage.fillClockwise = false;
                 progressImage.color = settings.BuildColor;
-                var buildModule = slot.Module as BuilderModule;
+                var buildModule = module as BuilderModule;
                 switch (buildModule.ConstructionModule.Id) {
                     case "laser":
                         return settings.WeaponModuleSprite;
@@ -98,7 +96,7 @@ namespace UI {
             //    progressImage.fillClockwise = false;
             //    progressImage.color = settings.BuildColor;
             //}
-            if (slot.Module is LaserModule)
+            if (module is LaserModule)
                 return settings.WeaponModuleSprite;
             //if (module is RocketLauncherModule)
             //    return settings.RocketModuleSprite;

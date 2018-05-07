@@ -35,6 +35,9 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
         }
     }
 
+    public void OnRemoveTitan(Titan titan) {
+    }
+
     public void OnBattleEnd(Faction winner) {
         Debug.LogError("Battle end, and winner is " + winner.ID);
     }

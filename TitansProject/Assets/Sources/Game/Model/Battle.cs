@@ -40,15 +40,34 @@ namespace Model {
             controller.OnCreateTitan(titan);
         }
 
+        private void RemoveTitan(Titan titan) {
+            controller.OnRemoveTitan(titan);
+
+            Units.Remove(titan);
+            titan.Faction.Units.Remove(titan);
+        }
+
         public void Update(float deltaTime) {
             foreach (var titan in Units) {
-                titan.Update(deltaTime);
+                if (titan.IsAlive)
+                    titan.Update(deltaTime);
+            }
+            RemoveDeadTitans();
+        }
+
+        private void RemoveDeadTitans() {
+            foreach (var titan in Units) {
+                if (!titan.IsAlive) {
+                    RemoveTitan(titan);
+                    return;
+                }
             }
         }
     }
 
     public interface IBattleController {
         void OnCreateTitan(Titan titan);
+        void OnRemoveTitan(Titan titan);
         void OnBattleEnd(Faction winner);
     }
 }

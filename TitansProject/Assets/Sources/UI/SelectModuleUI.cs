@@ -35,8 +35,7 @@ namespace UI {
                 CreateAvailableModules();
         }
 
-        protected override void OnHide() {
-        }
+        protected override void OnHide() { }
 
         private void CreateAvailableModules() {
             int count = Config.Modules.Modules.Count;
@@ -59,9 +58,13 @@ namespace UI {
 
         private void OnSelectModuleClick(string moduleId) {
             var module = Config.Modules[moduleId];
-            if (slot.CanBuild(module))
+            if (slot.CanBuild(module)) {
                 slot.Build(module);
-            UILayer.UpdateInterface();
+                UILayer.Hide<SelectModuleUI>();
+                UILayer.UpdateInterface();
+            } else {
+                UILayer.Hide<SelectModuleUI>();
+            }
         }
     }
 }

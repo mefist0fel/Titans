@@ -944,6 +944,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b9b878a9c2382439e00235f4808d70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitTransfom: {fileID: 4570086840736638}
+  deathMaterial: {fileID: 2100000, guid: 78c5bceb303baaa49b69ae0065ada339, type: 2}
 --- !u!114 &114532699269733260
 MonoBehaviour:
   m_ObjectHideFlags: 1

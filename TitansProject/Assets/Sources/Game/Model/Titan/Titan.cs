@@ -23,6 +23,7 @@ namespace Model {
 
         private TitanMover mover;
         private IView view = new NoView();
+        public IView View { get { return view; } }
 
         private List<Task> taskList = new List<Task>(20);
         public List<Task> TaskList { get { return taskList; } }
@@ -44,13 +45,22 @@ namespace Model {
             for (int i = 0; i < ModuleSlots.Length; i++) {
                 ModuleSlots[i] = new ModuleSlot(this);
             }
+            // TODO kill
+            ResourceUnits = 20;
         }
 
         public void Hit(int damage) {
-            Debug.Log("I'm hit! on " + damage);
+            view.OnHit(damage);
+            Armor -= damage;
+            if (Armor < 0) {
+                Die();
+            }
         }
 
-        public void Die(int damage) {
+        public void Die() {
+            Armor = 0;
+            taskList.Clear();
+            view.OnDie();
         }
 
         public void SetView(IView titanView) {
@@ -108,10 +118,16 @@ namespace Model {
             view.OnCollectResource(count);
         }
 
+        public void UpdateModules() {
+            view.OnUpdateModules();
+        }
 
         public interface IView {
             void OnCollectResource(int count);
             void OnUpdateTaskList();
+            void OnUpdateModules();
+            void OnHit(int damage);
+            void OnDie();
         }
 
         private sealed class NoView : Titan.IView {
@@ -121,6 +137,18 @@ namespace Model {
 
             public void OnUpdateTaskList() {
                 Debug.Log("On Update task list ");
+            }
+
+            public void OnUpdateModules() {
+                Debug.Log("On Update modules ");
+            }
+
+            public void OnHit(int damage) {
+                Debug.Log("On Hit titan " + damage);
+            }
+
+            public void OnDie() {
+                Debug.Log("On Titan Die ");
             }
         }
     }

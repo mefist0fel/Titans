@@ -14,7 +14,6 @@ namespace Model {
         public bool IsReady { get { return timer <= 0 && hostTitan != null && hostTitan.IsAlive; } }
 
         public void OnAttach(Titan titan) {
-            Debug.LogError("Build laser!");
             hostTitan = titan;
         }
 
