@@ -67,6 +67,10 @@ namespace UI {
             }
         }
 
+        public override void UpdateState() {
+            UpdateModules();
+        }
+
         public void SelectTitan(TitanView titan = null) {
             // if (selectedTitan != null) {
             //     selectedTitan.UnSubscribe(UpdateTitanStatus);
@@ -153,7 +157,7 @@ namespace UI {
                 return;
             selectedSlot = selectedTitan.Titan.ModuleSlots[moduleId];
             var selectModule = UILayer.ShowModal<SelectModuleUI>();
-            selectModule.SetCancelPosition(modules[moduleId].RectTransform.anchoredPosition + new Vector2(0, 800));
+            selectModule.Init(modules[moduleId].RectTransform.anchoredPosition + new Vector2(0, 800), selectedSlot);
             // var module = new ModuleData("laser", 5, 2f);
             // selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
             // UpdateModules();

@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Model {
     /// <summary>
@@ -10,6 +11,20 @@ namespace Model {
 
         public ModuleSlot(Titan hostTitan) {
             titan = hostTitan;
+        }
+
+        public bool CanBuild(ModuleData moduleData) {
+            return moduleData.Cost >= titan.ResourceUnits;
+        }
+
+        public void Build(ModuleData moduleData) {
+            if (CanBuild(moduleData)) {
+                titan.ChangeResourceCount(-moduleData.Cost);
+                var module = Model.ModulesFactory.CreateBuildModule(moduleData, this);
+                Attach(module);
+            } else {
+                Debug.LogError("Not enough resources for module: " + moduleData.Id);
+            }
         }
 
         public void Attach(IModule module = null) {

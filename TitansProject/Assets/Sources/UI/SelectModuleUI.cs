@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Model;
 using UI.Widget;
 using UnityEngine;
 
@@ -17,10 +18,12 @@ namespace UI {
         private float moduleSize = 200f; // Set from editor
 
         private List<ModuleUI> modules;
+        private ModuleSlot slot;
 
-        public void SetCancelPosition(Vector2 position) {
+        public void Init(Vector2 position, ModuleSlot controlSlot) {
             listPanel.anchoredPosition = new Vector2(position.x + 50, 0);
             cancelButtonRect.anchoredPosition = position;
+            slot = controlSlot;
         }
 
         public void OnCancelClick() { // Set from editor
@@ -36,21 +39,29 @@ namespace UI {
         }
 
         private void CreateAvailableModules() {
-            int count = 12;
+            int count = Config.Modules.Modules.Count;
             modules = new List<ModuleUI>(count);
             for (int i = 0; i < count; i++) {
-                var module = CreateModule();
+                var module = CreateModule(Config.Modules.Modules[i]);
                 module.RectTransform.anchoredPosition = new Vector2(0, moduleSize * -i);
                 modules.Add(module);
             }
             contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, moduleSize * count);
         }
 
-        private ModuleUI CreateModule() {
+        private ModuleUI CreateModule(ModuleData moduleData) {
             modulePrefab.gameObject.SetActive(false);
             var module = Instantiate(modulePrefab, modulePrefab.transform.parent);
             module.gameObject.SetActive(true);
+            module.Init(moduleData, OnSelectModuleClick);
             return module;
+        }
+
+        private void OnSelectModuleClick(string moduleId) {
+            var module = Config.Modules[moduleId];
+            if (slot.CanBuild(module))
+                slot.Build(module);
+            UILayer.UpdateInterface();
         }
     }
 }

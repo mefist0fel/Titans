@@ -94,7 +94,7 @@ namespace Model {
 
         public void AddResourceTask(ResourcePoint resourcePoint) {
             taskList.Add(new MoveTask(resourcePoint.Position, mover));
-            taskList.Add(new ResourceTask(resourcePoint, OnCollectResource));
+            taskList.Add(new ResourceTask(resourcePoint, ChangeResourceCount));
             view.OnUpdateTaskList();
         }
 
@@ -103,7 +103,7 @@ namespace Model {
             view.OnUpdateTaskList();
         }
 
-        private void OnCollectResource(int count) {
+        public void ChangeResourceCount(int count) {
             ResourceUnits += count;
             view.OnCollectResource(count);
         }

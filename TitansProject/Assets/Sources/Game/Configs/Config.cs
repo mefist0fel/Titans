@@ -6,7 +6,7 @@ public static class Config {
     public static readonly ModuleList Modules = new ModuleList();
 
     public sealed class ModuleList {
-        private readonly List<ModuleData> modules = new List<ModuleData>() {
+        public readonly List<ModuleData> Modules = new List<ModuleData>() {
             new ModuleData("laser", 10, 3f, "Лазерное оружие"),
             new ModuleData("rocket", 10, 2f, "Ракетная установка"),
             new ModuleData("shield", 10, 2f, "Энергетические щиты"),
@@ -19,7 +19,7 @@ public static class Config {
 
         public ModuleData this[string id] {
             get {
-                foreach (var module in modules) {
+                foreach (var module in Modules) {
                     if (id == module.Id)
                         return module;
                 }
