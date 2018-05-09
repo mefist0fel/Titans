@@ -10,8 +10,13 @@ namespace Model {
         private float reloadTimeRandomShift = 0.2f;
         private float timer = 0f;
         private Titan target = null;
+        public string Id { get; private set; }
 
         public bool IsReady { get { return timer <= 0 && hostTitan != null && hostTitan.IsAlive; } }
+
+        public LaserModule(ModuleData data) {
+            Id = data.Id;
+        }
 
         public void OnAttach(Titan titan) {
             hostTitan = titan;

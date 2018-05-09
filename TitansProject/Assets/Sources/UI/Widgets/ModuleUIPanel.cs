@@ -73,16 +73,7 @@ namespace UI {
                 progressImage.fillClockwise = false;
                 progressImage.color = settings.BuildColor;
                 var buildModule = module as BuilderModule;
-                switch (buildModule.ConstructionModule.Id) {
-                    case "laser":
-                        return settings.WeaponModuleSprite;
-                        //case "rocket":
-                        //    return settings.RocketModuleSprite;
-                        //case "shield":
-                        //    return settings.ShieldModuleSprite;
-                        //case "anti_air":
-                        //    return settings.AntiAirModuleSprite;
-                }
+                return settings[buildModule.Id];
             }
             //if (module is BuildTitanModule) {
             //    progressImage.fillClockwise = false;
@@ -96,8 +87,6 @@ namespace UI {
             //    progressImage.fillClockwise = false;
             //    progressImage.color = settings.BuildColor;
             //}
-            if (module is LaserModule)
-                return settings.WeaponModuleSprite;
             //if (module is RocketLauncherModule)
             //    return settings.RocketModuleSprite;
             //if (module is AntiAirLaserModule)
@@ -107,6 +96,8 @@ namespace UI {
             //    progressImage.color = settings.ShieldRestoreColor;
             //    return settings.ShieldModuleSprite;
             //}
+            if (module is LaserModule)
+                return settings[module.Id];
 
             return null;
         }

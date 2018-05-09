@@ -12,7 +12,7 @@ namespace Model {
             Debug.Log("Try create module " + moduleData.Id);
             switch (moduleData.Id) {
                 case "laser":
-                    return new LaserModule();
+                    return new LaserModule(moduleData);
                 case "rocket":
                     return null;
                 case "shield":

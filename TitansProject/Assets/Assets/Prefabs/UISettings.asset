@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Name: UISettings
   m_EditorClassIdentifier: 
   NewModuleSprite: {fileID: 21300000, guid: 3d69a128c7e270d44b734f0f634995ef, type: 3}
-  WeaponModuleSprite: {fileID: 21300000, guid: cfa71dac5a0786042be043ed1ebbdc47, type: 3}
-  ShieldModuleSprite: {fileID: 21300000, guid: 877e6b79846e94a45a3bfefee32d667a, type: 3}
-  RocketModuleSprite: {fileID: 21300000, guid: ce64350eff7774c4eba1d7a77cf04ceb, type: 3}
-  AntiAirModuleSprite: {fileID: 21300000, guid: 3afc4da9e24766e43bc9b93f572f888c,
-    type: 3}
+  modules:
+  - Name: shield
+    Sprite: {fileID: 21300000, guid: 877e6b79846e94a45a3bfefee32d667a, type: 3}
+  - Name: laser
+    Sprite: {fileID: 21300000, guid: cfa71dac5a0786042be043ed1ebbdc47, type: 3}
+  - Name: rocket
+    Sprite: {fileID: 21300000, guid: ce64350eff7774c4eba1d7a77cf04ceb, type: 3}
+  Empty: {fileID: 21300000, guid: 10d03b600327a1044b4f37f69ca6bf90, type: 3}
   BuildColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5019608}
   ShieldRestoreColor: {r: 0.5, g: 0.5, b: 1, a: 0.5019608}

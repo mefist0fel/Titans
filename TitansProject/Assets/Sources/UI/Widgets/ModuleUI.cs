@@ -17,6 +17,8 @@ namespace UI.Widget {
         private Text moduleTime; // Set from editor
         [SerializeField]
         private Text moduleDescription; // Set from editor
+        [SerializeField]
+        private UISettings settings; // Set from editor
 
         public RectTransform RectTransform { get; private set; }
         private ModuleData module;
@@ -28,7 +30,7 @@ namespace UI.Widget {
 
         public void Init(ModuleData moduleData, Action<string> OnSelectModuleBuild) {
             module = moduleData;
-            // moduleImage.sprite = 
+            moduleImage.sprite = settings[moduleData.Id];
             onSelectModule = OnSelectModuleBuild;
             moduleName.text = module.Id;
             moduleDescription.text = module.Description;

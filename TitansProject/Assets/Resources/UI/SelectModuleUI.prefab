@@ -605,6 +605,7 @@ MonoBehaviour:
   moduleCost: {fileID: 114998898213795176}
   moduleTime: {fileID: 114149888224101186}
   moduleDescription: {fileID: 114196805444284970}
+  settings: {fileID: 11400000, guid: 73bc36f58125f4e44a32ba0fcb842032, type: 2}
 --- !u!114 &114829998307651638
 MonoBehaviour:
   m_ObjectHideFlags: 1
