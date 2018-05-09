@@ -83,7 +83,7 @@ namespace Model {
             }
         }
 
-        private Task GetCurrentTask() {
+        public Task GetCurrentTask() {
             if (taskList.Count > 0)
                 return taskList[0];
             return null;
