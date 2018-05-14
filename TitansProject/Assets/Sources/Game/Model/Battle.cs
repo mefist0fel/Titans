@@ -12,12 +12,14 @@ namespace Model {
 
         public readonly Faction[] Factions;
         public List<Titan> Units { get; private set; }
+        public List<AbstractInteraction> Interactions { get; private set; }
         private readonly IBattleController controller;
 
         public Battle(IBattleController battleController) {
             controller = battleController;
             Planet = new Planet();
             Units = new List<Titan>();
+            Interactions = new List<AbstractInteraction>();
             Factions = new Faction[] {
                 new Faction(0),
                 new Faction(1)
@@ -40,19 +42,16 @@ namespace Model {
             controller.OnCreateTitan(titan);
         }
 
-        private void RemoveTitan(Titan titan) {
-            controller.OnRemoveTitan(titan);
-
-            Units.Remove(titan);
-            titan.Faction.Units.Remove(titan);
-        }
-
         public void Update(float deltaTime) {
             foreach (var titan in Units) {
                 if (titan.IsAlive)
                     titan.Update(deltaTime);
             }
+            foreach (var interaction in Interactions) {
+                interaction.Update(deltaTime);
+            }
             RemoveDeadTitans();
+            RemoveEndedInteractions();
         }
 
         private void RemoveDeadTitans() {
@@ -60,6 +59,22 @@ namespace Model {
                 if (!titan.IsAlive) {
                     RemoveTitan(titan);
                     return;
+                }
+            }
+        }
+
+        private void RemoveTitan(Titan titan) {
+            controller.OnRemoveTitan(titan);
+
+            Units.Remove(titan);
+            titan.Faction.Units.Remove(titan);
+        }
+
+        private void RemoveEndedInteractions() {
+            for (int i = 0; i < Interactions.Count; i++) {
+                if (Interactions[i].IsEnded) {
+                    Interactions.RemoveAt(i);
+                    i -= 1;
                 }
             }
         }
