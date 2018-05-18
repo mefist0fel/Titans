@@ -21,8 +21,8 @@ public sealed class PlayerFactionController : MonoBehaviour {
     private TitanMoveMarkers moveMarkers;
 
     private void Awake() {
-        gameUI = UILayer.Show<GameUI>();
         // TODO make normal
+        gameUI = UILayer.Get<GameUI>();
         moveMarkers = FindObjectOfType<TitanMoveMarkers>();
     }
 
@@ -85,12 +85,16 @@ public sealed class PlayerFactionController : MonoBehaviour {
     }
 
     private void SelectTitan(TitanView titanView) {
+        // Enemy titan
+        if (titanView.Titan.Faction != faction) {
+            return;
+        }
         if (selectedTitan != null) {
             selectedTitan.UpdateTaskList -= UpdateTaskList;
             selectedTitan.UpdateResources -= UpdateResources;
         }
+        selectedTitan = null;
         if (titanView == null || !titanView.Titan.IsAlive) {
-            selectedTitan = null;
             gameUI.SelectTitan();
             moveMarkers.HideSelection();
             // RocketAimView.Hide();

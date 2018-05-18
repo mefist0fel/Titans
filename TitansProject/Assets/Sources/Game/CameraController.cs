@@ -51,6 +51,14 @@ public sealed class CameraController : MonoBehaviour {
         }
     }
 
+    private float Radius { get; set; }
+
+    public static void SetPlanetRadius(float radius) {
+        if (Instance != null) {
+            Instance.Radius = radius;
+        }
+    }
+
     public static void SetViewToTitan(Vector3 position) {
         if (Instance != null) {
             Instance.rotation = Quaternion.LookRotation(position.normalized) * Quaternion.Euler(90, 0, 0);
@@ -236,7 +244,7 @@ public sealed class CameraController : MonoBehaviour {
     }
 
     private void SetRotation() {
-        transform.position = rotation * Vector3.up * planet.Radius;
+        transform.position = rotation * Vector3.up * Radius;
         transform.rotation = rotation * cameraViewRotation;
     }
 

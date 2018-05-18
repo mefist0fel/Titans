@@ -14,13 +14,17 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
     private List<TitanView> titanList = new List<TitanView>();
 
     private Battle battle;
+    private GameUI gameUI;
 
-	public void Start () {
+
+    public void Start () {
+        gameUI = UILayer.Show<GameUI>();
         battle = new Battle(this);
         playerFactionController = Utils.GetOrCreateComponent<PlayerFactionController>(gameObject);
         playerFactionController.Init(battle, battle.Factions[0]);
         planetView.Init(battle.Planet);
-	}
+        CameraController.SetPlanetRadius(battle.Planet.Radius);
+    }
 
 	private void Update () {
         battle.Update(Time.deltaTime);
@@ -29,10 +33,7 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
     public void OnCreateTitan(Titan titan) {
         var titanView = TitansFactory.CreateTitan(titan, transform);
         titanList.Add(titanView);
-        GameUI gameUI = UILayer.Get<GameUI>();
-        if (gameUI != null) {
-            gameUI.AddMarker(titanView, planetView);
-        }
+        gameUI.AddMarker(titanView, planetView);
     }
 
     public void OnRemoveTitan(Titan titan) {

@@ -28,6 +28,7 @@ namespace Model {
                 faction.SetEnemy(Factions);
 
             AddTitan(0, new Vector3(0, Planet.Radius, 0));
+            AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, Planet.Radius, 0));
             AddTitan(1, Planet.GetRandomPosition());
         }
 

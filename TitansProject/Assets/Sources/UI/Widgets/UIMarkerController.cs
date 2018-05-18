@@ -69,7 +69,7 @@ namespace UI {
             }
             pos = horizonMarkerPosition;
             Vector2 border = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f);
-            Vector2 centerPosition = ((Vector2)camera.WorldToScreenPoint(Vector3.zero) - border) * (1f / canvas.scaleFactor);
+            // Vector2 centerPosition = ((Vector2)camera.WorldToScreenPoint(Vector3.zero) - border) * (1f / canvas.scaleFactor);
             Vector2 position = ((Vector2)camera.WorldToScreenPoint(horizonMarkerPosition) - border) * (1f / canvas.scaleFactor);
             Vector2 angleStartPosition = ((Vector2)camera.WorldToScreenPoint(markerPosition) - border) * (1f / canvas.scaleFactor);
             Vector2 angleDirectionPosition = ((Vector2)camera.WorldToScreenPoint(directionMarkerPosition) - border) * (1f / canvas.scaleFactor);
