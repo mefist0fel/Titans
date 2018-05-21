@@ -511,7 +511,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!43 &632875217
+--- !u!43 &691313653
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1575,7 +1575,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1543206618}
-  m_Mesh: {fileID: 632875217}
+  m_Mesh: {fileID: 691313653}
 --- !u!23 &1543206622
 MeshRenderer:
   m_ObjectHideFlags: 0

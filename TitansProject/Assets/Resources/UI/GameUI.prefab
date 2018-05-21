@@ -351,22 +351,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1250243279177348
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 224417095486670544}
-  - component: {fileID: 114422689323595476}
-  m_Layer: 5
-  m_Name: MoveCommandsQueue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1250605980693908
 GameObject:
   m_ObjectHideFlags: 1
@@ -940,6 +924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224126733883798468}
   - component: {fileID: 114567331218425762}
+  - component: {fileID: 114559395856215498}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -2982,23 +2967,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114422689323595476
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1250243279177348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02289b922aedae843a9cef35cf15dd3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveIcon: {fileID: 21300000, guid: 5f12ecc3b4180114bbb3f23712ed0f24, type: 3}
-  attackIcon: {fileID: 21300000, guid: 221f22d0389ff444a8efc85f1dec3536, type: 3}
-  buttonPrefab: {fileID: 114694844086949228, guid: ff804e4f0f4536e45a25ea2293b06bf1,
-    type: 2}
-  size: 100
-  queueButtons: []
 --- !u!114 &114425643660522620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3683,6 +3651,19 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114559395856215498
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1632473973480378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff56add3ce6171d41b8ce1282b0a3f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonPrefab: {fileID: 114633534101121894, guid: bb1efdf329946694fb34525b8401d134,
+    type: 2}
 --- !u!114 &114564393158118810
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3774,6 +3755,7 @@ MonoBehaviour:
   RocketsCount: {fileID: 114248108697566538}
   markerControllerPrefab: {fileID: 114830137941878778, guid: 9a5acf4669312a040ab0a82a8b8f7aa0,
     type: 2}
+  cancelTaskButtons: {fileID: 114559395856215498}
 --- !u!114 &114592250410735126
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5887,7 +5869,6 @@ RectTransform:
   - {fileID: 224763525117202442}
   - {fileID: 224120111343493860}
   - {fileID: 224242427814936984}
-  - {fileID: 224417095486670544}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6022,7 +6003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 209, y: 100}
+  m_AnchoredPosition: {x: 209, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224250202703689144
@@ -6421,24 +6402,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 92, y: 92}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!224 &224417095486670544
-RectTransform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1250243279177348}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 224126733883798468}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 200, y: 50}
-  m_SizeDelta: {x: -400, y: 100}
-  m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &224437184492266184
 RectTransform:
   m_ObjectHideFlags: 1

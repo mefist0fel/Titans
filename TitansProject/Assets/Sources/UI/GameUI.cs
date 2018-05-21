@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using View;
+using System.Collections.Generic;
 
 namespace UI {
     public sealed class GameUI : UILayer {
@@ -34,6 +35,8 @@ namespace UI {
         private Text RocketsCount; // Set from editor
         [SerializeField]
         private UIMarkerController markerControllerPrefab; // Set from editor
+        [SerializeField]
+        private UICancelTaskQueue cancelTaskButtons; // Set from editor
 
 
         private TitanView selectedTitan;
@@ -48,6 +51,7 @@ namespace UI {
 
         private void Start() {
             HideContextMenu();
+            SelectTitan(null);
         }
 
         float winTimer = 0;
@@ -142,6 +146,10 @@ namespace UI {
             //  upgradeTitanModule.gameObject.SetActive(selectedTitan.Level < TitanViewOld.MaxLevel);
             //  OnBuildRocketButton.SetModule(selectedTitan.Modules[14]);
             LayoutRebuilder.ForceRebuildLayoutImmediate(modules[0].transform.parent.GetComponent<RectTransform>());
+        }
+
+        public void ShowTaskCancelButtons(List<Titan.Task> taskPoints) {
+            cancelTaskButtons.Show(taskPoints, selectedTitan.Titan);
         }
 
         public void OnSelectNextTitanClick() {

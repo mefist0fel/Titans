@@ -59,4 +59,7 @@ public class TitanMoveMarkers : MonoBehaviour {
             }
         }
     }
+
+    public class Task {
+    }
 }

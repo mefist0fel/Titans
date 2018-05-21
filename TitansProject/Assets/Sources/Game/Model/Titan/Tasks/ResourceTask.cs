@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Model {
     public sealed class ResourceTask : Titan.Task {
@@ -6,6 +7,12 @@ namespace Model {
         private readonly Action<int> OnCollectResource;
         private float resourceCollectionTime = 0.5f; // TODO to settings
         private float collectionTimer = 0;
+
+        public Vector3 Position {
+            get {
+                return resourcePoint.Position;
+            }
+        }
 
         public ResourceTask(ResourcePoint point, Action<int> onCollectResource) {
             resourcePoint = point;

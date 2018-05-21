@@ -102,6 +102,14 @@ namespace Model {
             }
         }
 
+        public void CancelTasks(Task[] tasks) {
+            if (!IsAlive)
+                return;
+            foreach (var task in tasks)
+                TaskList.Remove(task);
+            view.OnUpdateTaskList();
+        }
+
         public void AddResourceTask(ResourcePoint resourcePoint) {
             taskList.Add(new MoveTask(resourcePoint.Position, mover));
             taskList.Add(new ResourceTask(resourcePoint, ChangeResourceCount));

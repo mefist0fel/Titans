@@ -121,7 +121,9 @@ public sealed class PlayerFactionController : MonoBehaviour {
         if (selectedTitan == null) {
             return;
         }
-        moveMarkers.ShowPathMarkers(GetPathPoints(selectedTitan.Titan.TaskList));
+        var taskPoints = GetPathPoints(selectedTitan.Titan.TaskList);
+        moveMarkers.ShowPathMarkers(taskPoints);
+        gameUI.ShowTaskCancelButtons(selectedTitan.Titan.TaskList);
     }
 
     private List<Vector3> GetPathPoints(List<Titan.Task> taskList) {
