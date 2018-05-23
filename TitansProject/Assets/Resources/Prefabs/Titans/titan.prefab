@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 114755754296740244}
   - component: {fileID: 114914581067859542}
   m_Layer: 0
-  m_Name: ShieldVisual
+  m_Name: ShieldView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -955,6 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitTransfom: {fileID: 4530818640335124}
   deathMaterial: {fileID: 2100000, guid: 78c5bceb303baaa49b69ae0065ada339, type: 2}
+  shieldView: {fileID: 114914581067859542}
   resourceCollectionParticles: {fileID: 198496939077829500}
 --- !u!114 &114914581067859542
 MonoBehaviour:

@@ -16,7 +16,7 @@ namespace Model {
                 case "rocket":
                     return null;
                 case "shield":
-                    return null;
+                    return new ShieldCapacitorModule(moduleData);
                 case "anti_air":
                     return null;
             }

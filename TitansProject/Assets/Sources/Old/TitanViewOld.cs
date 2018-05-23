@@ -27,9 +27,9 @@ public sealed class TitanViewOld : MonoBehaviour {
     public int FactionId;
     public OldFaction SelfFaction;
 
-    private Shield shield;
+    private ShieldOld shield;
 
-    public Shield ShieldGenerator { get { return shield; } }
+    public ShieldOld ShieldGenerator { get { return shield; } }
     public int MaxShield = 20;
     private int armor = 10;
     public int Armor { get { return armor; } }
@@ -237,7 +237,7 @@ public sealed class TitanViewOld : MonoBehaviour {
     }
 
     private void Start () {
-        shield = new Shield(this);
+        shield = new ShieldOld(this);
         UpdateState();
         // Attach(ModulesFactory.CreateModule(Config.Modules["weapon"], this), 0);
     }

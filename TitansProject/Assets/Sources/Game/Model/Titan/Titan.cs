@@ -19,6 +19,9 @@ namespace Model {
 
         public readonly ModuleSlot[] ModuleSlots;
 
+        // Components
+        public readonly Shield Shield;
+
         private readonly Battle battle;
 
         private TitanMover mover;
@@ -45,6 +48,7 @@ namespace Model {
             for (int i = 0; i < ModuleSlots.Length; i++) {
                 ModuleSlots[i] = new ModuleSlot(this);
             }
+            Shield = new Shield(UpdateShield);
             // TODO kill
             ResourceUnits = 20;
         }
@@ -70,6 +74,7 @@ namespace Model {
         }
 
         public void Update(float deltaTime) {
+            Shield.Update(deltaTime);
             var currentTask = GetCurrentTask();
             if (currentTask != null) {
                 currentTask.MakeTask(deltaTime);
@@ -130,10 +135,15 @@ namespace Model {
             view.OnUpdateModules();
         }
 
+        private void UpdateShield() {
+            view.OnUpdateShield();
+        }
+
         public interface IView {
             void OnCollectResource(int count);
             void OnUpdateTaskList();
             void OnUpdateModules();
+            void OnUpdateShield();
             void OnHit(int damage);
             void OnDie();
         }
@@ -149,6 +159,10 @@ namespace Model {
 
             public void OnUpdateModules() {
                 Debug.Log("On Update modules ");
+            }
+
+            public void OnUpdateShield() {
+                Debug.Log("On Update shield ");
             }
 
             public void OnHit(int damage) {

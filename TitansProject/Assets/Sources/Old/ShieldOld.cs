@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Shield {
+public sealed class ShieldOld {
     public int Value { get; private set; }
     public int MaxValue { get; private set; }
     public float NormalizedRestoreTime { get { return timer / reloadTime; } }
@@ -13,7 +13,7 @@ public sealed class Shield {
     private float timer = 0;
     private TitanViewOld titan;
 
-    public Shield(TitanViewOld parentTitan) {
+    public ShieldOld(TitanViewOld parentTitan) {
         titan = parentTitan;
     }
 

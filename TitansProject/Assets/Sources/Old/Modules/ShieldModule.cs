@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ShieldModule : MonoBehaviour, ITitanModule, Shield.IShieldModificator {
+public sealed class ShieldModule : MonoBehaviour, ITitanModule, ShieldOld.IShieldModificator {
     [SerializeField]
     private int shield = 10;
 

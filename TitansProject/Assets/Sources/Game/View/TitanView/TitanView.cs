@@ -9,6 +9,8 @@ namespace View {
         [SerializeField]
         private Material deathMaterial;
         [SerializeField]
+        private ShieldView shieldView;
+        [SerializeField]
         private ParticleSystem resourceCollectionParticles;
 
         public Titan Titan { get; private set; }
@@ -39,6 +41,11 @@ namespace View {
         public void OnUpdateModules() {
             if (UpdateModules != null)
                 UpdateModules();
+        }
+
+        public void OnUpdateShield() {
+            if (shieldView != null)
+                shieldView.UpdateState(Titan.Shield.Capacity);
         }
 
         private void Update() {
