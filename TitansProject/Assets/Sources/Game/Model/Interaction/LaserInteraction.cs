@@ -2,21 +2,22 @@
 
 namespace Model {
     public sealed class LaserInteraction : AbstractInteraction {
-        private float timer;
         public readonly Titan TargetTitan;
+        public readonly Damage Damage;
 
         public LaserInteraction(Titan parentTitan, Titan targetTitan, Damage damage, float time = 0): base (parentTitan) {
             TargetTitan = targetTitan;
+            Damage = damage;
         }
 
         public override bool IsEnded {
             get {
-                throw new NotImplementedException();
+                return true;
             }
         }
 
         public override void Update(float deltaTime) {
-            throw new NotImplementedException();
+            TargetTitan.Hit(Damage);
         }
     }
 }

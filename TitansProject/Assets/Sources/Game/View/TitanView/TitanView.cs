@@ -58,6 +58,10 @@ namespace View {
             StatusTextView.Create(damage.ToString(), Color.red, hitTransfom.position);
         }
 
+        public Vector3 GetHitPoint() {
+            return hitTransfom.transform.position;
+        }
+
         public void OnDie() {
             Debug.Log("I'm Die!");
             var renderers = GetComponentsInChildren<MeshRenderer>();

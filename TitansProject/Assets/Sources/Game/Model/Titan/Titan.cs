@@ -21,6 +21,7 @@ namespace Model {
 
         // Components
         public readonly Shield Shield;
+        public readonly Laser Laser;
 
         private readonly Battle battle;
 
@@ -49,13 +50,14 @@ namespace Model {
                 ModuleSlots[i] = new ModuleSlot(this);
             }
             Shield = new Shield(UpdateShield);
+            Laser = new Laser(this, battle);
             // TODO kill
             ResourceUnits = 20;
         }
 
-        public void Hit(int damage) {
-            view.OnHit(damage);
-            Armor -= damage;
+        public void Hit(Damage damage) {
+            view.OnHit(damage.Value);
+            Armor -= damage.Value;
             if (Armor < 0) {
                 Die();
             }
@@ -75,6 +77,7 @@ namespace Model {
 
         public void Update(float deltaTime) {
             Shield.Update(deltaTime);
+            Laser.Update(deltaTime);
             var currentTask = GetCurrentTask();
             if (currentTask != null) {
                 currentTask.MakeTask(deltaTime);

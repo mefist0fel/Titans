@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserBeamController : MonoBehaviour {
+public sealed class LaserBeamController : MonoBehaviour {
     private static LaserBeamController instance;
 
     private List<LineRenderer> cache = new List<LineRenderer>();
@@ -11,7 +9,7 @@ public class LaserBeamController : MonoBehaviour {
     [SerializeField]
     public LineRenderer laserLinePrototype; // Set from editor
     [SerializeField]
-    public float liserWifght = 0.1f; // Set from editor
+    public float liserWeight = 0.1f; // Set from editor
     [SerializeField]
     public AnimationCurve curve = new AnimationCurve(new Keyframe[] { new Keyframe(0, 0), new Keyframe(0.2f, 1f), new Keyframe(1f, 0f) });
 
@@ -49,7 +47,7 @@ public class LaserBeamController : MonoBehaviour {
         laser.endColor = end;
         Timer.Add(showTime,
             (anim) => {
-                float width = curve.Evaluate(anim) * liserWifght;
+                float width = curve.Evaluate(anim) * liserWeight;
                 laser.startWidth = width;
                 laser.endWidth = width;
             },

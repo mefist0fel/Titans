@@ -43,6 +43,11 @@ namespace Model {
             controller.OnCreateTitan(titan);
         }
 
+        public void AddInteraction(AbstractInteraction interaction) {
+            Interactions.Add(interaction);
+            controller.OnAddInteraction(interaction);
+        }
+
         public void Update(float deltaTime) {
             foreach (var titan in Units) {
                 if (titan.IsAlive)
@@ -85,5 +90,6 @@ namespace Model {
         void OnCreateTitan(Titan titan);
         void OnRemoveTitan(Titan titan);
         void OnBattleEnd(Faction winner);
+        void OnAddInteraction(AbstractInteraction interaction);
     }
 }

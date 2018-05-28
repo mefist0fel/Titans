@@ -42,4 +42,14 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
     public void OnBattleEnd(Faction winner) {
         Debug.LogError("Battle end, and winner is " + winner.ID);
     }
+
+    public void OnAddInteraction(AbstractInteraction interaction) {
+        var laserInteraction = interaction as LaserInteraction;
+        if (laserInteraction != null) {
+            var titanView = laserInteraction.ParentTitan.View as TitanView;
+            var enemyTitanView = laserInteraction.TargetTitan.View as TitanView;
+            LaserBeamController.Show(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.3f);
+        }
+        // LaserBeamController
+    }
 }
