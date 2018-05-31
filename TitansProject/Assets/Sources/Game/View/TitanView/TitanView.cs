@@ -55,7 +55,7 @@ namespace View {
 
         public void OnHit(int damage) {
             Debug.Log("I'm hit! on " + damage);
-            StatusTextView.Create(damage.ToString(), Color.red, hitTransfom.position);
+            StatusTextView.Create(damage.ToString(), Color.white, hitTransfom.position);
         }
 
         public Vector3 GetHitPoint() {

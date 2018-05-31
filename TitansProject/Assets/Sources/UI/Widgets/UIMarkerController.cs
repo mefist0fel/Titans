@@ -6,6 +6,8 @@ namespace UI {
     public sealed class UIMarkerController : MonoBehaviour {
         [SerializeField]
         private RectTransform controlArrow;
+        [SerializeField]
+        private UIScaleAnimator scaleAnimator;
         private TitanView controlledTitan;
         private PlanetView controlledPlanet;
         private RectTransform rectTransform;
@@ -32,7 +34,7 @@ namespace UI {
         private void OnDrawGizmos() {
             Gizmos.DrawCube(pos, Vector3.one);
         }
-
+        // TODO refactor it later
         private void Update() {
             if (controlledTitan == null)
                 return;
@@ -74,24 +76,35 @@ namespace UI {
             Vector2 angleStartPosition = ((Vector2)camera.WorldToScreenPoint(markerPosition) - border) * (1f / canvas.scaleFactor);
             Vector2 angleDirectionPosition = ((Vector2)camera.WorldToScreenPoint(directionMarkerPosition) - border) * (1f / canvas.scaleFactor);
             if (controlArrow != null) {
-                controlArrow.localEulerAngles = new Vector3(0, 0, -Utils.GetAngle(angleStartPosition, angleDirectionPosition));
+                controlArrow.localEulerAngles = new Vector3(0, 0, -Utils.GetAngle(angleStartPosition, angleDirectionPosition) + 180f);
             }
 
             float screenBorderPixels = 32f;
             float aspect = Screen.width / (float)Screen.height;
+            bool isOnScreen = true;
             if (position.x > referenceScreenSize.x * aspect - screenBorderPixels) {
                 position *= (referenceScreenSize.x * aspect - screenBorderPixels) / position.x;
+                isOnScreen = false;
             }
             if (position.x < -(referenceScreenSize.x * aspect - screenBorderPixels)) {
                 position *= -(referenceScreenSize.x * aspect - screenBorderPixels) / position.x;
+                isOnScreen = false;
             }
             if (position.y > referenceScreenSize.y - screenBorderPixels) {
                 position *= (referenceScreenSize.y - screenBorderPixels) / position.y;
+                isOnScreen = false;
             }
             if (position.y < -(referenceScreenSize.y - screenBorderPixels)) {
                 position *= -(referenceScreenSize.y - screenBorderPixels) / position.y;
+                isOnScreen = false;
             }
+            var needToShow = needShowArrowOnHorizon || !isOnScreen;
+            ShowMarker(needToShow);
             rectTransform.anchoredPosition = position;
+        }
+
+        private void ShowMarker(bool needToShow) {
+            scaleAnimator.Show(needToShow);
         }
     }
 

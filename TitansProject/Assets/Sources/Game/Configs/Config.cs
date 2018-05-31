@@ -8,6 +8,7 @@ public static class Config {
     public sealed class ModuleList {
         public readonly List<ModuleData> Modules = new List<ModuleData>() {
             new ModuleData("laser", 10, 3f, "Лазерное оружие"),
+            new ModuleData("thermal_protection", 10, 3f, "Термозащита"),
             new ModuleData("rocket", 10, 2f, "Ракетная установка"),
             new ModuleData("shield", 10, 2f, "Энергетические щиты"),
             new ModuleData("anti_air", 10, 2f, "Установка ПВО"),
