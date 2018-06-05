@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 namespace Model {
-    public sealed class Shield {
+    public sealed class Shield: Titan.IComponent {
         public int Capacity { get; private set; }
         public int MaxCapacity { get; private set; }
 
         public float NormalizedRestoreTime { get { return timer / reloadTime; } }
 
-        private int restoreValue = 5;
+        private int restoreValue = 0;
 
         public const float reloadTime = 10f;
         private float timer = 0;
@@ -32,9 +32,14 @@ namespace Model {
             }
         }
 
-        public void AddCapacity(int count) {
-            MaxCapacity += count;
-            Capacity = Mathf.Min(MaxCapacity, Capacity);
+        public void OnAttach(ModuleData module) {
+            Capacity += module["shield"];
+            restoreValue += module["shield_restore"];
+        }
+
+        public void OnDetach(ModuleData module) {
+            Capacity -= module["shield"];
+            restoreValue -= module["shield_restore"];
         }
     }
 }

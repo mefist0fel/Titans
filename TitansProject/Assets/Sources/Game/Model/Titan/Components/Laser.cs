@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
 namespace Model {
-    public sealed class Laser {
+    public sealed class Laser: Titan.IComponent {
         private readonly Titan titan;
         private readonly Battle battle;
         private int damage = 0;
-        private float fireRadius = 2f;
+        private float fireRadius = 3f;
         private float accuracy = 0.5f;
         private float reloadTime = 1.5f;
-        private float reloadTimeRandomShift = 0.2f;
+        private float reloadTimeRandomShift = 0.6f;
 
         private float timer = 0f;
         private Titan target = null;
@@ -16,13 +16,17 @@ namespace Model {
 
         public bool IsReady { get { return timer <= 0 && titan != null && titan.IsAlive; } }
 
+        public bool IsActive { get { return damage > 0; } }
+
+        public float Radius { get { return fireRadius; } }
+
         public Laser(Titan parentTitan, Battle battleController) {
             titan = parentTitan;
             battle = battleController;
         }
 
         public void Update(float deltaTime) {
-            if (damage == 0)
+            if (!IsActive)
                 return;
             ProcessReload(deltaTime);
             if (!IsReady)
@@ -31,10 +35,6 @@ namespace Model {
             if (target == null)
                 return;
             Fire(target);
-        }
-
-        internal void SetDamate(int additionalDamage) {
-            damage += additionalDamage;
         }
 
         public void Fire(Titan enemyTitan) {
@@ -78,6 +78,14 @@ namespace Model {
             if (timer > 0) {
                 timer -= deltaTime;
             }
+        }
+
+        public void OnAttach(ModuleData module) {
+            damage += module["damage"];
+        }
+
+        public void OnDetach(ModuleData module) {
+            damage -= module["damage"];
         }
     }
 }

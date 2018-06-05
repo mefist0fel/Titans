@@ -5,6 +5,11 @@ using UnityEngine;
 namespace Model {
     [System.Serializable]
     public sealed class Titan {
+        public interface IComponent {
+            void OnAttach(ModuleData module);
+            void OnDetach(ModuleData module);
+            void Update(float deltaTime);
+        }
 
         public readonly Faction Faction;
 
@@ -16,12 +21,11 @@ namespace Model {
 
         public int ResourceUnits { get; private set; }
         public float Speed { get; private set; }
-
+        
         public readonly ModuleSlot[] ModuleSlots;
 
-        // Components
         public readonly Shield Shield;
-        public readonly Laser Laser;
+        private readonly List<IComponent> Components;
 
         private readonly Battle battle;
 
@@ -50,7 +54,10 @@ namespace Model {
                 ModuleSlots[i] = new ModuleSlot(this);
             }
             Shield = new Shield(UpdateShield);
-            Laser = new Laser(this, battle);
+            Components = new List<IComponent>() {
+                Shield,
+                new Laser(this, battle)
+            };
             // TODO kill
             ResourceUnits = 20;
         }
@@ -75,9 +82,22 @@ namespace Model {
             view = titanView;
         }
 
+        public void AddParams(ModuleData data) {
+            foreach (var component in Components) {
+                component.OnAttach(data);
+            }
+        }
+
+        public void RemoveParams(ModuleData data) {
+            foreach (var component in Components) {
+                component.OnDetach(data);
+            }
+        }
+
         public void Update(float deltaTime) {
-            Shield.Update(deltaTime);
-            Laser.Update(deltaTime);
+            foreach (var component in Components) {
+                component.Update(deltaTime);
+            }
             var currentTask = GetCurrentTask();
             if (currentTask != null) {
                 currentTask.MakeTask(deltaTime);

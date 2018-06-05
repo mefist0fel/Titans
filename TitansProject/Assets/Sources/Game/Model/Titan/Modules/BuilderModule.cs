@@ -2,7 +2,7 @@
 
 namespace Model {
     /// <summary>
-    /// Module get build config, looki for time and cost and after - build selected module in titan slot instead self
+    /// Module get build config, looking for time and cost and after - build selected module in titan slot instead self
     /// </summary>
     public sealed class BuilderModule : IModule {
         public float FullTime { get; private set; }
@@ -27,7 +27,7 @@ namespace Model {
             controlledTitan = titan;
         }
 
-        public void OnDetach() {
+        public void OnDetach(Titan titan) {
             controlledTitan = null;
         }
 
@@ -38,9 +38,9 @@ namespace Model {
             }
         }
 
-        private void BuildSelectedModule(ModuleData module) {
-            var buildedModule = ModulesFactory.CreateModule(module, controlledTitan);
-            slot.Attach(buildedModule);
+        private void BuildSelectedModule(ModuleData moduleData) {
+            var module = new Module(moduleData);
+            slot.Attach(module);
         }
     }
 }

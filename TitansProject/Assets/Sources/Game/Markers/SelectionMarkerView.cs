@@ -26,7 +26,8 @@ public sealed class SelectionMarkerView : MonoBehaviour {
     public void SelectTitan(TitanView titan) {
         timer = 0;
         gameObject.SetActive(true);
-        needShowWeaponRange = false;// titan.Modules.Any((module) => module is WeaponModule);
+        needShowWeaponRange = true;//  titan.Titan.Laser.IsActive;
+        fireRadius = 3; //titan.Titan.Laser.Radius;
         transform.parent = titan.transform;
         transform.localRotation = Quaternion.identity;
         transform.localPosition = Vector3.zero;

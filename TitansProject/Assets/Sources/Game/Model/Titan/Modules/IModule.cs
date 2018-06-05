@@ -2,7 +2,7 @@
     public interface IModule {
         string Id { get; }
         void OnAttach(Titan titan);
-        void OnDetach();
+        void OnDetach(Titan titan);
         void Update(float deltaTime);
     }
 }

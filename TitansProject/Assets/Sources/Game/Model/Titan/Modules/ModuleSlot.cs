@@ -19,7 +19,7 @@ namespace Model {
         public void Build(ModuleData moduleData) {
             if (CanBuild(moduleData)) {
                 titan.ChangeResourceCount(-moduleData.Cost);
-                var module = Model.ModulesFactory.CreateBuildModule(moduleData, this);
+                var module = new BuilderModule(moduleData, this);
                 Attach(module);
             } else {
                 Debug.LogError("Not enough resources for module: " + moduleData.Id);
@@ -28,7 +28,7 @@ namespace Model {
 
         public void Attach(IModule module = null) {
             if (Module != null) {
-                Module.OnDetach();
+                Module.OnDetach(titan);
             }
             Module = module;
             if (Module != null) {

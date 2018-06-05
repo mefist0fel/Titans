@@ -91,13 +91,13 @@ namespace UI {
             //    return settings.RocketModuleSprite;
             //if (module is AntiAirLaserModule)
             //    return settings.AntiAirModuleSprite;
-            if (module is ShieldCapacitorModule) {
-                progressImage.fillClockwise = true;
-                progressImage.color = settings.ShieldRestoreColor;
-                return settings[module.Id];
-            }
-            if (module is LaserModule)
-                return settings[module.Id];
+           // if (module is ShieldCapacitorModule) {
+           //     progressImage.fillClockwise = true;
+           //     progressImage.color = settings.ShieldRestoreColor;
+           //     return settings[module.Id];
+           // }
+           // if (module is LaserModule)
+           //     return settings[module.Id];
             return null;
         }
     }

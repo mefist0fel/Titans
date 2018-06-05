@@ -195,7 +195,7 @@ namespace UI {
 
         public void OnSelectBuildWeaponModuleClick() { // Set from editor
             var module = new ModuleData("weapon", 5, 2f);
-            selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
+            //selectedSlot.Attach(Model.ModulesFactory.CreateBuildModule(module, selectedSlot));
             //   var module = Config.Modules["weapon"];
             //   selectedTitan.BuildModule(module, selectedSlot);
             //   HideContextMenu();
