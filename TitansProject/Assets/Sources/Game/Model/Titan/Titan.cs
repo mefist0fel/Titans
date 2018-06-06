@@ -17,13 +17,14 @@ namespace Model {
         public Quaternion UpRotation { get { return mover.UpRotation; } }
 
         public int MaxArmor { get; private set; }
-        public int Armor { get; private set; }
+        public int AFrmor { get; private set; }
 
         public int ResourceUnits { get; private set; }
         public float Speed { get; private set; }
         
         public readonly ModuleSlot[] ModuleSlots;
 
+        public readonly Armor Armor;
         public readonly Shield Shield;
         private readonly List<IComponent> Components;
 
@@ -36,7 +37,7 @@ namespace Model {
         private List<Task> taskList = new List<Task>(20);
         public List<Task> TaskList { get { return taskList; } }
 
-        public bool IsAlive { get { return Armor > 0; } }
+        public bool IsAlive { get { return AFrmor > 0; } }
 
         public abstract class Task {
             public abstract bool IsEnded { get; }
@@ -47,31 +48,36 @@ namespace Model {
             Faction = faction;
             battle = battleContext;
             Speed = 2;
-            Armor = 10;
+            AFrmor = 10;
             mover = new TitanMover(battleContext.Planet, position, Speed);
             ModuleSlots = new ModuleSlot[12];
             for (int i = 0; i < ModuleSlots.Length; i++) {
                 ModuleSlots[i] = new ModuleSlot(this);
             }
-            Shield = new Shield(UpdateShield);
+            Shield = new Shield(UpdateLives);
+            Armor = new Armor(UpdateLives);
             Components = new List<IComponent>() {
+                Armor,
                 Shield,
                 new Laser(this, battle)
             };
+            AddParams(Config.Base);
             // TODO kill
             ResourceUnits = 20;
         }
 
         public void Hit(Damage damage) {
+            var damageValue = damage.Value;
             view.OnHit(damage.Value);
-            Armor -= damage.Value;
-            if (Armor < 0) {
+            damageValue = Shield.OnHit(damageValue);
+            Armor.OnHit(damageValue);
+            if (Armor.Value <= 0) {
                 Die();
             }
         }
 
         public void Die() {
-            Armor = 0;
+            AFrmor = 0;
             taskList.Clear();
             view.OnDie();
         }
@@ -158,15 +164,15 @@ namespace Model {
             view.OnUpdateModules();
         }
 
-        private void UpdateShield() {
-            view.OnUpdateShield();
+        private void UpdateLives() {
+            view.OnUpdateLives();
         }
 
         public interface IView {
             void OnCollectResource(int count);
             void OnUpdateTaskList();
             void OnUpdateModules();
-            void OnUpdateShield();
+            void OnUpdateLives();
             void OnHit(int damage);
             void OnDie();
         }
@@ -184,7 +190,7 @@ namespace Model {
                 Debug.Log("On Update modules ");
             }
 
-            public void OnUpdateShield() {
+            public void OnUpdateLives() {
                 Debug.Log("On Update shield ");
             }
 

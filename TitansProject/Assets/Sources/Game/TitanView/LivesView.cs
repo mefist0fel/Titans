@@ -6,7 +6,7 @@ public class LivesView : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer spritePrefab; // Set from editor
     [SerializeField]
-    private int livePoint = 10;
+    private int livePoint = 5;
     [SerializeField]
     private int armor = 20;
     [SerializeField]

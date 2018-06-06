@@ -11,6 +11,8 @@ namespace View {
         [SerializeField]
         private ShieldView shieldView;
         [SerializeField]
+        private LivesView livesView;
+        [SerializeField]
         private ParticleSystem resourceCollectionParticles;
 
         public Titan Titan { get; private set; }
@@ -24,6 +26,7 @@ namespace View {
             transform.position = Titan.Position;
             transform.rotation = Titan.UpRotation;
             UpdateResourceCollectionEffect();
+            OnUpdateLives();
         }
 
         public void OnCollectResource(int count) {
@@ -43,9 +46,14 @@ namespace View {
                 UpdateModules();
         }
 
-        public void OnUpdateShield() {
+        public void OnUpdateLives() {
             if (shieldView != null)
                 shieldView.UpdateState(Titan.Shield.Capacity);
+            if (livesView != null) {
+                var armor = Titan.Armor;
+                var shield = Titan.Shield;
+                livesView.UpdateState(armor.Value, armor.MaxValue, shield.Capacity, shield.MaxValue);
+            }
         }
 
         private void Update() {

@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spritePrefab: {fileID: 212768196364849262}
-  livePoint: 10
+  livePoint: 5
   armor: 20
   maxArmor: 20
   shield: 20
@@ -978,6 +978,7 @@ MonoBehaviour:
   hitTransfom: {fileID: 4570086840736638}
   deathMaterial: {fileID: 2100000, guid: 78c5bceb303baaa49b69ae0065ada339, type: 2}
   shieldView: {fileID: 114964411803615054}
+  livesView: {fileID: 114423751636100130}
   resourceCollectionParticles: {fileID: 198464489067599764}
 --- !u!114 &114532699269733260
 MonoBehaviour:

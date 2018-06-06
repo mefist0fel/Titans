@@ -15,5 +15,5 @@ MonoBehaviour:
   ShieldBackColor: {r: 0.41565743, g: 0.46013615, b: 0.9117647, a: 0.25}
   ArmorColor: {r: 1, g: 0.3103448, b: 0, a: 1}
   ShieldColor: {r: 0.37597317, g: 0.37597317, b: 0.89705884, a: 1}
-  Size: {x: 0.08, y: 0.04}
-  Distance: {x: 0.2, y: 0.1}
+  Size: {x: 0.02, y: 0.04}
+  Distance: {x: 0.06, y: 0.1}

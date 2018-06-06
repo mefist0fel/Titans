@@ -4,6 +4,11 @@ using System.Collections.Generic;
 public static class Config {
 
     public static readonly ModuleList Modules = new ModuleList();
+    public static readonly ModuleData Base = new ModuleData("base", 0, 0,
+                new Dictionary<string, int>() {
+                    { "armor", 10},
+                    { "armor_restore", 2}
+                });
 
     public sealed class ModuleList {
         public readonly List<ModuleData> Modules = new List<ModuleData>() {
