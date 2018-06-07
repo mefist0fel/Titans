@@ -61,9 +61,13 @@ namespace View {
             transform.rotation = Titan.UpRotation;
         }
 
-        public void OnHit(int damage) {
-            Debug.Log("I'm hit! on " + damage);
-            StatusTextView.Create(damage.ToString(), Color.white, hitTransfom.position);
+        public void OnHit(Damage damage) {
+            if (damage.Value == 0) {
+                StatusTextView.Create("Miss", Color.white, hitTransfom.position);
+                return;
+            }
+            OnUpdateLives();
+            StatusTextView.Create(damage.Value.ToString(), damage.Critical ? Color.red : Color.yellow , hitTransfom.position);
         }
 
         public Vector3 GetHitPoint() {

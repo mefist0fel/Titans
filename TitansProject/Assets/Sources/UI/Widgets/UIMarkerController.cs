@@ -30,10 +30,6 @@ namespace UI {
             }
         }
 
-        Vector3 pos;
-        private void OnDrawGizmos() {
-            Gizmos.DrawCube(pos, Vector3.one);
-        }
         // TODO refactor it later
         private void Update() {
             if (controlledTitan == null)
@@ -69,7 +65,6 @@ namespace UI {
                     horizonMarkerPosition = planetPosition + (markerPosition - planetPosition).normalized * (radius / horizonPlanetMarkerCos);
                 }
             }
-            pos = horizonMarkerPosition;
             Vector2 border = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f);
             // Vector2 centerPosition = ((Vector2)camera.WorldToScreenPoint(Vector3.zero) - border) * (1f / canvas.scaleFactor);
             Vector2 position = ((Vector2)camera.WorldToScreenPoint(horizonMarkerPosition) - border) * (1f / canvas.scaleFactor);

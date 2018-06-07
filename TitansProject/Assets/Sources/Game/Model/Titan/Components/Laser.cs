@@ -5,6 +5,7 @@ namespace Model {
         private readonly Titan titan;
         private readonly Battle battle;
         private int damage = 0;
+        private float criticalFactor = 2.0f;
         private float fireRadius = 3f;
         private float accuracy = 0.5f;
         private float reloadTime = 1.5f;
@@ -38,10 +39,14 @@ namespace Model {
         }
 
         public void Fire(Titan enemyTitan) {
-            if (Random.Range(0f, 1f) < accuracy) {
-                battle.AddInteraction(new LaserInteraction(titan, enemyTitan, new Damage(DamageType.Heat, damage)));
-                // enemyTitan.Hit(damage);
+            var isHit = Random.Range(0f, 1f) < accuracy;
+            var isCritical = false;
+            var finalDamage = 0;
+            if (isHit) {
+                isCritical = Random.Range(0f, 1f) < accuracy;
+                finalDamage = damage + (isCritical ? Mathf.RoundToInt(criticalFactor * damage) : 0);
             }
+            battle.AddInteraction(new LaserInteraction(titan, enemyTitan, new Damage(DamageType.Heat, finalDamage, isCritical)));
             timer = reloadTime + Random.Range(0f, reloadTimeRandomShift);
         }
 

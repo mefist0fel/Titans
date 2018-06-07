@@ -12,9 +12,11 @@ namespace Model {
     public struct Damage {
         public readonly DamageType Type;
         public readonly int Value;
-        public Damage(DamageType type, int value) {
+        public readonly bool Critical;
+        public Damage(DamageType type, int value, bool critical = false) {
             Type = type;
             Value = value;
+            Critical = critical;
         }
     }
 }

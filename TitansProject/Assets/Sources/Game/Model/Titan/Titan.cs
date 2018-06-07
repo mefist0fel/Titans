@@ -68,9 +68,9 @@ namespace Model {
 
         public void Hit(Damage damage) {
             var damageValue = damage.Value;
-            view.OnHit(damage.Value);
             damageValue = Shield.OnHit(damageValue);
             Armor.OnHit(damageValue);
+            view.OnHit(damage);
             if (Armor.Value <= 0) {
                 Die();
             }
@@ -173,7 +173,7 @@ namespace Model {
             void OnUpdateTaskList();
             void OnUpdateModules();
             void OnUpdateLives();
-            void OnHit(int damage);
+            void OnHit(Damage damage);
             void OnDie();
         }
 
@@ -187,15 +187,12 @@ namespace Model {
             }
 
             public void OnUpdateModules() {
-                Debug.Log("On Update modules ");
             }
 
-            public void OnUpdateLives() {
-                Debug.Log("On Update shield ");
-            }
+            public void OnUpdateLives() {}
 
-            public void OnHit(int damage) {
-                Debug.Log("On Hit titan " + damage);
+            public void OnHit(Damage damage) {
+                Debug.Log("On Hit titan " + damage.Value);
             }
 
             public void OnDie() {

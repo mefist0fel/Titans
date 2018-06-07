@@ -7,7 +7,7 @@ public static class Config {
     public static readonly ModuleData Base = new ModuleData("base", 0, 0,
                 new Dictionary<string, int>() {
                     { "armor", 10},
-                    { "armor_restore", 2}
+                    { "armor_restore", 1}
                 });
 
     public sealed class ModuleList {
@@ -15,7 +15,7 @@ public static class Config {
             new ModuleData("laser", 10, 3f,
                 new Dictionary<string, int>() {
                     { "armor", 5},
-                    { "damage", 5}
+                    { "damage", 1}
                 },
                 "Лазерное оружие"),
             new ModuleData("shield", 10, 2f,

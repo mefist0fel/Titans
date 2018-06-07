@@ -8,9 +8,9 @@ namespace Model {
 
         public float NormalizedRestoreTime { get { return timer / reloadTime; } }
 
-        private int restoreValue = 2;
+        private int restoreValue = 0;
 
-        public const float reloadTime = 10f;
+        public const float reloadTime = 5f;
         private float timer = 0;
 
         private Action onArmorUpdate;
@@ -24,6 +24,8 @@ namespace Model {
 
         public void Update(float deltaTime) {
             if (Value >= MaxValue)
+                return;
+            if (restoreValue == 0)
                 return;
             timer -= deltaTime;
             if (timer < 0) {

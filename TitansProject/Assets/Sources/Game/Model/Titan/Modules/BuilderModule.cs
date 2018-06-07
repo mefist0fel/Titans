@@ -13,7 +13,6 @@ namespace Model {
 
         private float timer;
         private ModuleSlot slot;
-        private Titan controlledTitan;
 
         public BuilderModule(ModuleData buildModule, ModuleSlot buildSlot) {
             ConstructionModule = buildModule;
@@ -23,13 +22,9 @@ namespace Model {
             Id = ConstructionModule.Id;
         }
 
-        public void OnAttach(Titan titan) {
-            controlledTitan = titan;
-        }
+        public void OnAttach(Titan titan) {}
 
-        public void OnDetach(Titan titan) {
-            controlledTitan = null;
-        }
+        public void OnDetach(Titan titan) {}
 
         public void Update(float deltaTime) {
             timer -= deltaTime;

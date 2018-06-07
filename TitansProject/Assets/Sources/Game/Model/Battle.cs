@@ -27,9 +27,10 @@ namespace Model {
             foreach (var faction in Factions)
                 faction.SetEnemy(Factions);
 
-            AddTitan(0, new Vector3(0, Planet.Radius, 0));
-            AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, Planet.Radius, 0));
-            AddTitan(1, Planet.GetRandomPosition());
+            AddTitan(0, new Vector3(0, 0, Planet.Radius));
+            AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, 0, Planet.Radius));
+            AddTitan(1, Quaternion.Euler(0, 10, 0) * new Vector3(0, 0, Planet.Radius));// Planet.GetRandomPosition());
+            CameraController.SetViewToTitan(new Vector3(0, 0, Planet.Radius));
         }
 
         private void AddTitan(int factionId, Vector3 position) {
