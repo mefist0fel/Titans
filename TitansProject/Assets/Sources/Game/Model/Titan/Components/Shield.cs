@@ -10,7 +10,7 @@ namespace Model {
 
         private int restoreValue = 0;
 
-        public const float reloadTime = 10f;
+        public const float reloadTime = 5f;
         private float timer = 0;
 
         private Action onShieldUpdate;

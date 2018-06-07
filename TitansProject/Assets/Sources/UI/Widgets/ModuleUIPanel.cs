@@ -75,6 +75,12 @@ namespace UI {
                 var buildModule = module as BuilderModule;
                 return settings[buildModule.Id];
             }
+            if (module is Module) {
+                progressImage.fillClockwise = false;
+                progressImage.color = settings.ShieldRestoreColor;
+                var regularModule = module as Module;
+                return settings[regularModule.Id];
+            }
             //if (module is BuildTitanModule) {
             //    progressImage.fillClockwise = false;
             //    progressImage.color = settings.BuildColor;
@@ -91,13 +97,13 @@ namespace UI {
             //    return settings.RocketModuleSprite;
             //if (module is AntiAirLaserModule)
             //    return settings.AntiAirModuleSprite;
-           // if (module is ShieldCapacitorModule) {
-           //     progressImage.fillClockwise = true;
-           //     progressImage.color = settings.ShieldRestoreColor;
-           //     return settings[module.Id];
-           // }
-           // if (module is LaserModule)
-           //     return settings[module.Id];
+            // if (module is ShieldCapacitorModule) {
+            //     progressImage.fillClockwise = true;
+            //     progressImage.color = settings.ShieldRestoreColor;
+            //     return settings[module.Id];
+            // }
+            // if (module is LaserModule)
+            //     return settings[module.Id];
             return null;
         }
     }

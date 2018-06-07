@@ -21,7 +21,7 @@ public static class Config {
             new ModuleData("shield", 10, 2f,
                 new Dictionary<string, int>() {
                     { "shield", 10},
-                    { "shield_resrote", 3}
+                    { "shield_restore", 3}
                 },
                 "Энергетические щиты"),
             new ModuleData("rocket", 10, 2f,

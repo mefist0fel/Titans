@@ -1,6 +1,6 @@
 ﻿namespace Model {
     public sealed class Module : IModule {
-        public string Id { get; private set; }
+        public string Id { get { return data.Id; } }
         private readonly ModuleData data;
 
         public Module(ModuleData moduleData) {
