@@ -26,6 +26,8 @@ namespace Model {
 
         public readonly Armor Armor;
         public readonly Shield Shield;
+        public readonly Accuracy Accuracy;
+        public readonly Cloaking Cloaking;
         private readonly List<IComponent> Components;
 
         private readonly Battle battle;
@@ -56,10 +58,14 @@ namespace Model {
             }
             Shield = new Shield(UpdateLives);
             Armor = new Armor(UpdateLives);
+            Accuracy = new Accuracy();
+            Cloaking = new Cloaking();
             Components = new List<IComponent>() {
                 Armor,
                 Shield,
-                new Laser(this, battle)
+                Accuracy,
+                Cloaking,
+                new Laser(this, battle, Accuracy)
             };
             AddParams(Config.Base);
             // TODO kill

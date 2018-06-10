@@ -6,8 +6,10 @@ public static class Config {
     public static readonly ModuleList Modules = new ModuleList();
     public static readonly ModuleData Base = new ModuleData("base", 0, 0,
                 new Dictionary<string, int>() {
-                    { "armor", 10},
-                    { "armor_restore", 1}
+                    { "armor", 100},
+                    { "armor_restore", 1},
+                    { "accuracy", 100},
+                    { "cloaking", 100}
                 });
 
     public sealed class ModuleList {
@@ -30,9 +32,18 @@ public static class Config {
             new ModuleData("anti_air", 10, 2f,
                 new Dictionary<string, int>(),
                 "Установка ПВО"),
-            new ModuleData("thermal_protection", 10, 3f,
-                new Dictionary<string, int>(),
-                "Термозащита"),
+            new ModuleData("radar", 10, 3f,
+                new Dictionary<string, int>() {
+                    { "armor", 5},
+                    { "accuracy", 50}
+                },
+                "Радар - увеличивает точность прицеливания обычным оружием"),
+            new ModuleData("cloak", 10, 3f,
+                new Dictionary<string, int>() {
+                    { "armor", 5},
+                    { "cloak", 50}
+                },
+                "Система маскировки - снижает точность прицеливания противника"),
            // new ModuleData("titan", 20, 15f),
            // new ModuleData("enemy_titan", 20, 15f),
            // new ModuleData("titan_upgrade", 10, 10f),

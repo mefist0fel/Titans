@@ -76,6 +76,7 @@ namespace View {
 
         public void OnDie() {
             Debug.Log("I'm Die!");
+            livesView.UpdateState(0, 0, 0, 0);
             var renderers = GetComponentsInChildren<MeshRenderer>();
             foreach (var renderer in renderers) {
                 renderer.material = deathMaterial;
