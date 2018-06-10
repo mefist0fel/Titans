@@ -38,7 +38,7 @@ namespace UI {
                 return;
             if (canvas == null)
                 return;
-            const float markerHeight = 0.35f;
+            const float markerHeight = 0.32f;
             var camera = Camera.main;
             var radius = controlledPlanet.Planet.Radius + markerHeight;
             var planetPosition = controlledPlanet.transform.position;
@@ -71,7 +71,7 @@ namespace UI {
             Vector2 angleStartPosition = ((Vector2)camera.WorldToScreenPoint(markerPosition) - border) * (1f / canvas.scaleFactor);
             Vector2 angleDirectionPosition = ((Vector2)camera.WorldToScreenPoint(directionMarkerPosition) - border) * (1f / canvas.scaleFactor);
             if (controlArrow != null) {
-                controlArrow.localEulerAngles = new Vector3(0, 0, -Utils.GetAngle(angleStartPosition, angleDirectionPosition) + 180f);
+                controlArrow.localEulerAngles = new Vector3(0, 0, -Utils.GetAngle(angleStartPosition, angleDirectionPosition));
             }
 
             float screenBorderPixels = 32f;
