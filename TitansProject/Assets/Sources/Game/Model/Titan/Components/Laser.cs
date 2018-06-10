@@ -10,8 +10,8 @@ namespace Model {
         private readonly Battle battle;
         private int damage = 0;
         private float fireRadius = 3f;
-        private float reloadTime = 0.5f; // 1.7f;
-        private float reloadTimeRandomShift = 0;//0.6f;
+        private float reloadTime = 1.7f;
+        private float reloadTimeRandomShift = 0.6f;
 
         private float timer = 0f;
         private Titan target = null;

@@ -22,5 +22,5 @@ MonoBehaviour:
   - Name: radar
     Sprite: {fileID: 21300000, guid: 2b4b23a96fcf2ef43bdea06e2cd7e956, type: 3}
   Empty: {fileID: 21300000, guid: 10d03b600327a1044b4f37f69ca6bf90, type: 3}
-  BuildColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5019608}
+  BuildColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.76862746}
   ShieldRestoreColor: {r: 0.5, g: 0.5, b: 1, a: 0.5019608}
