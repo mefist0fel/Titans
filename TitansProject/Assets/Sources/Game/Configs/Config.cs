@@ -33,7 +33,10 @@ public static class Config {
                 },
                 "Ракетная установка"),
             new ModuleData("anti_air", 10, 2f,
-                new Dictionary<string, int>(),
+                new Dictionary<string, int>() {
+                    { "armor", 5},
+                    { "anti_air", 6}
+                },
                 "Установка ПВО"),
             new ModuleData("radar", 10, 3f,
                 new Dictionary<string, int>() {

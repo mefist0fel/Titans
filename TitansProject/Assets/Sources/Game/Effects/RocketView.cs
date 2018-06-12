@@ -28,7 +28,7 @@ namespace View {
             float maxHeight = Vector3.Distance(target.Titan.Position, titanView.Titan.Position) / 4f;
             heightVector = ((titanView.Titan.Position + target.Titan.Position).normalized + Random.insideUnitSphere * 0.3f) * maxHeight;
             gameObject.SetActive(true);
-            prevPosition = startPosition;
+            prevPosition = Vector3.Lerp(startPosition, target.GetHitPoint(), 1.1f);
             destroyTimer = destroyDelay;
             Update();
             if (trail != null)

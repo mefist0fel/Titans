@@ -28,6 +28,7 @@ namespace Model {
         public readonly Shield Shield;
         public readonly Accuracy Accuracy;
         public readonly Cloaking Cloaking;
+        public readonly AntiAirDefence AntiAirDefence; 
         private readonly List<IComponent> Components;
 
         public readonly Battle Context;
@@ -60,17 +61,20 @@ namespace Model {
             Armor = new Armor(UpdateLives);
             Accuracy = new Accuracy();
             Cloaking = new Cloaking();
+            AntiAirDefence = new AntiAirDefence();
             Components = new List<IComponent>() {
                 Armor,
                 Shield,
                 Accuracy,
                 Cloaking,
+                AntiAirDefence,
                 new RocketLauncher(this, Context),
                 new Laser(this, Context, Accuracy)
             };
             AddParams(Config.Base);
             // TODO kill
-            ResourceUnits = 20;
+            ResourceUnits = 30;
+            // ModuleSlots[0].Build(Config.Modules["anti_air"]);
         }
 
         public void Hit(Damage damage) {

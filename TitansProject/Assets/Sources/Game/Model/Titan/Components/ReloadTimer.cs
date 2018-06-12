@@ -5,13 +5,14 @@ namespace Model {
         private readonly float reloadTime;
         private readonly float randomDispertion;
 
-        private float timer = 0f;
+        private float timer;
 
         public bool IsReady { get { return timer <= 0; } }
 
         public ReloadTimer(float fullReloadTime = 2f, float maxDispertion = 0) {
             reloadTime = fullReloadTime - maxDispertion;
             randomDispertion = maxDispertion * 2f;
+            Reload();
         }
 
         public void Update(float deltaTime) {
