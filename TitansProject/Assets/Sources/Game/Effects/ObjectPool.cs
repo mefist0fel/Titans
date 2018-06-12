@@ -7,8 +7,9 @@ public sealed class ObjectPool<T> where T: Component {
     private readonly Transform parent;
     private List<T> cache = new List<T>();
 
-    public ObjectPool(T objectPrototype) {
+    public ObjectPool(T objectPrototype, Transform parentTransform = null) {
         prototype = objectPrototype;
+        parent = parentTransform;
     }
 
     public T Get() {

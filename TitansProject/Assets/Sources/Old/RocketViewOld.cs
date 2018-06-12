@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class RocketView : MonoBehaviour {
+public sealed class RocketViewOld : MonoBehaviour {
     [SerializeField]
     public float Speed = 20f;
 
@@ -22,10 +20,10 @@ public sealed class RocketView : MonoBehaviour {
 
     public Vector3 Position { get { return transform.position; } }
 
-    public static List<RocketView> RocketsList = new List<RocketView>();
+    public static List<RocketViewOld> RocketsList = new List<RocketViewOld>();
 
     public static void Fire(Vector3 startPosition, Vector3 endPosition, PlanetViewOld planet, int damage, float radius, int factionId) {
-        var rocket = Instantiate(Resources.Load<RocketView>("Prefabs/Rocket"));
+        var rocket = Instantiate(Resources.Load<RocketViewOld>("Prefabs/Rocket"));
         rocket.Init(startPosition, endPosition, planet, damage, radius, factionId);
     }
 

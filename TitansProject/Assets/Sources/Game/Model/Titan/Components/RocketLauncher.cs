@@ -5,10 +5,10 @@ namespace Model {
         private readonly Battle battle;
         private readonly Titan titan;
 
-        private const float fireRadius = 3f;
+        private const float fireRadius = 4.5f;
         private int damage = 1;
         private int countInSalvo = 0;
-        private const float delay = 0.1f;
+        private const float delay = 0.12f;
         private const float speed = 3f; // units per second
         private readonly ReloadTimer timer = new ReloadTimer(2f, 0.5f);
 
@@ -55,7 +55,8 @@ namespace Model {
         public void Fire(Titan enemyTitan) {
             for(var i = 0; i < countInSalvo; i++) {
                 var rocketDamage = new Damage(DamageType.Heat, damage);
-                battle.AddInteraction(new RocketInteraction(titan, enemyTitan, rocketDamage, speed, delay * i));
+                var rocket = new RocketInteraction(titan, enemyTitan, rocketDamage, speed);
+                battle.AddInteraction(new DelayedInteraction(titan, i * delay, rocket));
             }
             timer.Reload();
         }

@@ -18,7 +18,7 @@ public sealed class RocketLauncherModule : MonoBehaviour, ITitanModule {
             return;
         RocketCount -= 1;
         titan.UpdateState();
-        RocketView.Fire(transform.position, fireCoord, planet, Damage, Radius, titan.FactionId);
+        RocketViewOld.Fire(transform.position, fireCoord, planet, Damage, Radius, titan.FactionId);
     }
 
     public void OnAttach(TitanViewOld titanView) {

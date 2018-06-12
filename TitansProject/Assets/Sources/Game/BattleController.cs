@@ -53,6 +53,9 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
             else
                 LaserBeamPool.ShowMiss(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.5f);
         }
-        // LaserBeamController
+        var rocketInteraction = interaction as RocketInteraction;
+        if (rocketInteraction != null) {
+            RocketsPool.Fire(rocketInteraction);
+        }
     }
 }

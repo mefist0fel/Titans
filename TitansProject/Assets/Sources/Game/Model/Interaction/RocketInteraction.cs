@@ -7,15 +7,6 @@ namespace Model {
         
         private readonly float flyTime;
         private float timer;
-        private float delayTimer;
-
-        public RocketInteraction(Titan parentTitan, Titan targetTitan, Damage damage, float speed, float delay) : base(parentTitan) {
-            TargetTitan = targetTitan;
-            Damage = damage;
-            flyTime = Vector3.Distance(parentTitan.Position, targetTitan.Position) / speed;
-            timer = flyTime;
-            delayTimer = delay;
-        }
 
         public override bool IsEnded {
             get {
@@ -23,11 +14,20 @@ namespace Model {
             }
         }
 
-        public override void Update(float deltaTime) {
-            if (delayTimer > 0) {
-                delayTimer -= deltaTime;
-                return;
+        public float NormalizedTime {
+            get {
+                return timer / flyTime;
             }
+        }
+
+        public RocketInteraction(Titan parentTitan, Titan targetTitan, Damage damage, float speed) : base(parentTitan) {
+            TargetTitan = targetTitan;
+            Damage = damage;
+            flyTime = Vector3.Distance(parentTitan.Position, targetTitan.Position) / speed;
+            timer = flyTime;
+        }
+
+        public override void Update(float deltaTime) {
             timer -= deltaTime;
             if (timer > 0)
                 return;

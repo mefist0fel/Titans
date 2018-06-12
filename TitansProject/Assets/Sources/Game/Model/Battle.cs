@@ -12,14 +12,16 @@ namespace Model {
 
         public readonly Faction[] Factions;
         public List<Titan> Units { get; private set; }
-        public List<AbstractInteraction> Interactions { get; private set; }
+        private List<AbstractInteraction> activeInteractions;
+        public List<AbstractInteraction> interactionsAddQueue;
         private readonly IBattleController controller;
 
         public Battle(IBattleController battleController) {
             controller = battleController;
             Planet = new Planet();
             Units = new List<Titan>();
-            Interactions = new List<AbstractInteraction>();
+            activeInteractions = new List<AbstractInteraction>();
+            interactionsAddQueue = new List<AbstractInteraction>();
             Factions = new Faction[] {
                 new Faction(0),
                 new Faction(1)
@@ -45,7 +47,7 @@ namespace Model {
         }
 
         public void AddInteraction(AbstractInteraction interaction) {
-            Interactions.Add(interaction);
+            interactionsAddQueue.Add(interaction);
             controller.OnAddInteraction(interaction);
         }
 
@@ -54,7 +56,11 @@ namespace Model {
                 if (titan.IsAlive)
                     titan.Update(deltaTime);
             }
-            foreach (var interaction in Interactions) {
+            foreach (var interaction in interactionsAddQueue) {
+                activeInteractions.Add(interaction);
+            }
+            interactionsAddQueue.Clear();
+            foreach (var interaction in activeInteractions) {
                 interaction.Update(deltaTime);
             }
             RemoveDeadTitans();
@@ -78,9 +84,9 @@ namespace Model {
         }
 
         private void RemoveEndedInteractions() {
-            for (int i = 0; i < Interactions.Count; i++) {
-                if (Interactions[i].IsEnded) {
-                    Interactions.RemoveAt(i);
+            for (int i = 0; i < activeInteractions.Count; i++) {
+                if (activeInteractions[i].IsEnded) {
+                    activeInteractions.RemoveAt(i);
                     i -= 1;
                 }
             }

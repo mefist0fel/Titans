@@ -17,7 +17,7 @@ public sealed class LaserBeamPool : MonoBehaviour {
     }
 
     private void Start() {
-        cache = new ObjectPool<LineRenderer>(laserLinePrototype);
+        cache = new ObjectPool<LineRenderer>(laserLinePrototype, transform);
     }
 
     public static void ShowHit(Vector3 from, Vector3 to, float time = 0.3f) {

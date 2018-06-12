@@ -30,7 +30,7 @@ namespace Model {
         public readonly Cloaking Cloaking;
         private readonly List<IComponent> Components;
 
-        private readonly Battle battle;
+        public readonly Battle Context;
 
         private TitanMover mover;
         private IView view = new NoView();
@@ -48,7 +48,7 @@ namespace Model {
 
         public Titan(Faction faction, Battle battleContext, Vector3 position) {
             Faction = faction;
-            battle = battleContext;
+            Context = battleContext;
             Speed = 2;
             AFrmor = 10;
             mover = new TitanMover(battleContext.Planet, position, Speed);
@@ -65,8 +65,8 @@ namespace Model {
                 Shield,
                 Accuracy,
                 Cloaking,
-                new RocketLauncher(this, battle),
-                new Laser(this, battle, Accuracy)
+                new RocketLauncher(this, Context),
+                new Laser(this, Context, Accuracy)
             };
             AddParams(Config.Base);
             // TODO kill

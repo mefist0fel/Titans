@@ -16,7 +16,7 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
 
     private TitanViewOld titan;
 
-    private List<RocketView> aimRockets = new List<RocketView>();
+    private List<RocketViewOld> aimRockets = new List<RocketViewOld>();
 
     public void OnAttach(TitanViewOld parentTitan) {
         titan = parentTitan;
@@ -43,7 +43,7 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
             return;
         int factionId = titan.FactionId;
         Vector3 position = titan.Position;
-        foreach (var rocket in RocketView.RocketsList) {
+        foreach (var rocket in RocketViewOld.RocketsList) {
             if (factionId == rocket.FactionId || aimRockets.Contains(rocket))
                 continue;
             if (Vector3.Distance(rocket.Position, position) < hitRadius) {
@@ -52,7 +52,7 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
         }
 	}
 
-    private void TryInterceptRocket(RocketView rocket) {
+    private void TryInterceptRocket(RocketViewOld rocket) {
         aimRockets.RemoveAll((emptyRocket) => { return (emptyRocket == null); });
         aimRockets.Add(rocket);
         var count = fireCount;
