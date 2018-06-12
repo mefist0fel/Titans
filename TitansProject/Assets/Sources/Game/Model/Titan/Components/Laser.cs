@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using System;
+using UnityEngine;
 
 namespace Model {
     public sealed class Laser: Titan.IComponent {
@@ -8,16 +8,11 @@ namespace Model {
         private readonly Battle battle;
         private int damage = 0;
         private float fireRadius = 3f;
-        private float reloadTime = 1.7f;
-        private float reloadTimeRandomShift = 0.6f;
 
-        private float timer = 0f;
+        private readonly ReloadTimer timer;
+
         private Titan target = null;
         private Accuracy accuracy;
-
-        public string Id { get; private set; }
-
-        public bool IsReady { get { return timer <= 0 && titan != null && titan.IsAlive; } }
 
         public bool IsActive { get { return damage > 0; } }
 
@@ -27,45 +22,20 @@ namespace Model {
             titan = parentTitan;
             battle = battleController;
             accuracy = titanAccuracy;
-            // formulas test
-            // var Accuracy = new Accuracy(10);
-            // var Cloaking = new Cloaking(20);
-            // const int allCount = 100000;
-            // int countCrit = 0;
-            // int countHit = 0;
-            // for (int i = 0; i < allCount; i++) {
-            //     if (Accuracy.GetCriticalChance(Cloaking)) {
-            //         countCrit += 1;
-            //     }
-            //     if (Accuracy.GetHitChance(Cloaking)) {
-            //         countHit += 1;
-            //     }
-            // }
-            // int countAll = countCrit + countHit;
-            // var crit = Mathf.RoundToInt(countCrit / (float)allCount * 100);
-            // var hit = Mathf.RoundToInt(countHit / (float)allCount * 100);
-            // var all = Mathf.RoundToInt(countAll / (float)allCount * 100);
-            // Debug.LogError("crit " + crit + "% hit " + hit + "% all " + all + "%");
+            timer = new ReloadTimer(2f, 0.3f);
+            // TestFormulas();
         }
 
         public void Update(float deltaTime) {
             if (!IsActive)
                 return;
-            ProcessReload(deltaTime);
-            if (!IsReady)
+            timer.Update(deltaTime);
+            if (!timer.IsReady)
                 return;
             target = FindTarget(target);
             if (target == null)
                 return;
             Fire(target);
-        }
-
-        public void Fire(Titan enemyTitan) {
-            var isHit = accuracy.GetHitChance(enemyTitan.Cloaking);
-            var isCritical = accuracy.GetCritivalChance(enemyTitan.Cloaking);
-            var finalDamage = (isHit ? damage : 0) + (isCritical ? damage : 0);
-            battle.AddInteraction(new LaserInteraction(titan, enemyTitan, new Damage(DamageType.Heat, finalDamage, isCritical && isHit)));
-            timer = reloadTime + Random.Range(0f, reloadTimeRandomShift);
         }
 
         private Titan FindTarget(Titan currentTarget) {
@@ -74,33 +44,15 @@ namespace Model {
                     return currentTarget;
                 }
             }
-            return FindInFireRange();
+            return titan.FindEnemyInRange(fireRadius);
         }
 
-        private Titan FindInFireRange() {
-            var position = titan.Position;
-            Titan nearestEnemy = null;
-            float nearestDistance = 0;
-            foreach (var enemyFaction in titan.Faction.EnemyFactions) {
-                foreach (var enemyTitan in enemyFaction.Units) {
-                    if (enemyTitan == null)
-                        continue;
-                    if (!enemyTitan.IsAlive)
-                        continue;
-                    var distance = Vector3.Distance(enemyTitan.Position, position);
-                    if (distance < fireRadius && (distance < nearestDistance || nearestEnemy == null)) {
-                        nearestDistance = distance;
-                        nearestEnemy = enemyTitan;
-                    }
-                }
-            }
-            return nearestEnemy;
-        }
-
-        private void ProcessReload(float deltaTime) {
-            if (timer > 0) {
-                timer -= deltaTime;
-            }
+        public void Fire(Titan enemyTitan) {
+            var isHit = accuracy.GetHitChance(enemyTitan.Cloaking);
+            var isCritical = accuracy.GetCriticalChance(enemyTitan.Cloaking);
+            var finalDamage = (isHit ? damage : 0) + (isCritical ? damage : 0);
+            battle.AddInteraction(new LaserInteraction(titan, enemyTitan, new Damage(DamageType.Heat, finalDamage, isCritical && isHit)));
+            timer.Reload();
         }
 
         public void OnAttach(ModuleData module) {
@@ -109,6 +61,27 @@ namespace Model {
 
         public void OnDetach(ModuleData module) {
             damage -= module["damage"];
+        }
+
+        private void TestFormulas() {
+            var Accuracy = new Accuracy(10);
+            var Cloaking = new Cloaking(20);
+            const int allCount = 100000;
+            int countCrit = 0;
+            int countHit = 0;
+            for (int i = 0; i < allCount; i++) {
+                if (Accuracy.GetCriticalChance(Cloaking)) {
+                    countCrit += 1;
+                }
+                if (Accuracy.GetHitChance(Cloaking)) {
+                    countHit += 1;
+                }
+            }
+            int countAll = countCrit + countHit;
+            var crit = Mathf.RoundToInt(countCrit / (float)allCount * 100);
+            var hit = Mathf.RoundToInt(countHit / (float)allCount * 100);
+            var all = Mathf.RoundToInt(countAll / (float)allCount * 100);
+            Debug.LogError("crit " + crit + "% hit " + hit + "% all " + all + "%");
         }
     }
 }

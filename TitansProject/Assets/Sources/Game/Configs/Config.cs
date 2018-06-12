@@ -27,7 +27,10 @@ public static class Config {
                 },
                 "Энергетические щиты"),
             new ModuleData("rocket", 10, 2f,
-                new Dictionary<string, int>(),
+                new Dictionary<string, int>() {
+                    { "armor", 5},
+                    { "rocket_salvo", 3}
+                },
                 "Ракетная установка"),
             new ModuleData("anti_air", 10, 2f,
                 new Dictionary<string, int>(),

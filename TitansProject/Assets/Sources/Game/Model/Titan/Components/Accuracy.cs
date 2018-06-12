@@ -19,7 +19,7 @@ namespace Model {
             return Random.Range(0f, 1f) > missChance;
         }
 
-        public bool GetCritivalChance(Cloaking cloaking) {
+        public bool GetCriticalChance(Cloaking cloaking) {
             var cloakAspect = (float)cloaking.Value / (float)Value;
             var critChance = 1f - Mathf.Min(1f, cloakAspect);
             critChance = critChance * (1f - minimalCriticalChance) + minimalCriticalChance;

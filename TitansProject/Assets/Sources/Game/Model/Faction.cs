@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Model {
     public sealed class Faction {
@@ -16,6 +18,23 @@ namespace Model {
                     continue;
                 EnemyFactions.Add(faction);
             }
+        }
+
+        public Titan FindNearestEnemy(Vector3 position, float radius) {
+            Titan nearestEnemy = null;
+            float nearestDistance = 0;
+            foreach (var enemyFaction in EnemyFactions) {
+                foreach (var enemyTitan in enemyFaction.Units) {
+                    if (enemyTitan == null || !enemyTitan.IsAlive)
+                        continue;
+                    var distance = Vector3.Distance(enemyTitan.Position, position);
+                    if (distance < radius && (distance < nearestDistance || nearestEnemy == null)) {
+                        nearestDistance = distance;
+                        nearestEnemy = enemyTitan;
+                    }
+                }
+            }
+            return nearestEnemy;
         }
     }
 }

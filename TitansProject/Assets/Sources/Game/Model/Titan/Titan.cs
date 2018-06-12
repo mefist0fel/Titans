@@ -65,6 +65,7 @@ namespace Model {
                 Shield,
                 Accuracy,
                 Cloaking,
+                new RocketLauncher(this, battle),
                 new Laser(this, battle, Accuracy)
             };
             AddParams(Config.Base);
@@ -80,6 +81,10 @@ namespace Model {
             if (Armor.Value <= 0) {
                 Die();
             }
+        }
+
+        public Titan FindEnemyInRange(float radius) {
+            return Faction.FindNearestEnemy(Position, radius);
         }
 
         public void Die() {
@@ -107,6 +112,8 @@ namespace Model {
         }
 
         public void Update(float deltaTime) {
+            if (!IsAlive)
+                return;
             foreach (var component in Components) {
                 component.Update(deltaTime);
             }

@@ -49,9 +49,9 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
             var titanView = laserInteraction.ParentTitan.View as TitanView;
             var enemyTitanView = laserInteraction.TargetTitan.View as TitanView;
             if (laserInteraction.Damage.Value > 0)
-                LaserBeamController.ShowHit(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.5f);
+                LaserBeamPool.ShowHit(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.5f);
             else
-                LaserBeamController.ShowMiss(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.5f);
+                LaserBeamPool.ShowMiss(titanView.GetHitPoint(), enemyTitanView.GetHitPoint(), 0.5f);
         }
         // LaserBeamController
     }

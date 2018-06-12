@@ -29,7 +29,7 @@ public sealed class WeaponModule : MonoBehaviour, ITitanModule {
 
     public void Fire(TitanViewOld enemyTitan) {
         Vector3 up = (parentTitan.Position + enemyTitan.Position).normalized;
-        LaserBeamController.Show(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), 0.7f);
+        // LaserBeamPool.Show(parentTitan.GetFirePosition(), enemyTitan.GetHitPosition(), 0.7f);
         if (UnityEngine.Random.Range(0f, 1f) < accuracy) {
             enemyTitan.Hit(damage);
         }

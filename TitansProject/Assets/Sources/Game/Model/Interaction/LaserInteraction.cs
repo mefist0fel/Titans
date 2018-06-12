@@ -5,7 +5,7 @@ namespace Model {
         public readonly Titan TargetTitan;
         public readonly Damage Damage;
 
-        public LaserInteraction(Titan parentTitan, Titan targetTitan, Damage damage, float time = 0): base (parentTitan) {
+        public LaserInteraction(Titan parentTitan, Titan targetTitan, Damage damage): base (parentTitan) {
             TargetTitan = targetTitan;
             Damage = damage;
         }

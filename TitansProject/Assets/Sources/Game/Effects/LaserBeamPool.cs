@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public sealed class LaserBeamController : MonoBehaviour {
-    private static LaserBeamController instance;
+public sealed class LaserBeamPool : MonoBehaviour {
+    private static LaserBeamPool instance;
 
-    private List<LineRenderer> cache = new List<LineRenderer>();
+    private ObjectPool<LineRenderer> cache;
 
     [SerializeField]
     public LineRenderer laserLinePrototype; // Set from editor
@@ -17,10 +16,8 @@ public sealed class LaserBeamController : MonoBehaviour {
         instance = this;
     }
 
-    public static void Show(Vector3 from, Vector3 to, float time) {
-        if (instance != null) {
-            instance.ShowLaser(from, to, Color.red, Color.red, time);
-        }
+    private void Start() {
+        cache = new ObjectPool<LineRenderer>(laserLinePrototype);
     }
 
     public static void ShowHit(Vector3 from, Vector3 to, float time = 0.3f) {
@@ -37,7 +34,7 @@ public sealed class LaserBeamController : MonoBehaviour {
     }
 
     private void ShowLaser(Vector3 from, Vector3 to, Color start, Color end, float showTime) {
-        var laser = CreateLaser();
+        var laser = cache.Get();
         laser.gameObject.SetActive(true);
         laser.widthMultiplier = 0;
         laser.widthCurve = AnimationCurve.Constant(0, 1, 1);
@@ -54,21 +51,5 @@ public sealed class LaserBeamController : MonoBehaviour {
                 laser.widthMultiplier = 0;
                 laser.gameObject.SetActive(false);
             });
-    }
-
-    private LineRenderer CreateLaser() {
-        foreach (var laser in cache) {
-            if (laser == null) {
-                Debug.LogError("Empty laser in laser cache!");
-                continue;
-            }
-            if (!laser.gameObject.activeSelf) {
-                return laser;
-            }
-        }
-        var newLaser = Instantiate<LineRenderer>(laserLinePrototype, transform);
-        newLaser.gameObject.SetActive(false);
-        cache.Add(newLaser);
-        return newLaser;
     }
 }

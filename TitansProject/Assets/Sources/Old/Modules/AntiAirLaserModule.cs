@@ -66,9 +66,9 @@ public sealed class AntiAirLaserModule : MonoBehaviour, ITitanModule {
                     return;
                 if (Random.Range(0f, 1f) < accuracy) {
                     rocket.Intercept();
-                    LaserBeamController.ShowHit(titan.GetFirePosition(), rocket.Position);
+                    LaserBeamPool.ShowHit(titan.GetFirePosition(), rocket.Position);
                 } else {
-                    LaserBeamController.ShowMiss(titan.GetFirePosition(), rocket.Position);
+                    LaserBeamPool.ShowMiss(titan.GetFirePosition(), rocket.Position);
                 }
             });
         }
