@@ -9,20 +9,20 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1725702287308206}
+  m_RootGameObject: {fileID: 1994160106930514}
   m_IsPrefabParent: 1
---- !u!1 &1725702287308206
+--- !u!1 &1994160106930514
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4241283829476266}
-  - component: {fileID: 114034757559053800}
-  - component: {fileID: 23556388101690812}
-  - component: {fileID: 33710507802440570}
-  - component: {fileID: 114335473499878906}
+  - component: {fileID: 4627074107207658}
+  - component: {fileID: 114717939531804422}
+  - component: {fileID: 23879781778411630}
+  - component: {fileID: 33914958680966808}
+  - component: {fileID: 114677481366876296}
   m_Layer: 0
   m_Name: Explosion
   m_TagString: Untagged
@@ -30,12 +30,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4241283829476266
+--- !u!4 &4627074107207658
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725702287308206}
+  m_GameObject: {fileID: 1994160106930514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -43,12 +43,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23556388101690812
+--- !u!23 &23879781778411630
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725702287308206}
+  m_GameObject: {fileID: 1994160106930514}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -77,56 +77,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33710507802440570
+--- !u!33 &33914958680966808
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725702287308206}
+  m_GameObject: {fileID: 1994160106930514}
   m_Mesh: {fileID: 0}
---- !u!114 &114034757559053800
+--- !u!114 &114677481366876296
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725702287308206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67ac0b3551c40324a89628b1c465349a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultRadius: 1
-  explosionSpeed: 0.2
-  explosionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 12.808855
-      outSlope: 12.808855
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.213741
-      value: 1.0060126
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.99583334
-      value: 0.00000011920929
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
---- !u!114 &114335473499878906
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725702287308206}
+  m_GameObject: {fileID: 1994160106930514}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97754331993a26744892f96e98b03927, type: 3}
@@ -134,4 +97,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 1
   details: 7
-  meshFilter: {fileID: 33710507802440570}
+  generateOnStart: 1
+  meshFilter: {fileID: 33914958680966808}
+--- !u!114 &114717939531804422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1994160106930514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37590629592b9d419e66972120ddfad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionSpeed: 0.6
+  explosionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 2.3514621
+      outSlope: 2.3514621
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.699237
+      value: 0.99986595
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.99705595
+      value: 0.000000092666596
+      inSlope: -8.248653
+      outSlope: -8.248653
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0

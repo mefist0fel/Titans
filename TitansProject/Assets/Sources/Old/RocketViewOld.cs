@@ -59,7 +59,7 @@ public sealed class RocketViewOld : MonoBehaviour {
         Destroy(gameObject, 0.3f);
         Destroy(GetComponent<MeshFilter>(), 0.01f);
         timer = -1;
-        ExplosionView.Explode(Position, 0.3f);
+        ExplosionViewOld.Explode(Position, 0.3f);
     }
 
     private void Start() {
@@ -72,7 +72,7 @@ public sealed class RocketViewOld : MonoBehaviour {
 
     private void Explode() {
         Destroy(gameObject, 0.3f);
-        ExplosionView.Explode(endPosition, radius, damage);
+        ExplosionViewOld.Explode(endPosition, radius, damage);
     }
 
     private void AnimateMove(float backTime) {
