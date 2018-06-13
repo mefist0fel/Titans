@@ -1,4 +1,5 @@
-﻿using Random = UnityEngine.Random;
+﻿using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Model {
     public sealed class AntiAirDefence : Titan.IComponent {
@@ -45,10 +46,12 @@ namespace Model {
 
         public void OnAttach(ModuleData module) {
             Value += module["anti_air"];
+            MaxValue += module["anti_air"];
         }
 
         public void OnDetach(ModuleData module) {
-            Value -= module["anti_air"];
+            Value = Mathf.Max(0, Value - module["anti_air"]);
+            MaxValue -= module["anti_air"];
         }
 	}
 }

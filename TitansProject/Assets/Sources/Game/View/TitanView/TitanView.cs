@@ -62,6 +62,8 @@ namespace View {
         }
 
         public void OnHit(Damage damage) {
+            if (!Titan.IsAlive)
+                return;
             if (damage.Value == 0) {
                 StatusTextView.Create("Miss", Color.white, hitTransfom.position);
                 return;
