@@ -5,8 +5,8 @@ namespace Model {
     public sealed class RocketInteraction : AbstractInteraction {
         public readonly Titan TargetTitan;
         public readonly Damage Damage;
-        
-        private readonly float flyTime;
+        public readonly float FlyTime;
+
         private float timer;
         private const float interceptTime = 0.3f;
         private const float defaultSpeed = 1.5f; // units per second
@@ -21,15 +21,15 @@ namespace Model {
 
         public float NormalizedTime {
             get {
-                return timer / flyTime;
+                return timer / FlyTime;
             }
         }
 
         public RocketInteraction(Titan parentTitan, Titan targetTitan, Damage damage, float speed = defaultSpeed) : base(parentTitan) {
             TargetTitan = targetTitan;
             Damage = damage;
-            flyTime = Vector3.Distance(parentTitan.Position, targetTitan.Position) / speed;
-            timer = flyTime;
+            FlyTime = Vector3.Distance(parentTitan.Position, targetTitan.Position) / speed;
+            timer = FlyTime;
             isIntercepted = false;
         }
 

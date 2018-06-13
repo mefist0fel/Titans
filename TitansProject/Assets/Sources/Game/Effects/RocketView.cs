@@ -1,5 +1,6 @@
 ﻿using Model;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace View {
     public sealed class RocketView : MonoBehaviour {
@@ -10,13 +11,15 @@ namespace View {
         [SerializeField]
         private AnimationCurve heightCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0,0), new Keyframe(0.5f, 1), new Keyframe(1, 0)});
         [SerializeField]
+        private float explosionDelay = 0.06f;
+        [SerializeField]
         private float destroyDelay = 0.3f;
         private RocketInteraction interaction;
         private TitanView target;
         private Vector3 startPosition;
         private Vector3 prevPosition;
         private Vector3 heightVector;
-        private float destroyTimer;
+        const float destroySpeed = 0.4f;
 
         public void Init(RocketInteraction rocketInteraction) {
             interaction = rocketInteraction;
@@ -29,7 +32,6 @@ namespace View {
             heightVector = ((titanView.Titan.Position + target.Titan.Position).normalized + Random.insideUnitSphere * 0.3f) * maxHeight;
             gameObject.SetActive(true);
             prevPosition = Vector3.Lerp(startPosition, target.GetHitPoint(), 1.1f);
-            destroyTimer = destroyDelay;
             Update();
             if (trail != null)
                 trail.Clear();
@@ -37,24 +39,41 @@ namespace View {
 
         private void Update() {
             if (interaction == null) {
-                if (destroyTimer > 0) {
-                    destroyTimer -= Time.deltaTime;
-                    return;
-                }
-                gameObject.SetActive(false);
                 return;
             }
-            var curvedTime = speedCurve.Evaluate(1f - interaction.NormalizedTime);
-            var position = Vector3.Lerp(startPosition, target.GetHitPoint(), curvedTime) + heightVector * heightCurve.Evaluate(curvedTime);
+            Vector3 position = GetPosition(1f - interaction.NormalizedTime);
             Quaternion rotation = Quaternion.LookRotation(prevPosition - position) * Quaternion.Euler(90, 0, 0);
             prevPosition = position;
             transform.rotation = rotation;
             transform.position = position;
             if (interaction.IsEnded) {
-                interaction = null;
+                var destroyVector = Vector3.zero;
+                if (interaction.NormalizedTime > 0) {
+                    var extrapolatedPosition = GetPosition((1f - interaction.NormalizedTime) + 0.01f / interaction.FlyTime);
+                    destroyVector = (extrapolatedPosition - position) * 100f * destroySpeed;
+                }
                 const float explodeRadius = 0.15f;
-                ExplosionPool.Explode(position, explodeRadius);
+                ExplosionPool.Explode(position, destroyVector, explodeRadius);
+                interaction = null;
+                Timer.Add(explosionDelay, (anim) => {
+                    if (this == null)
+                        return;
+                    transform.position = transform.position + destroyVector * Time.deltaTime;
+                }, () => {
+                    if (this == null)
+                        return;
+                    Timer.Add(destroyDelay, () => {
+                        if (this == null)
+                            return;
+                        gameObject.SetActive(false);
+                    });
+                });
             }
+        }
+
+        private Vector3 GetPosition(float normalizedTime) {
+            var curvedTime = speedCurve.Evaluate(normalizedTime);
+            return Vector3.Lerp(startPosition, target.GetHitPoint(), curvedTime) + heightVector * heightCurve.Evaluate(curvedTime);
         }
     }
 }

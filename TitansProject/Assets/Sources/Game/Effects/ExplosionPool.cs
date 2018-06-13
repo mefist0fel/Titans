@@ -21,4 +21,9 @@ public sealed class ExplosionPool : MonoBehaviour {
         var explosion = instance.cache.Get();
         explosion.Init(position, radius);
     }
+
+    public static void Explode(Vector3 position, Vector3 direction, float radius) {
+        var explosion = instance.cache.Get();
+        explosion.Init(position, direction, radius);
+    }
 }

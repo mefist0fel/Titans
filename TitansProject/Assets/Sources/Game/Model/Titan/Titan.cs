@@ -74,7 +74,7 @@ namespace Model {
             AddParams(Config.Base);
             // TODO kill
             ResourceUnits = 30;
-            // ModuleSlots[0].Build(Config.Modules["anti_air"]);
+            ModuleSlots[0].Build(Config.Modules["anti_air"]);
         }
 
         public void Hit(Damage damage) {

@@ -39,7 +39,6 @@ namespace Model {
         }
 
         private void ReloadAntiAir() {
-            UnityEngine.Debug.LogError("Reload AA");
             timer.Reload();
             Value = MaxValue;
         }
