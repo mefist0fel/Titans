@@ -21,13 +21,16 @@ public sealed class PlayerFactionController : MonoBehaviour {
     private TitanMoveMarkers moveMarkers;
 
     private void Awake() {
-        // TODO make normal
-        gameUI = UILayer.Get<GameUI>();
+        gameUI = UILayer.Show<GameUI>();
         moveMarkers = FindObjectOfType<TitanMoveMarkers>();
     }
 
-    private void Start() {
-        mainCamera = Camera.main;
+    public void OnAddTitan(TitanView titanView, PlanetView planetView) {
+        gameUI.AddMarker(titanView, planetView);
+    }
+
+    public void OnRemoveTitan(TitanView titanView) {
+        gameUI.RemoveMarker(titanView);
     }
 
     public void Init(Battle currentBattle, Faction playerFaction) {

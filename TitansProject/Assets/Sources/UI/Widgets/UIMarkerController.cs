@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using View;
 
 namespace UI {
     public sealed class UIMarkerController : MonoBehaviour {
         [SerializeField]
-        private RectTransform controlArrow;
+        private RectTransform controlArrow; // Set from editor
         [SerializeField]
-        private UIScaleAnimator scaleAnimator;
-        private TitanView controlledTitan;
+        private UIScaleAnimator scaleAnimator; // Set from editor
+        [SerializeField]
+        private float destroyTime = 0.3f;
+
+        public TitanView Titan { get; private set; }
+
         private PlanetView controlledPlanet;
         private RectTransform rectTransform;
         private Canvas canvas;
@@ -22,7 +27,7 @@ namespace UI {
         }
 
         public void Init(TitanView titan, PlanetView planet) {
-            controlledTitan = titan;
+            Titan = titan;
             controlledPlanet = planet;
             var image = GetComponentInChildren<Image>();
             if (image != null) {
@@ -30,9 +35,15 @@ namespace UI {
             }
         }
 
+        public void Destroy() {
+            Titan = null;
+            Destroy(gameObject, destroyTime);
+            scaleAnimator.Show(false);
+        }
+
         // TODO refactor it later
         private void Update() {
-            if (controlledTitan == null)
+            if (Titan == null)
                 return;
             if (rectTransform == null)
                 return;
@@ -42,7 +53,7 @@ namespace UI {
             var camera = Camera.main;
             var radius = controlledPlanet.Planet.Radius + markerHeight;
             var planetPosition = controlledPlanet.transform.position;
-            var markerPosition = controlledTitan.Titan.Position.normalized * radius;
+            var markerPosition = Titan.Titan.Position.normalized * radius;
             var directionMarkerPosition = markerPosition * 0.99f;
             var cameraPosition = camera.transform.position;
             var normalToCamera = Vector3.Normalize(cameraPosition - markerPosition);

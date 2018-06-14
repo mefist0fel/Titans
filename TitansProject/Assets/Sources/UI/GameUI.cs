@@ -41,12 +41,22 @@ namespace UI {
 
         private TitanView selectedTitan;
         private ModuleSlot selectedSlot;
+        private List<UIMarkerController> markers = new List<UIMarkerController>();
 
         public enum ModuleType { }
 
         public void AddMarker(TitanView titan, PlanetView planet) {
             var marker = Instantiate(markerControllerPrefab, transform);
             marker.Init(titan, planet);
+            markers.Add(marker);
+        }
+
+        public void RemoveMarker(TitanView titan) {
+            for (int i = 0; i < markers.Count; i++) {
+                if (markers[i].Titan == null || markers[i].Titan == titan) {
+                    markers[i].Destroy();
+                }
+            }
         }
 
         private void Start() {

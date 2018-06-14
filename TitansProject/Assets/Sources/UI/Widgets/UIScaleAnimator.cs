@@ -10,7 +10,6 @@ namespace UI {
         private AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         private float normalizedTimer;
-
         private bool isShowed = true;
 
         public bool IsShowed {

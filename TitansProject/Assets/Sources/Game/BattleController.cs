@@ -18,9 +18,7 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
 
 
     public void Start () {
-        gameUI = UILayer.Show<GameUI>();
         battle = new Battle(this);
-        playerFactionController = Utils.GetOrCreateComponent<PlayerFactionController>(gameObject);
         playerFactionController.Init(battle, battle.Factions[0]);
         planetView.Init(battle.Planet);
         CameraController.SetPlanetRadius(battle.Planet.Radius);
@@ -33,10 +31,14 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
     public void OnCreateTitan(Titan titan) {
         var titanView = TitansFactory.CreateTitan(titan, transform);
         titanList.Add(titanView);
-        gameUI.AddMarker(titanView, planetView);
+        playerFactionController.OnAddTitan(titanView, planetView);
     }
 
     public void OnRemoveTitan(Titan titan) {
+        foreach(var titanView in titanList)
+            if (titanView != null && titanView.Titan == titan)
+                playerFactionController.OnRemoveTitan(titanView);
+        // TODO remove corps
     }
 
     public void OnBattleEnd(Faction winner) {

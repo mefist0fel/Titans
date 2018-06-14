@@ -6,7 +6,7 @@ namespace Model {
         private readonly Titan titan;
 
         private const float fireRadius = 5f;
-        private int damage = 1;
+        private int damage = 2;
         private int countInSalvo = 0;
         private const float delay = 0.12f;
         private readonly ReloadTimer timer = new ReloadTimer(2f, 0.5f);
