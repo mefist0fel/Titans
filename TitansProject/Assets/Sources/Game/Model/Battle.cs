@@ -42,7 +42,7 @@ namespace Model {
             var faction = Factions[factionId];
             var titan = new Titan(faction, this, position);
             Units.Add(titan);
-            faction.Units.Add(titan);
+            faction.AddUnit(titan);
             controller.OnCreateTitan(titan);
         }
 
@@ -80,7 +80,7 @@ namespace Model {
             controller.OnRemoveTitan(titan);
 
             Units.Remove(titan);
-            titan.Faction.Units.Remove(titan);
+            titan.Faction.RemoveUnit(titan);
         }
 
         private void RemoveEndedInteractions() {

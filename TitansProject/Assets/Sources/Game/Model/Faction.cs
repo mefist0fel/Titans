@@ -8,6 +8,13 @@ namespace Model {
         public readonly List<Titan> Units = new List<Titan>();
         public readonly List<Faction> EnemyFactions = new List<Faction>();
 
+        public interface Listener {
+            void OnAddTitan(Titan titan);
+            void OnRemoveTitan(Titan titan);
+        }
+
+        private Listener listener;
+
         public Faction(int id) {
             ID = id;
         }
@@ -18,6 +25,15 @@ namespace Model {
                     continue;
                 EnemyFactions.Add(faction);
             }
+        }
+
+        public void AddListener(Listener factionListener) {
+            listener = factionListener;
+        }
+
+        public void RemoveListener(Listener factionListener) {
+            if (listener == factionListener)
+                listener = null;
         }
 
         public Titan FindNearestEnemy(Vector3 position, float radius) {
@@ -35,6 +51,18 @@ namespace Model {
                 }
             }
             return nearestEnemy;
+        }
+
+        public void RemoveUnit(Titan titan) {
+            Units.Add(titan);
+            if (listener != null)
+                listener.OnAddTitan(titan);
+        }
+
+        public void AddUnit(Titan titan) {
+            Units.Remove(titan);
+            if (listener != null)
+                listener.OnRemoveTitan(titan);
         }
     }
 }
