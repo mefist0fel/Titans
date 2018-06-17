@@ -42,6 +42,10 @@ namespace View {
                 return;
             }
             Vector3 position = GetPosition(1f - interaction.NormalizedTime);
+            if (position.x == float.NaN) {
+                gameObject.SetActive(false);
+                return;
+            }
             Quaternion rotation = Quaternion.LookRotation(prevPosition - position) * Quaternion.Euler(90, 0, 0);
             prevPosition = position;
             transform.rotation = rotation;
@@ -72,7 +76,7 @@ namespace View {
         }
 
         private Vector3 GetPosition(float normalizedTime) {
-            var curvedTime = speedCurve.Evaluate(normalizedTime);
+            var curvedTime = speedCurve.Evaluate(Mathf.Clamp01(normalizedTime));
             return Vector3.Lerp(startPosition, target.GetHitPoint(), curvedTime) + heightVector * heightCurve.Evaluate(curvedTime);
         }
     }
