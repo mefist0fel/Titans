@@ -10,7 +10,7 @@ namespace Model.AI {
 
         public readonly CollectResourcesState CollectResources;
         public readonly DoNothingState DoNothing;
-        public readonly AbstractAIState KillAllEnemy;
+        public readonly KillAllEnemiesState KillAllEnemy;
 
         private readonly Queue<string> commandsQueue;
 
@@ -25,7 +25,7 @@ namespace Model.AI {
             battle = controlBattle;
             CollectResources = new CollectResourcesState(this, battle.Planet, occupiedResources);
             DoNothing = new DoNothingState(this);
-            KillAllEnemy = DoNothing;
+            KillAllEnemy = new KillAllEnemiesState(this, battle.Planet);
             commandsQueue = new Queue<string>(queueOfCommands);
             SetState(new WaitingState(this, CollectResources, 5));
         }
@@ -48,7 +48,7 @@ namespace Model.AI {
 
         private void UpdateBuildList() {
             if (commandsQueue.Count == 0) {
-                SetState(DoNothing);
+                SetState(KillAllEnemy);
                 return;
             }
             var moduleName = commandsQueue.Peek();
