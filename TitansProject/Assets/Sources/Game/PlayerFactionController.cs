@@ -8,15 +8,15 @@ using View;
 /// <summary>
 /// Base class for player controls his faction
 /// </summary>
-public sealed class PlayerFactionController : MonoBehaviour {
+public sealed class PlayerFactionController : MonoBehaviour, Battle.IFactionController {
     [SerializeField]
     private Camera mainCamera;
 
     private Faction faction;
-    private Battle battle;
     private TitanView selectedTitan = null;
     private Vector3 prevMousePosition;
     private GameUI gameUI;
+    private bool isInitialized = false;
 
     private TitanMoveMarkers moveMarkers;
 
@@ -33,8 +33,22 @@ public sealed class PlayerFactionController : MonoBehaviour {
         gameUI.RemoveMarker(titanView);
     }
 
-    public void Init(Battle currentBattle, Faction playerFaction) {
-        battle = currentBattle;
+    public void OnAddTitan(Titan titan) {
+        if (!isInitialized)
+            Initialize(titan);
+    }
+
+    private void Initialize(Titan titan) {
+        CameraController.SetViewToTitan(titan.Position);
+        isInitialized = true;
+    }
+
+    public void OnRemoveTitan(Titan titan) {}
+
+    // TODO remove battle init
+    public void Init(Battle currentBattle) {}
+
+    public void Init(Faction playerFaction) {
         faction = playerFaction;
     }
 

@@ -163,7 +163,7 @@ namespace UI {
         }
 
         public void OnSelectNextTitanClick() {
-            Game.SelectNextTitan();
+          //  Game.SelectNextTitan();
         }
 
         public void OnBuildModuleClick(int moduleId) { // Set from editor
@@ -234,12 +234,12 @@ namespace UI {
         }
 
         public void OnSelectRocketFireButton() {
-            Game.OnSelectRocketStrike();
+            //Game.OnSelectRocketStrike();
             OnFireRocketButton.gameObject.SetActive(false);
             OnCancelRocketButton.gameObject.SetActive(true);
         }
         public void OnCancelRocketFireButton() {
-            RocketAimView.Hide();
+            //RocketAimView.Hide();
             OnFireRocketButton.gameObject.SetActive(true);
             OnCancelRocketButton.gameObject.SetActive(false);
         }

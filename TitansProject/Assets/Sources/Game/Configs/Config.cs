@@ -12,6 +12,20 @@ public static class Config {
                     { "cloaking", 100}
                 });
 
+
+    public static List<string> DefaultAiCommands = new List<string>() {
+        "shield",
+        "laser",
+        "rocket",
+        "anti_air",
+      //  "enemy_titan",
+      //  "titan_upgrade",
+      //  "shield",
+      //  "rocket",
+      //  "anti_air"
+    };
+
+
     public sealed class ModuleList {
         public readonly List<ModuleData> Modules = new List<ModuleData>() {
             new ModuleData("laser", 10, 3f,

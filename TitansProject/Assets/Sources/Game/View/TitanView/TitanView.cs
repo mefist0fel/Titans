@@ -23,6 +23,7 @@ namespace View {
         public void Init(Titan controlTitan) {
             Titan = controlTitan;
             Titan.SetView(this);
+            name = Titan.Name;
             transform.position = Titan.Position;
             transform.rotation = Titan.UpRotation;
             UpdateResourceCollectionEffect();

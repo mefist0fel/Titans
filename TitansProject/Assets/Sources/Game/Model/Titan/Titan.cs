@@ -11,6 +11,7 @@ namespace Model {
             void Update(float deltaTime);
         }
 
+        public readonly string Name;
         public readonly Faction Faction;
 
         public Vector3 Position { get { return mover.Position; } }
@@ -49,6 +50,7 @@ namespace Model {
 
         public Titan(Faction faction, Battle battleContext, Vector3 position) {
             Faction = faction;
+            Name = Faction.GetTitanName();
             Context = battleContext;
             Speed = 2;
             AFrmor = 10;
@@ -72,9 +74,10 @@ namespace Model {
                 new Laser(this, Context, Accuracy)
             };
             AddParams(Config.Base);
+            Faction.AddUnit(this);
             // TODO kill
-            ResourceUnits = 30;
-            ModuleSlots[0].Build(Config.Modules["anti_air"]);
+            ResourceUnits = 10;
+            // ModuleSlots[0].Build(Config.Modules["anti_air"]);
         }
 
         public void Hit(Damage damage) {
@@ -142,6 +145,7 @@ namespace Model {
 
         public void ClearTasks() {
             taskList.Clear();
+            view.OnUpdateTaskList();
         }
 
         public void TryRemoveLastMoveTask() {
@@ -154,8 +158,10 @@ namespace Model {
         }
 
         public void CancelTasks(Task[] tasks) {
-            if (!IsAlive)
+            if (!IsAlive) {
+                view.OnUpdateTaskList();
                 return;
+            }
             foreach (var task in tasks)
                 TaskList.Remove(task);
             view.OnUpdateTaskList();

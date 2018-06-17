@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Random = UnityEngine.Random;
+using View;
 
 public sealed class CameraController : MonoBehaviour {
     private static CameraController Instance;
@@ -13,7 +11,7 @@ public sealed class CameraController : MonoBehaviour {
     [SerializeField]
     private float rotationSpeed = 120f;
     [SerializeField]
-    private PlanetViewOld planet; // Set from editor
+    private PlanetView planetView; // Set from editor
     [SerializeField]
     private Camera mainCamera; // Set from editor
     [SerializeField]
@@ -47,7 +45,7 @@ public sealed class CameraController : MonoBehaviour {
     private Quaternion rotation = Quaternion.identity;
     private float AngularSpeed {
         get {
-            return moveSpeed * 2 * Mathf.PI * planet.Radius;
+            return moveSpeed * 2 * Mathf.PI * planetView.Planet.Radius;
         }
     }
 

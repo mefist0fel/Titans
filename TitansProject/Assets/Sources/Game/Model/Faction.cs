@@ -7,16 +7,20 @@ namespace Model {
         public readonly int ID;
         public readonly List<Titan> Units = new List<Titan>();
         public readonly List<Faction> EnemyFactions = new List<Faction>();
+        private int number = 0;
 
-        public interface Listener {
+        public interface IController {
+            void Init(Faction faction);
             void OnAddTitan(Titan titan);
             void OnRemoveTitan(Titan titan);
         }
 
-        private Listener listener;
+        private IController controller;
 
-        public Faction(int id) {
+        public Faction(int id, IController factionController) {
             ID = id;
+            controller = factionController;
+            controller.Init(this);
         }
 
         public void SetEnemy(Faction[] allFactions) {
@@ -26,14 +30,10 @@ namespace Model {
                 EnemyFactions.Add(faction);
             }
         }
-
-        public void AddListener(Listener factionListener) {
-            listener = factionListener;
-        }
-
-        public void RemoveListener(Listener factionListener) {
-            if (listener == factionListener)
-                listener = null;
+        
+        public void RemoveListener(IController factionListener) {
+            if (controller == factionListener)
+                controller = null;
         }
 
         public Titan FindNearestEnemy(Vector3 position, float radius) {
@@ -53,16 +53,32 @@ namespace Model {
             return nearestEnemy;
         }
 
-        public void RemoveUnit(Titan titan) {
-            Units.Add(titan);
-            if (listener != null)
-                listener.OnAddTitan(titan);
+        public string GetTitanName() {
+            number += 1;
+            switch (ID) {
+                case 0:
+                    return "blue_titan_" + number;
+                case 1:
+                    return "red_titan_" + number;
+                case 2:
+                    return "green_titan_" + number;
+                case 3:
+                    return "yellow_titan_" + number;
+                default:
+                    return "gray_titan_" + number;
+            }
         }
 
         public void AddUnit(Titan titan) {
+            Units.Add(titan);
+            if (controller != null)
+                controller.OnAddTitan(titan);
+        }
+
+        public void RemoveUnit(Titan titan) {
             Units.Remove(titan);
-            if (listener != null)
-                listener.OnRemoveTitan(titan);
+            if (controller != null)
+                controller.OnRemoveTitan(titan);
         }
     }
 }

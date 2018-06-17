@@ -8,41 +8,39 @@ namespace Model {
     /// Main class for control battle (units, resources) on single planet
     /// </summary>
     public sealed class Battle {
-        public Planet Planet { get; private set; }
-
+        public readonly Planet Planet;
         public readonly Faction[] Factions;
         public List<Titan> Units { get; private set; }
-        private List<AbstractInteraction> activeInteractions;
-        public List<AbstractInteraction> interactionsAddQueue;
+        private readonly List<AbstractInteraction> activeInteractions = new List<AbstractInteraction>();
+        public readonly List<AbstractInteraction> interactionsAddQueue = new List<AbstractInteraction>();
         private readonly IBattleController controller;
 
-        public Battle(IBattleController battleController) {
+        public interface IFactionController : Faction.IController {
+            void Init(Battle battle);
+        }
+
+        public Battle(IBattleController battleController, IFactionController[] factionControllers) {
             controller = battleController;
             Planet = new Planet();
             Units = new List<Titan>();
-            activeInteractions = new List<AbstractInteraction>();
-            interactionsAddQueue = new List<AbstractInteraction>();
-            Factions = new Faction[] {
-                new Faction(0),
-                new Faction(1)
-            };
+            Factions = new Faction[factionControllers.Length];
+            for (int i = 0; i < factionControllers.Length; i++) {
+                factionControllers[i].Init(this);
+                Factions[i] = new Faction(i, factionControllers[i]);
+            }
             foreach (var faction in Factions)
                 faction.SetEnemy(Factions);
+            foreach (var faction in Factions)
+                AddTitan(faction, Planet.GetRandomPosition());
 
-            AddTitan(0, new Vector3(0, 0, Planet.Radius));
-            AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, 0, Planet.Radius));
-            AddTitan(1, Quaternion.Euler(0, 10, 0) * new Vector3(0, 0, Planet.Radius));// Planet.GetRandomPosition());
-            CameraController.SetViewToTitan(new Vector3(0, 0, Planet.Radius));
+            // AddTitan(0, new Vector3(0, 0, Planet.Radius));
+            // AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, 0, Planet.Radius));
+            // AddTitan(1, Quaternion.Euler(0, 10, 0) * new Vector3(0, 0, Planet.Radius));// Planet.GetRandomPosition());
         }
 
-        private void AddTitan(int factionId, Vector3 position) {
-            if (factionId < 0 || factionId >= Factions.Length) {
-                throw new InvalidOperationException("Try add titan but no such faction id " + factionId);
-            }
-            var faction = Factions[factionId];
+        private void AddTitan(Faction faction, Vector3 position) {
             var titan = new Titan(faction, this, position);
             Units.Add(titan);
-            faction.AddUnit(titan);
             controller.OnCreateTitan(titan);
         }
 

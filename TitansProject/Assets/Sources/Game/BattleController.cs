@@ -18,10 +18,11 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
 
 
     public void Start () {
-        battle = new Battle(this);
-        playerFactionController.Init(battle, battle.Factions[0]);
-        AIFactionController.Create(battle.Factions[1], battle);
-        playerFactionController.Init(battle, battle.Factions[0]);
+        battle = new Battle(this, 
+            new Battle.IFactionController[] {
+                playerFactionController,
+                FactionAIController.Create()
+            });
         planetView.Init(battle.Planet);
         CameraController.SetPlanetRadius(battle.Planet.Radius);
     }
