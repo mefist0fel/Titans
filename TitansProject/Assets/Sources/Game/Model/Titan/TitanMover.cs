@@ -12,8 +12,7 @@ namespace Model {
         private float fullTime = 0;
         private float angle;
 
-        private Quaternion currentPosition;
-        private Quaternion needPosition;
+        private Quaternion endRotation;
 
         private Vector3 endPosition;
         private float speed;
@@ -30,6 +29,7 @@ namespace Model {
             planet = controlPlanet;
             Position = position;
             UpRotation = GetUpRotation(Position);
+            endRotation = UpRotation;
             speed = moveSpeed;
         }
 
@@ -38,6 +38,10 @@ namespace Model {
             endPosition = position;
             moveAxe = -Utils.GetNormal(startPosition, endPosition, Vector3.zero);
             angle = Vector3.Angle(startPosition, endPosition);
+            endRotation = Quaternion.AngleAxis(-angle, moveAxe) * UpRotation;
+            Debug.Assert(!float.IsNaN(endPosition.x));
+            Debug.Assert(!float.IsNaN(endPosition.y));
+            Debug.Assert(!float.IsNaN(endPosition.z));
             float distance = angle / 180f * Mathf.PI * 2f * planet.Radius;
             fullTime = distance / speed;
             moveTimer = fullTime;
@@ -54,7 +58,7 @@ namespace Model {
         private void AnimateMove(float normalizedTime) {
             var rotation = Quaternion.AngleAxis(angle * normalizedTime, moveAxe);
             Position = rotation * endPosition;
-            UpRotation = GetUpRotation(Position);
+            UpRotation = rotation * endRotation;
         }
 
         private Quaternion GetUpRotation(Vector3 position) {

@@ -31,7 +31,7 @@ namespace Model {
             foreach (var faction in Factions)
                 faction.SetEnemy(Factions);
             foreach (var faction in Factions)
-                AddTitan(faction, Planet.GetRandomPosition());
+                AddTitan(faction, Quaternion.Euler(faction.ID * 90, 0, 0) * new Vector3(0, 0, Planet.Radius)); // Planet.GetRandomPosition());
 
             // AddTitan(0, new Vector3(0, 0, Planet.Radius));
             // AddTitan(0, Quaternion.Euler(10, 0, 0) * new Vector3(0, 0, Planet.Radius));
