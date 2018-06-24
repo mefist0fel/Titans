@@ -51,16 +51,17 @@ public sealed class PrysmMeshFilter: MonoBehaviour {
     public static Mesh GeneratePrysmMesh(Settings settings, Vector3 shift) {
         var mesh = new MeshGenerator("Prysm");
         int segments = settings.edgeCount;
+        float startAngle = settings.startAngle / 180f * Mathf.PI;
         Vector3[] sideNormals = new Vector3[segments + 1];
         Vector3[] topPoints = new Vector3[segments + 1];
         Vector3[] bottomPoints = new Vector3[segments + 1];
         for (int i = 0; i < topPoints.Length; i++) {
-            float angleInRad = 2f * Mathf.PI / (float)segments * (float)i;
+            float angleInRad = 2f * Mathf.PI / (float)segments * (float)i + startAngle;
             float angleOfNormalInRad;
             if (settings.smoothNormals) {
-                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i);
+                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i) + startAngle;
             } else {
-                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i + 0.5f);
+                angleOfNormalInRad = 2f * Mathf.PI / (float)segments * (float)(i + 0.5f) + startAngle;
             }
             topPoints[i] = new Vector3(Mathf.Sin(angleInRad), 0, Mathf.Cos(angleInRad)) * settings.radius + shift;
             bottomPoints[i] = topPoints[i] + new Vector3(0, -settings.depth);

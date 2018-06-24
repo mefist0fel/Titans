@@ -5,9 +5,11 @@
 /// </summary>
 public sealed class LegsController : MonoBehaviour {
     [SerializeField]
-    private Leg[] legs; // Set from editor
+    private LegStepTarget[] legs; // Set from editor
     [SerializeField]
     private float stepTime = 0.1f;
+    [SerializeField]
+    private int stepCount = 1;
 
     private float timer;
     private int currentLegId;
@@ -19,7 +21,9 @@ public sealed class LegsController : MonoBehaviour {
 	private void Update () {
         timer -= Time.deltaTime;
         if (timer < 0) {
-            MoveNextLeg();
+            for (int i = 0; i < stepCount; i++) {
+                MoveNextLeg();
+            }
             timer = stepTime;
         }
 	}
