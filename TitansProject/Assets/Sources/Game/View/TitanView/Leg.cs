@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,10 +48,10 @@ public class Leg : MonoBehaviour {
             // distanceToTarget - a
             // secondSegmentLenght - b
             // firstSegmentLenght - c
-            float pitchAngleToSecondSegment = Mathf.Acos(
+            float pitchAngleToSecondSegment = AcosSafe(
                  (distanceToTarget * distanceToTarget + firstSegmentLenght * firstSegmentLenght - secondSegmentLenght * secondSegmentLenght) /
                  (2f * distanceToTarget * firstSegmentLenght)) / Mathf.PI * 180f;
-            float pitchAngleToTargetSegment = Mathf.Acos(
+            float pitchAngleToTargetSegment = AcosSafe(
                 (secondSegmentLenght * secondSegmentLenght + firstSegmentLenght * firstSegmentLenght - distanceToTarget * distanceToTarget) /
                 (2f * secondSegmentLenght * firstSegmentLenght)) / Mathf.PI * 180f;
             if (distanceToTarget >= firstSegmentLenght + secondSegmentLenght) {
@@ -64,10 +65,14 @@ public class Leg : MonoBehaviour {
         }
     }
 
+    private float AcosSafe(float d) {
+        return Mathf.Acos(Mathf.Clamp(d, -1f, 1f));
+    }
+
     private float GetPitchToTargetAngle(Vector3 objectSpaceDelta) {
         float DistanceToTarget = objectSpaceDelta.magnitude; // hypotenuse
         float DistanceToTargetProjection = new Vector2(objectSpaceDelta.x, objectSpaceDelta.z).magnitude; // adjanced side
-        return Mathf.Acos(DistanceToTargetProjection / DistanceToTarget) / Mathf.PI * 180f;
+        return AcosSafe(DistanceToTargetProjection / DistanceToTarget) / Mathf.PI * 180f;
     }
 
     // https://ru.wikipedia.org/wiki/Решение_треугольников

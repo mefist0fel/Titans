@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Model {
     public sealed class MoveTask : Titan.Task {
-        public readonly Vector3 Position;
+        public override Vector3 Position { get { return position; } }
+        private readonly Vector3 position;
         private readonly TitanMover titanMover;
         private bool isStarted = false;
 
@@ -13,14 +14,14 @@ namespace Model {
         }
 
         public MoveTask(Vector3 toPosition, TitanMover mover) {
-            Position = toPosition;
+            position = toPosition;
             titanMover = mover;
         }
 
         public override void MakeTask(float deltaTime) {
             if (!isStarted) {
                 isStarted = true;
-                titanMover.MoveTo(Position);
+                titanMover.MoveTo(position);
             }
             titanMover.Update(deltaTime);
         }

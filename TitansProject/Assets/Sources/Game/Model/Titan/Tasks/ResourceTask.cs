@@ -8,7 +8,7 @@ namespace Model {
         private float resourceCollectionTime = 0.5f; // TODO to settings
         private float collectionTimer = 0;
 
-        public Vector3 Position {
+        public override Vector3 Position {
             get {
                 return resourcePoint.Position;
             }

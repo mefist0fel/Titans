@@ -45,6 +45,8 @@ namespace Model {
 
         public abstract class Task {
             public abstract bool IsEnded { get; }
+            public abstract Vector3 Position { get; }
+
             public abstract void MakeTask(float deltaTime);
         }
 

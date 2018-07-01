@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class LegIKController : MonoBehaviour {
+public sealed class LegIKControllerOld : MonoBehaviour {
     [SerializeField]
     private LegStepTarget target; // Set from editor
     [SerializeField]

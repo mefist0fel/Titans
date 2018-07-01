@@ -13,6 +13,8 @@ namespace View {
         [SerializeField]
         private LivesView livesView;
         [SerializeField]
+        private HeadView headView;
+        [SerializeField]
         private ParticleSystem resourceCollectionParticles;
 
         public Titan Titan { get; private set; }
@@ -21,6 +23,7 @@ namespace View {
         public Action<int> UpdateResources;
 
         public void Init(Titan controlTitan) {
+            gameObject.SetActive(true);
             Titan = controlTitan;
             Titan.SetView(this);
             name = Titan.Name;
@@ -40,6 +43,15 @@ namespace View {
             if (UpdateTaskList != null)
                 UpdateTaskList();
             UpdateResourceCollectionEffect();
+            RotateHeadToTarget();
+        }
+
+        private void RotateHeadToTarget() {
+            if (headView == null)
+                return;
+            var task = Titan.GetCurrentTask();
+            if (task != null)
+                headView.SetAngle(task.Position);
         }
 
         public void OnUpdateModules() {
