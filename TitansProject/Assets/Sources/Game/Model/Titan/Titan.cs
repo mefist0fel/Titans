@@ -52,7 +52,7 @@ namespace Model {
             Faction = faction;
             Name = Faction.GetTitanName();
             Context = battleContext;
-            Speed = 2;
+            Speed = 1f;
             AFrmor = 10;
             mover = new TitanMover(battleContext.Planet, position, Speed);
             ModuleSlots = new ModuleSlot[12];

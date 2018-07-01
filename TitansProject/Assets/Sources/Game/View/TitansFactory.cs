@@ -4,7 +4,7 @@ using View;
 
 public sealed class TitansFactory {
     public static TitanView CreateTitan(Titan titan, Transform parent) {
-        var titanPrefabName = "Prefabs/Titans/titan";
+        var titanPrefabName = "Prefabs/Titans/cylinder";//"Prefabs/Titans/titan";
         if (titan.Faction.ID == 1)
             titanPrefabName = "Prefabs/Titans/titan_enemy";
         var titanView = GameObject.Instantiate(Resources.Load<TitanView>(titanPrefabName), parent);

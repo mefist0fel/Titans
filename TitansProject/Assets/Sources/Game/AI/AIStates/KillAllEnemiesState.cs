@@ -14,6 +14,7 @@ namespace Model.AI {
         }
 
         public override void Update(float deltaTime) {
+            return;
             if (!titanAI.Titan.IsAlive) {
                 titanAI.SetState(titanAI.DoNothing);
                 return;

@@ -7,7 +7,13 @@ public sealed class LegIKController : MonoBehaviour {
     [SerializeField]
     private LegStepTarget target; // Set from editor
     [SerializeField]
+    private Transform baseRotationTransform; // Set from editor
+    [SerializeField]
+    private Transform firstSegmentTransform; // Set from editor
+    [SerializeField]
     private Transform secondSegmentTransform; // Set from editor
+    [SerializeField]
+    private Transform feetTransform; // Set from editor
     [SerializeField]
     private float firstSegmentLenght = 0.3f; // Set from editor
     [SerializeField]
@@ -39,10 +45,18 @@ public sealed class LegIKController : MonoBehaviour {
             pitchAngleToSecondSegment = 0;
             pitchAngleToTargetSegment = 0;
         }
-        transform.localRotation = Quaternion.Euler(0, yawAngle - 90, pichAngleToTarget - pitchAngleToSecondSegment);
-        secondSegmentTransform.localRotation = Quaternion.Euler(0, 0, 180f - pitchAngleToTargetSegment);
+        //if (baseRotationTransform != null)
+        //    baseRotationTransform.localRotation = Quaternion.Euler(0, yawAngle, 0);
+        if (firstSegmentTransform != null)
+            firstSegmentTransform.localRotation = Quaternion.Euler(0, yawAngle - 90, pichAngleToTarget - pitchAngleToSecondSegment);
+        if (secondSegmentTransform != null)
+            secondSegmentTransform.localRotation = Quaternion.Euler(0, 0, 180f - pitchAngleToTargetSegment);
         kneePosition = Quaternion.Euler(0, yawAngle - 90, pichAngleToTarget - pitchAngleToSecondSegment) * new Vector3(firstSegmentLenght, 0, 0);
         feetPosition = kneePosition + Quaternion.Euler(0, 0, 180f - pitchAngleToTargetSegment) * new Vector3(secondSegmentLenght, 0, 0);
+        if (feetTransform != null) {
+            feetTransform.localPosition = feetPosition;
+            feetTransform.localRotation = Quaternion.Euler(0, yawAngle, 0);
+        }
     }
 
     private float GetPitchToTargetAngle(Vector3 objectSpaceDelta) {
