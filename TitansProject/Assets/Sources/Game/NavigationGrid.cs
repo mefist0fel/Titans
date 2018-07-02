@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public sealed class NavigationGrid : MonoBehaviour {
     [SerializeField]
     public float radius = 10;
@@ -25,7 +24,8 @@ public sealed class NavigationGrid : MonoBehaviour {
         const int density = 20;
         for (int i = 0; i < density; i++) {
             for (int j = 0; j < density; j++) {
-                Vector3 normale = new Vector3(-1 + 2f * (i / (float) density), -1 + 2f * (i / (float)density), 1).normalized;
+                Vector3 normal = new Vector3(-1 + 2f * (i / (float)density), -1 + 2f * (j / (float)density), 1).normalized;
+                grid.Add(new NavigationPoint() { Position = normal * radius, UpNormal = normal });
             }
         }
         return grid.ToArray();
