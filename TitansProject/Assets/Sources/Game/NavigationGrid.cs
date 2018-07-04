@@ -57,7 +57,7 @@ public sealed class NavigationGrid : MonoBehaviour {
                         Position = normal * radius,
                         UpNormal = normal,
                         IsBorderPoint = isBorderPoint,
-                        PositionHash = (int)cell.x * size * size + (int)cell.y * size + (int)cell.z
+                        PositionHash = (int)(cell.x * (size + 1)) * (size + 1) + (int)(cell.y * (size + 1)) + (int)cell.z
                     };
                     if (isBorderPoint)
                         borderPoins.Add(point);
@@ -68,10 +68,14 @@ public sealed class NavigationGrid : MonoBehaviour {
             // add links
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i, j + 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j    );
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j + 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j + 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j + 1);
                     AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i, j - 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j - 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j - 1);
+                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j - 1);
                 }
             }
         }
@@ -80,6 +84,8 @@ public sealed class NavigationGrid : MonoBehaviour {
             if (point.Neigbhors == null)
                 continue;
             foreach (var merge in borderPoins) {
+                if (merge == point)
+                    continue;
                 if (merge.Neigbhors == null)
                     continue;
                 if (merge.PositionHash == point.PositionHash) {
@@ -101,7 +107,6 @@ public sealed class NavigationGrid : MonoBehaviour {
     }
 
     private void MergePoints(NavigationBuildPoint point, NavigationBuildPoint merge) {
-        point.Neigbhors.AddRange(merge.Neigbhors);
         foreach (var neigbhor in merge.Neigbhors) {
             if (neigbhor.Neigbhors == null)
                 continue;
@@ -111,6 +116,7 @@ public sealed class NavigationGrid : MonoBehaviour {
                 }
             }
         }
+        point.Neigbhors.AddRange(merge.Neigbhors);
         merge.Neigbhors = null;
     }
 
