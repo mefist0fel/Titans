@@ -9,6 +9,14 @@ public sealed class NavigationGrid : MonoBehaviour {
     public float radius = 10;
     [SerializeField]
     public int size = 50;
+    [SerializeField]
+    public Transform startObject; // Set from editor
+    [SerializeField]
+    public Transform endObject; // Set from editor
+    [SerializeField]
+    public Camera hitCamera; // Set from editor
+    [SerializeField]
+    public Collider baseCollider; // Set from editor
 
     public class NavigationPoint {
         public Vector3 Position;
@@ -23,6 +31,7 @@ public sealed class NavigationGrid : MonoBehaviour {
         public Vector3 UpNormal;
         public int PositionHash;
         public List<NavigationBuildPoint> Neigbhors = new List<NavigationBuildPoint>();
+        public List<float> Distances = new List<float>();
     }
 
     private NavigationPoint[] points;
@@ -94,9 +103,14 @@ public sealed class NavigationGrid : MonoBehaviour {
                 }
             }
         }
-        Debug.Log("before " + points.Count);
         points.RemoveAll(point => point.Neigbhors == null);
-        Debug.Log("after " + points.Count);
+        foreach (var point in points) {
+            point.Distances = new List<float>(point.Neigbhors.Count);
+            for (int i = 0; i < point.Neigbhors.Count; i++) {
+                var distance = Vector3.Distance(point.Position, point.Neigbhors[i].Position);
+                point.Distances.Add(distance);
+            }
+        }
         buildPoins = points.ToArray();
         // merge borders
         // var grid = new NavigationPoint[points.Length];
@@ -132,7 +146,37 @@ public sealed class NavigationGrid : MonoBehaviour {
         neigbhors.Add(grid[x * size + y]);
     }
 
-    private void Update () {}
+    private void Update () {
+        if (Input.GetMouseButtonDown(0)) {
+            var ray = hitCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (baseCollider.Raycast(ray, out hit, 20)) {
+                NavigationBuildPoint point = GetNearest(hit.point);
+                startObject.position = point.Position;
+            }
+        }
+        if (Input.GetMouseButtonDown(1)) {
+            var ray = hitCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (baseCollider.Raycast(ray, out hit, 20)) {
+                NavigationBuildPoint point = GetNearest(hit.point);
+                endObject.position = point.Position;
+            }
+        }
+    }
+
+    private NavigationBuildPoint GetNearest(Vector3 position) {
+        NavigationBuildPoint nearest = null;
+        float minDistance = float.MaxValue;
+        foreach (var point in buildPoins) {
+            var distance = Vector3.Distance(point.Position, position);
+            if (distance > minDistance)
+                continue;
+            nearest = point;
+            minDistance = distance;
+        }
+        return nearest;
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos() {
