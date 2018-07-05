@@ -37,6 +37,9 @@ public sealed class NavigationGrid : MonoBehaviour {
     private NavigationPoint[] points;
     private NavigationBuildPoint[] buildPoins;
 
+    private NavigationBuildPoint startPoint;
+    private NavigationBuildPoint endPoint;
+
     [ContextMenu("Regenerate grid")]
 	private void Start () {
         points = GenerateNavGrid(radius);
@@ -153,6 +156,8 @@ public sealed class NavigationGrid : MonoBehaviour {
             if (baseCollider.Raycast(ray, out hit, 20)) {
                 NavigationBuildPoint point = GetNearest(hit.point);
                 startObject.position = point.Position;
+                startPoint = point;
+                TryFindPath();
             }
         }
         if (Input.GetMouseButtonDown(1)) {
@@ -161,8 +166,22 @@ public sealed class NavigationGrid : MonoBehaviour {
             if (baseCollider.Raycast(ray, out hit, 20)) {
                 NavigationBuildPoint point = GetNearest(hit.point);
                 endObject.position = point.Position;
+                endPoint = point;
+                TryFindPath();
             }
         }
+    }
+
+    private void TryFindPath() {
+        if (startPoint == null)
+            return;
+        if (endPoint == null)
+            return;
+        FindPath(startPoint, endPoint);
+    }
+
+    private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
+
     }
 
     private NavigationBuildPoint GetNearest(Vector3 position) {
