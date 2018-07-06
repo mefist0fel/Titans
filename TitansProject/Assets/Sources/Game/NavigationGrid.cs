@@ -39,6 +39,7 @@ public sealed class NavigationGrid : MonoBehaviour {
 
     private NavigationBuildPoint startPoint;
     private NavigationBuildPoint endPoint;
+    private List<Vector3> path = new List<Vector3>();
 
     [ContextMenu("Regenerate grid")]
 	private void Start () {
@@ -172,18 +173,6 @@ public sealed class NavigationGrid : MonoBehaviour {
         }
     }
 
-    private void TryFindPath() {
-        if (startPoint == null)
-            return;
-        if (endPoint == null)
-            return;
-        FindPath(startPoint, endPoint);
-    }
-
-    private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
-
-    }
-
     private NavigationBuildPoint GetNearest(Vector3 position) {
         NavigationBuildPoint nearest = null;
         float minDistance = float.MaxValue;
@@ -197,28 +186,79 @@ public sealed class NavigationGrid : MonoBehaviour {
         return nearest;
     }
 
+    private void TryFindPath() {
+        if (startPoint == null)
+            return;
+        if (endPoint == null)
+            return;
+        FindPath(startPoint, endPoint);
+    }
+
+    private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
+        Queue<NavigationBuildPoint> frontier = new Queue<NavigationBuildPoint>();
+        Dictionary<NavigationBuildPoint, NavigationBuildPoint> cameFrom = new Dictionary<NavigationBuildPoint, NavigationBuildPoint>();
+        frontier.Enqueue(startPoint);
+        cameFrom.Add(startPoint, null);
+        NavigationBuildPoint current = null;
+
+        while (frontier.Count > 0) {
+            current = frontier.Dequeue();
+
+            if (current == endPoint)
+                break;
+            foreach (var neigbhor in current.Neigbhors) {
+                if (!cameFrom.ContainsKey(neigbhor)) {
+                    frontier.Enqueue(neigbhor);
+                    cameFrom.Add(neigbhor, current);
+                }
+            }
+        }
+        if (current == endPoint) {
+            path.Clear();
+            path.Add(endPoint.Position);
+            while (current != startPoint) {
+                current = cameFrom[current];
+                path.Add(current.Position);
+            }
+            path.Add(startPoint.Position);
+            Debug.LogError("ended " + path.Count);
+        }
+    }
+
 #if UNITY_EDITOR
+    [SerializeField]
+    private bool showPath = true;
+    [SerializeField]
+    private bool showLines = true;
+
     private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         if (buildPoins != null) {
             foreach (var point in buildPoins) {
                 Gizmos.DrawWireSphere(point.Position, 0.02f);
-                if (point.Neigbhors != null) {
+                if (point.Neigbhors != null && showLines) {
                     foreach (var neigbhor in point.Neigbhors) {
                         Gizmos.DrawLine(point.Position, neigbhor.Position);
                     }
                 }
             }
         }
-        if (points == null)
-            return;
-        foreach (var point in points) {
-            Gizmos.DrawWireSphere(point.Position, 0.02f);
-            // Gizmos.DrawLine(point.Position, point.Position + point.UpNormal * 0.1f);
-            if (point.Neigbhors != null) {
-                foreach (var neigbhor in point.Neigbhors) {
-                    Gizmos.DrawLine(point.Position, points[neigbhor].Position);
-                }
+       //if (points != null) {
+       //    foreach (var point in points) {
+       //        Gizmos.DrawWireSphere(point.Position, 0.02f);
+       //        // Gizmos.DrawLine(point.Position, point.Position + point.UpNormal * 0.1f);
+       //        if (point.Neigbhors != null) {
+       //            foreach (var neigbhor in point.Neigbhors) {
+       //                Gizmos.DrawLine(point.Position, points[neigbhor].Position);
+       //            }
+       //        }
+       //    }
+       //}
+        Gizmos.color = Color.red;
+        // show path
+        if (path != null) {
+            for (int i = 0; i < path.Count - 1; i++) {
+                Gizmos.DrawLine(path[i], path[i + 1]);
             }
         }
     }
