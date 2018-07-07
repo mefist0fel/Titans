@@ -197,13 +197,7 @@ public sealed class NavigationGrid : MonoBehaviour {
         if (endPoint == null)
             return;
         //FindPath(startPoint, endPoint);
-        var watch = System.Diagnostics.Stopwatch.StartNew();
-        float count = 10;
-        for(int i = 0; i < count; i++) {
-            path = graph.FindPath(startPoint.Id, endPoint.Id);
-        }
-        watch.Stop();
-        Debug.LogError("Find path " + count + " times for " + (watch.ElapsedMilliseconds / 1000f));
+        path = graph.FindPath(startPoint.Id, endPoint.Id);
     }
 
     private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
