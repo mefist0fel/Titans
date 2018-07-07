@@ -18,12 +18,6 @@ public sealed class NavigationGrid : MonoBehaviour {
     [SerializeField]
     public Collider baseCollider; // Set from editor
 
-    public class NavigationPoint {
-        public Vector3 Position;
-        public Vector3 UpNormal;
-        public int[] Neigbhors;
-    }
-
     private sealed class NavigationBuildPoint {
         public int Id;
         public bool IsBorderPoint;
@@ -34,19 +28,36 @@ public sealed class NavigationGrid : MonoBehaviour {
         public List<float> Distances = new List<float>();
     }
 
-    private NavigationPoint[] points;
-    private NavigationBuildPoint[] buildPoins;
+    private NavigationBuildPoint[] points;
 
     private NavigationBuildPoint startPoint;
     private NavigationBuildPoint endPoint;
     private List<Vector3> path = new List<Vector3>();
 
+    private NavigationGraph graph;
+
     [ContextMenu("Regenerate grid")]
 	private void Start () {
         points = GenerateNavGrid(radius);
-	}
+        graph = new NavigationGraph(FinalizeGraph(points));
 
-    private NavigationPoint[] GenerateNavGrid(float radius) {
+    }
+
+    private NavigationGraph.Node[] FinalizeGraph(NavigationBuildPoint[] points) {
+        var nodes = new NavigationGraph.Node[points.Length];
+        for (int i = 0; i < points.Length; i++) {
+            points[i].Id = i;
+        }
+        for (int i = 0; i < points.Length; i++) {
+            nodes[i] = new NavigationGraph.Node() {
+                Position = points[i].Position,
+                Neigbhors = points[i].Neigbhors.Select(Neibghor => Neibghor.Id).ToArray()
+            };
+        }
+        return nodes;
+    }
+
+    private NavigationBuildPoint[] GenerateNavGrid(float radius) {
         var directions = new Quaternion[] {
             Quaternion.Euler(0, 0, 0),
             Quaternion.Euler(0, 90, 0),
@@ -115,13 +126,7 @@ public sealed class NavigationGrid : MonoBehaviour {
                 point.Distances.Add(distance);
             }
         }
-        buildPoins = points.ToArray();
-        // merge borders
-        // var grid = new NavigationPoint[points.Length];
-        // for (int i = 0; i < points.Length; i++) {
-        //     grid[i] = new NavigationPoint() { Position = points[i], UpNormal = normals[i], Neigbhors = neigbhors[i].ToArray()};
-        // }
-        return null;
+        return points.ToArray();
     }
 
     private void MergePoints(NavigationBuildPoint point, NavigationBuildPoint merge) {
@@ -176,7 +181,7 @@ public sealed class NavigationGrid : MonoBehaviour {
     private NavigationBuildPoint GetNearest(Vector3 position) {
         NavigationBuildPoint nearest = null;
         float minDistance = float.MaxValue;
-        foreach (var point in buildPoins) {
+        foreach (var point in points) {
             var distance = Vector3.Distance(point.Position, position);
             if (distance > minDistance)
                 continue;
@@ -191,7 +196,14 @@ public sealed class NavigationGrid : MonoBehaviour {
             return;
         if (endPoint == null)
             return;
-        FindPath(startPoint, endPoint);
+        //FindPath(startPoint, endPoint);
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        float count = 10;
+        for(int i = 0; i < count; i++) {
+            path = graph.FindPath(startPoint.Id, endPoint.Id);
+        }
+        watch.Stop();
+        Debug.LogError("Find path " + count + " times for " + (watch.ElapsedMilliseconds / 1000f));
     }
 
     private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
@@ -233,8 +245,8 @@ public sealed class NavigationGrid : MonoBehaviour {
 
     private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
-        if (buildPoins != null) {
-            foreach (var point in buildPoins) {
+        if (points != null) {
+            foreach (var point in points) {
                 Gizmos.DrawWireSphere(point.Position, 0.02f);
                 if (point.Neigbhors != null && showLines) {
                     foreach (var neigbhor in point.Neigbhors) {
@@ -243,17 +255,6 @@ public sealed class NavigationGrid : MonoBehaviour {
                 }
             }
         }
-       //if (points != null) {
-       //    foreach (var point in points) {
-       //        Gizmos.DrawWireSphere(point.Position, 0.02f);
-       //        // Gizmos.DrawLine(point.Position, point.Position + point.UpNormal * 0.1f);
-       //        if (point.Neigbhors != null) {
-       //            foreach (var neigbhor in point.Neigbhors) {
-       //                Gizmos.DrawLine(point.Position, points[neigbhor].Position);
-       //            }
-       //        }
-       //    }
-       //}
         Gizmos.color = Color.red;
         // show path
         if (path != null) {
