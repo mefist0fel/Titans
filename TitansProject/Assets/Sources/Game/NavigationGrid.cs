@@ -18,6 +18,48 @@ public sealed class NavigationGrid : MonoBehaviour {
     [SerializeField]
     public Collider baseCollider; // Set from editor
 
+    private static readonly float sd = 1f / ((1f + Mathf.Sqrt(5)) / 2f); // side
+    private Vector3[] icosaedronVertices = new Vector3[] {
+        new Vector3(-sd, 1f, 0f),
+        new Vector3( sd, 1f, 0f),
+        new Vector3( sd,-1f, 0f),
+        new Vector3(-sd,-1f, 0f),
+        new Vector3( 1f, 0f,-sd),
+        new Vector3( 1f, 0f, sd),
+        new Vector3(-1f, 0f, sd),
+        new Vector3(-1f, 0f,-sd),
+        new Vector3( 0f,-sd, 1f),
+        new Vector3( 0f, sd, 1f),
+        new Vector3( 0f, sd,-1f),
+        new Vector3( 0f,-sd,-1f)
+    };
+
+
+    private int[] icosaedronFaces = new int[] {
+        1, 2, 10,
+        1, 11, 2,
+        2, 5, 6,
+        3, 6, 5,
+        3, 4, 9,
+        3, 12, 4,
+        4, 8, 7,
+        1, 7, 8,
+        6, 9, 10,
+        7, 10, 9,
+        8, 12, 11,
+        5, 11, 12,
+
+        2, 6, 10,
+        1, 10, 7,
+        1, 8, 11,
+        2, 11, 5,
+
+        3, 9, 6,
+        4, 7, 9,
+        4, 12, 8,
+        3, 12, 5
+    };
+
     private sealed class NavigationBuildPoint {
         public int Id;
         public bool IsBorderPoint;
@@ -92,14 +134,22 @@ public sealed class NavigationGrid : MonoBehaviour {
             // add links
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j    );
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j + 1);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j + 1);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j + 1);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j - 1);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j - 1);
-                    AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j - 1);
+                    for (int dx = -2; dx <= 2; dx++) {
+                        for (int dy = -2; dy <= 2; dy++) {
+                            if (dx == 0 && dy == 0) {
+                            } else {
+                                AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + dx, j + dy);
+                            }
+                        }
+                    }
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j    );
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j + 1);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j + 1);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j + 1);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i - 1, j - 1);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i    , j - 1);
+                    // AddLinks(ref grid, ref grid[i * size + j].Neigbhors, i + 1, j - 1);
                 }
             }
         }
@@ -238,6 +288,22 @@ public sealed class NavigationGrid : MonoBehaviour {
     private bool showLines = true;
 
     private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        foreach (var point in icosaedronVertices) {
+            Gizmos.DrawWireSphere(point * 11, 0.1f);
+        }
+        for (int i = 0; i < 20; i++) {
+            var a = icosaedronVertices[icosaedronFaces[i * 3 + 0] - 1] * 11;
+            var b = icosaedronVertices[icosaedronFaces[i * 3 + 1] - 1] * 11;
+            var c = icosaedronVertices[icosaedronFaces[i * 3 + 2] - 1] * 11;
+            var center = (a + b + c) * (1f / 3f);
+            a = center + (a - center) * 0.9f;
+            b = center + (b - center) * 0.9f;
+            c = center + (c - center) * 0.9f;
+            Gizmos.DrawLine(a, b);
+            Gizmos.DrawLine(b, c);
+            Gizmos.DrawLine(c, a);
+        }
         Gizmos.color = Color.blue;
         if (points != null) {
             foreach (var point in points) {
