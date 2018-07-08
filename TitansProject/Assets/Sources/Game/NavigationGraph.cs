@@ -47,13 +47,13 @@ public sealed class NavigationGraph {
         Debug.Log("Find path Dijkstra " + count + " times for " + (watch.ElapsedMilliseconds / 1000f));
         watch = System.Diagnostics.Stopwatch.StartNew();
         for (int i = 0; i < count; i++) {
-            FindPathAStarOld(startNodeId, endNodeId);
+            FindPathAStar(startNodeId, endNodeId);
         }
         watch.Stop();
         Debug.Log("Find path AStar " + count + " times for " + (watch.ElapsedMilliseconds / 1000f));
         watch = System.Diagnostics.Stopwatch.StartNew();
         for (int i = 0; i < count; i++) {
-            FindPathAStar(startNodeId, endNodeId);
+            FindPathAStarCached(startNodeId, endNodeId);
         }
         watch.Stop();
         Debug.Log("Find path AStar* " + count + " times for " + (watch.ElapsedMilliseconds / 1000f));
@@ -103,7 +103,7 @@ public sealed class NavigationGraph {
         return path;
     }
 
-    public List<Vector3> FindPathAStar(int startNodeId, int endNodeId) {
+    public List<Vector3> FindPathAStarCached(int startNodeId, int endNodeId) {
         frontier.Clear();
         frontier.Enqueue(startNodeId, 0);
         cameFromId[startNodeId] = -1;
@@ -147,7 +147,7 @@ public sealed class NavigationGraph {
         return path;
     }
 
-    public List<Vector3> FindPathAStarOld(int startNodeId, int endNodeId) {
+    public List<Vector3> FindPathAStar(int startNodeId, int endNodeId) {
         frontier.Clear();
         frontier.Enqueue(startNodeId, 0);
         cameFromId[startNodeId] = -1;

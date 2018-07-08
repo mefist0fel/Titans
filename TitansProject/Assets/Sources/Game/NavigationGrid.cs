@@ -319,44 +319,15 @@ public sealed class NavigationGrid : MonoBehaviour {
         return nearest;
     }
 
+    BesieCurve curve;
+
     private void TryFindPath() {
         if (startPoint == null)
             return;
         if (endPoint == null)
             return;
-        //FindPath(startPoint, endPoint);
         path = graph.FindPath(startPoint.Id, endPoint.Id);
-    }
-
-    private void FindPath(NavigationBuildPoint startPoint, NavigationBuildPoint endPoint) {
-        Queue<NavigationBuildPoint> frontier = new Queue<NavigationBuildPoint>();
-        Dictionary<NavigationBuildPoint, NavigationBuildPoint> cameFrom = new Dictionary<NavigationBuildPoint, NavigationBuildPoint>();
-        frontier.Enqueue(startPoint);
-        cameFrom.Add(startPoint, null);
-        NavigationBuildPoint current = null;
-
-        while (frontier.Count > 0) {
-            current = frontier.Dequeue();
-
-            if (current == endPoint)
-                break;
-            foreach (var neigbhor in current.Neigbhors) {
-                if (!cameFrom.ContainsKey(neigbhor)) {
-                    frontier.Enqueue(neigbhor);
-                    cameFrom.Add(neigbhor, current);
-                }
-            }
-        }
-        if (current == endPoint) {
-            path.Clear();
-            path.Add(endPoint.Position);
-            while (current != startPoint) {
-                current = cameFrom[current];
-                path.Add(current.Position);
-            }
-            path.Add(startPoint.Position);
-            Debug.LogError("ended " + path.Count);
-        }
+        curve = new BesieCurve(path.ToArray());
     }
 
 #if UNITY_EDITOR
@@ -403,9 +374,9 @@ public sealed class NavigationGrid : MonoBehaviour {
         }
         Gizmos.color = Color.red;
         // show path
-        if (path != null) {
-            for (int i = 0; i < path.Count - 1; i++) {
-                Gizmos.DrawLine(path[i], path[i + 1]);
+        if (curve != null) {
+            for (int i = 0; i < curve.pathPoints.Length - 1; i++) {
+                Gizmos.DrawLine(curve.pathPoints[i], curve.pathPoints[i + 1]);
             }
         }
     }
