@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [ExecuteInEditMode]
 public sealed class NavigationGrid : MonoBehaviour {
@@ -19,7 +19,7 @@ public sealed class NavigationGrid : MonoBehaviour {
     public Collider baseCollider; // Set from editor
 
     private static readonly float sd = 1f / ((1f + Mathf.Sqrt(5)) / 2f); // side
-    private Vector3[] icosaedronVertices = new Vector3[] {
+    private readonly Vector3[] icosaedronVertices = new Vector3[] {
         new Vector3(-sd, 1f, 0f),
         new Vector3( sd, 1f, 0f),
         new Vector3( sd,-1f, 0f),
@@ -35,7 +35,7 @@ public sealed class NavigationGrid : MonoBehaviour {
     };
 
 
-    private int[] icosaedronFaces = new int[] {
+    private readonly int[] icosaedronFaces = new int[] {
         0, 1, 9,
         0, 10, 1,
         1, 4, 5,
@@ -288,7 +288,7 @@ public sealed class NavigationGrid : MonoBehaviour {
             var ray = hitCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (baseCollider.Raycast(ray, out hit, 20)) {
-                NavigationBuildPoint point = GetNearest(hit.point);
+                NavigationBuildPoint point = points[graph.FindNearestId(hit.point)];
                 startObject.position = point.Position;
                 startPoint = point;
                 TryFindPath();
@@ -298,25 +298,12 @@ public sealed class NavigationGrid : MonoBehaviour {
             var ray = hitCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (baseCollider.Raycast(ray, out hit, 20)) {
-                NavigationBuildPoint point = GetNearest(hit.point);
+                NavigationBuildPoint point = points[graph.FindNearestId(hit.point)];
                 endObject.position = point.Position;
                 endPoint = point;
                 TryFindPath();
             }
         }
-    }
-
-    private NavigationBuildPoint GetNearest(Vector3 position) {
-        NavigationBuildPoint nearest = null;
-        float minDistance = float.MaxValue;
-        foreach (var point in points) {
-            var distance = Vector3.Distance(point.Position, position);
-            if (distance > minDistance)
-                continue;
-            nearest = point;
-            minDistance = distance;
-        }
-        return nearest;
     }
 
     BesieCurve curve;
@@ -328,6 +315,40 @@ public sealed class NavigationGrid : MonoBehaviour {
             return;
         path = graph.FindPath(startPoint.Id, endPoint.Id);
         curve = new BesieCurve(path.ToArray());
+    }
+
+    [ContextMenu("test")]
+    private void Test() {
+        int count = 100;
+        System.Diagnostics.Stopwatch watch;
+        Vector3[] randomPoints = new Vector3[count];
+        for (int i = 0; i < randomPoints.Length; i++) {
+            randomPoints[i] = Random.insideUnitSphere * radius;
+        }
+        watch = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < randomPoints.Length - 1; i++) {
+            graph.FindNearestIdBruteForce(randomPoints[i]);
+        }
+        watch.Stop();
+        Debug.Log("Find nearest brute force for " + randomPoints.Length + " randomPoints for " + (watch.ElapsedMilliseconds / 1000f));
+
+        int[] points = new int[count];
+        for (int i = 0; i < points.Length; i++) {
+            points[i] = UnityEngine.Random.Range(0, graph.Nodes.Length);
+        }
+
+        watch = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < points.Length - 1; i++) {
+            graph.FindPathDijkstra(points[i], points[i + 1]);
+        }
+        watch.Stop();
+        Debug.Log("Find path Dijkstra for " + points.Length + " points for " + (watch.ElapsedMilliseconds / 1000f));
+        watch = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < points.Length - 1; i++) {
+            graph.FindPathAStar(points[i], points[i + 1]);
+        }
+        watch.Stop();
+        Debug.Log("Find path AStar for " + points.Length + " points for " + (watch.ElapsedMilliseconds / 1000f));
     }
 
 #if UNITY_EDITOR
