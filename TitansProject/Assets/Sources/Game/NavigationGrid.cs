@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System;
 
 [ExecuteInEditMode]
 public sealed class NavigationGrid : MonoBehaviour {
@@ -9,6 +10,8 @@ public sealed class NavigationGrid : MonoBehaviour {
     public float radius = 10;
     [SerializeField]
     public int size = 50;
+    [SerializeField]
+    public int excludeVolumesCount = 50;
     [SerializeField]
     public Transform startObject; // Set from editor
     [SerializeField]
@@ -70,17 +73,32 @@ public sealed class NavigationGrid : MonoBehaviour {
         public List<float> Distances = new List<float>();
     }
 
+    private sealed class ExcludeVolume {
+        public readonly Vector3 Position;
+        public readonly float Radius;
+
+        public ExcludeVolume(Vector3 position, float radius) {
+            Position = position;
+            Radius = radius;
+        }
+    }
+
     private NavigationBuildPoint[] points;
 
     private NavigationBuildPoint startPoint;
     private NavigationBuildPoint endPoint;
     private List<Vector3> path = new List<Vector3>();
 
+    List<ExcludeVolume> excludeVolumes;
+
     private NavigationGraph graph;
 
     [ContextMenu("Regenerate grid")]
 	private void Start () {
-        points = GenerateNavGridIcosaedron(radius);
+        var pointsList = GenerateNavGridIcosaedron(radius);
+        excludeVolumes = GenerateEnviroment(excludeVolumesCount, 0.5f, 2f);
+        ExcludePathPoins(pointsList, excludeVolumes);
+        points = pointsList.ToArray();
         graph = new NavigationGraph(FinalizeGraph(points));
 
     }
@@ -98,7 +116,7 @@ public sealed class NavigationGrid : MonoBehaviour {
         }
         return nodes;
     }
-    private NavigationBuildPoint[] GenerateNavGridIcosaedron(float radius) {
+    private List<NavigationBuildPoint> GenerateNavGridIcosaedron(float radius) {
         List<NavigationBuildPoint> points = new List<NavigationBuildPoint>();
         List<NavigationBuildPoint> borderPoins = new List<NavigationBuildPoint>();
         NavigationBuildPoint[] grid = new NavigationBuildPoint[size * size];
@@ -172,7 +190,32 @@ public sealed class NavigationGrid : MonoBehaviour {
                 point.Distances.Add(distance);
             }
         }
-        return points.ToArray();
+        return points;
+    }
+
+    private void ExcludePathPoins(List<NavigationBuildPoint> points, List<ExcludeVolume> excludeVolumes) {
+        foreach (var point in points) {
+            if (point.Neigbhors == null)
+                continue;
+            foreach (var volume in excludeVolumes) {
+                if (Vector3.Distance(point.Position, volume.Position) <= volume.Radius) {
+                    foreach (var neigbhor in point.Neigbhors) {
+                        neigbhor.Neigbhors.Remove(point);
+                    }
+                    point.Neigbhors = null;
+                    break;
+                }
+            }
+        }
+        points.RemoveAll(point => point.Neigbhors == null);
+    }
+
+    private List<ExcludeVolume> GenerateEnviroment(int count, float minSize, float maxSize) {
+        var volumes = new List<ExcludeVolume>(count);
+        for (int i = 0; i < count; i++) {
+            volumes.Add(new ExcludeVolume(Random.insideUnitSphere * radius, Random.Range(minSize, maxSize)));
+        }
+        return volumes;
     }
 
     private void AddLinksHex(ref NavigationBuildPoint[] grid, ref List<NavigationBuildPoint> neigbhors, int x, int y) {
@@ -391,6 +434,12 @@ public sealed class NavigationGrid : MonoBehaviour {
                         Gizmos.DrawLine(point.Position, neigbhor.Position);
                     }
                 }
+            }
+        }
+        if (excludeVolumes != null) {
+            Gizmos.color = Color.gray;
+            foreach (var volume in excludeVolumes) {
+                Gizmos.DrawWireSphere(volume.Position, volume.Radius);
             }
         }
         Gizmos.color = Color.red;
