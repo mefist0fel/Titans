@@ -19,9 +19,9 @@ namespace Model {
             void Init(Battle battle);
         }
 
-        public Battle(IBattleController battleController, IFactionController[] factionControllers) {
+        public Battle(IBattleController battleController, IFactionController[] factionControllers, Planet planet = null) {
             controller = battleController;
-            Planet = new Planet();
+            Planet = planet ?? new Planet();
             Units = new List<Titan>();
             Factions = new Faction[factionControllers.Length];
             for (int i = 0; i < factionControllers.Length; i++) {

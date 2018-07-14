@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System;
+using Navigation;
 
 [ExecuteInEditMode]
 public sealed class NavigationGrid : MonoBehaviour {

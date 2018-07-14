@@ -1,7 +1,7 @@
 ﻿using Model;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using Navigation;
 
 namespace View {
     public sealed class PlanetView : MonoBehaviour {
@@ -38,5 +38,38 @@ namespace View {
             pointView.Init(point);
             return pointView;
         }
+
+
+        [SerializeField]
+        private bool debugShowNavigationPoints = false;
+        [SerializeField]
+        private bool debugShowNavigationConnections = false;
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos() {
+            if (planet == null)
+                return;
+            Gizmos.color = Color.green;
+            if (debugShowNavigationPoints)
+                DrawNavPoints(planet.Graph.Nodes);
+            Gizmos.color = Color.blue;
+            if (debugShowNavigationConnections)
+                DrawNavConnections(planet.Graph.Nodes);
+        }
+
+        private void DrawNavPoints(NavigationGraph.Node[] nodes) {
+            foreach (var node in nodes) {
+                Gizmos.DrawWireSphere(node.Position, 0.02f);
+            }
+        }
+
+        private void DrawNavConnections(NavigationGraph.Node[] nodes) {
+            foreach (var node in nodes) {
+                foreach (var neigbhor in node.Neigbhors) {
+                    Gizmos.DrawLine(node.Position, nodes[neigbhor].Position);
+                }
+            }
+        }
+#endif
     }
 }

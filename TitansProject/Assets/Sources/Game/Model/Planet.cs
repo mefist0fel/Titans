@@ -1,10 +1,24 @@
 ﻿using UnityEngine;
+using Navigation;
+using System.Collections.Generic;
 
 namespace Model {
     public sealed class Planet {
         public readonly float Radius;
+        public readonly NavigationGraph Graph;
 
         public readonly ResourcePoint[] Resources;
+
+        public Planet(float radius = 10f, int resourcePointsCount = 20, List<ExcludeVolume> excludeVolumes = null) {
+            const float gridCellSize = 0.3f;
+            int density = Mathf.CeilToInt((2f * Mathf.PI * radius / 6f) / gridCellSize);
+            Graph = NavigationGridBuilder.Generate(radius, density, excludeVolumes);
+            Radius = radius;
+            Resources = new ResourcePoint[resourcePointsCount];
+            for (int i = 0; i < Resources.Length; i++) {
+                Resources[i] = new ResourcePoint(GetRandomPosition(), 10);
+            }
+        }
 
         public bool FindNearestResourcePoint(Vector3 position, out ResourcePoint resourcePoint, float maxDistance = 0.5f) {
             resourcePoint = null;
@@ -19,14 +33,6 @@ namespace Model {
                 }
             }
             return resourcePoint != null;
-        }
-
-        public Planet(float radius = 10f, int resourcePointsCount = 20) {
-            Radius = radius;
-            Resources = new ResourcePoint[resourcePointsCount];
-            for (int i = 0; i < Resources.Length; i++) {
-                Resources[i] = new ResourcePoint(GetRandomPosition(), 10);
-            }
         }
 
         public Vector3 GetRandomPosition() {

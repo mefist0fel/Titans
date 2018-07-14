@@ -4,10 +4,14 @@ using View;
 using System;
 using System.Collections.Generic;
 using UI;
+using Navigation;
+using Random = UnityEngine.Random;
 
 public sealed class BattleController : MonoBehaviour, IBattleController {
     [SerializeField]
     private PlanetView planetView; // Set from editor
+    [SerializeField]
+    private EnviromentBuilder builder; // Set from editor
     [SerializeField]
     private PlayerFactionController playerFactionController; // Set from editor
     [SerializeField]
@@ -18,16 +22,31 @@ public sealed class BattleController : MonoBehaviour, IBattleController {
 
 
     public void Start () {
+        float radius = 10f;
+        var excludePoints = new List<ExcludeVolume>();
+        if (builder != null) {
+            excludePoints = builder.GenerateEnviroment();
+            radius = builder.Radius;
+        }
+        var planet = new Planet(radius, 20, excludePoints);
         battle = new Battle(this, 
             new Battle.IFactionController[] {
                 playerFactionController,
                 FactionAIController.Create()
-            });
+            }, planet);
         planetView.Init(battle.Planet);
         CameraController.SetPlanetRadius(battle.Planet.Radius);
     }
 
-	private void Update () {
+    private List<ExcludeVolume> GenerateEnviroment(float radius, int count, float minSize, float maxSize) {
+        var volumes = new List<ExcludeVolume>(count);
+        for (int i = 0; i < count; i++) {
+            volumes.Add(new ExcludeVolume(Random.insideUnitSphere * radius, Random.Range(minSize, maxSize)));
+        }
+        return volumes;
+    }
+
+    private void Update () {
         battle.Update(Time.deltaTime);
     }
 
