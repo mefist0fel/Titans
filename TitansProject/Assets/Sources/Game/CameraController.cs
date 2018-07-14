@@ -112,7 +112,7 @@ public sealed class CameraController : MonoBehaviour {
                     prevTouchAPosition,
                     prevTouchBPosition);
             }
-            if (Input.touchCount == 1) {
+            if (Input.touchCount == 1 && Input.GetTouch(0).phase != TouchPhase.Ended) {
                 var touchA = Input.GetTouch(0);
                 prevPosition = touchA.position;
                 if (touchA.phase == TouchPhase.Moved) {
