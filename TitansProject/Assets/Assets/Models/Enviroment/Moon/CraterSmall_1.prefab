@@ -124,5 +124,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   occupiedVolumes:
-  - Size: 0.25
+  - Size: 0.32
     Offset: {x: 0, y: 0, z: 0}

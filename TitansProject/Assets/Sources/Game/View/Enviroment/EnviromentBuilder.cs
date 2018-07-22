@@ -26,7 +26,7 @@ namespace View {
                 var volumes = prefab.OccupatedVolumes.Select(volume => new ExcludeVolume(position + rotation * volume.Offset, volume.Size));
                 if (IsContains(excludeVolumes, volumes))
                     continue;
-                var enviromentObject = Instantiate(prefab);
+                var enviromentObject = Instantiate(prefab, transform);
                 enviromentObject.transform.position = position;
                 enviromentObject.transform.rotation = rotation;
                 enviromentObject.RebuildMeshSpherical(radius);
