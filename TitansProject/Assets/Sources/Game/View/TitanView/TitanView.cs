@@ -108,5 +108,16 @@ namespace View {
                 }
             }
         }
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool showPath = true;
+
+        private void OnDrawGizmos() {
+            if (showPath) {
+                Gizmos.color = Color.red;
+                Titan.Mover.DrawGizmos();
+            }
+        }
+#endif
     }
 }

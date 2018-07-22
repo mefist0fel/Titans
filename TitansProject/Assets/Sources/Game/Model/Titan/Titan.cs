@@ -14,8 +14,8 @@ namespace Model {
         public readonly string Name;
         public readonly Faction Faction;
 
-        public Vector3 Position { get { return mover.Position; } }
-        public Quaternion UpRotation { get { return mover.UpRotation; } }
+        public Vector3 Position { get { return Mover.Position; } }
+        public Quaternion UpRotation { get { return Mover.UpRotation; } }
 
         public int MaxArmor { get; private set; }
         public int AFrmor { get; private set; }
@@ -34,7 +34,7 @@ namespace Model {
 
         public readonly Battle Context;
 
-        private TitanMover mover;
+        public readonly TitanMover Mover;
         private IView view = new NoView();
         public IView View { get { return view; } }
 
@@ -56,7 +56,7 @@ namespace Model {
             Context = battleContext;
             Speed = 1f;
             AFrmor = 10;
-            mover = new TitanMover(battleContext.Planet, position, Speed);
+            Mover = new TitanMover(battleContext.Planet, position, Speed);
             ModuleSlots = new ModuleSlot[12];
             for (int i = 0; i < ModuleSlots.Length; i++) {
                 ModuleSlots[i] = new ModuleSlot(this);
@@ -170,13 +170,13 @@ namespace Model {
         }
 
         public void AddResourceTask(ResourcePoint resourcePoint) {
-            taskList.Add(new MoveTask(resourcePoint.Position, mover));
+            taskList.Add(new MoveTask(resourcePoint.Position, Mover));
             taskList.Add(new ResourceTask(resourcePoint, ChangeResourceCount));
             view.OnUpdateTaskList();
         }
 
         public void AddMoveTask(Vector3 targetPosition) {
-            taskList.Add(new MoveTask(targetPosition, mover));
+            taskList.Add(new MoveTask(targetPosition, Mover));
             view.OnUpdateTaskList();
         }
 

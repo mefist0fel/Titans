@@ -93,7 +93,6 @@ namespace Navigation {
                     currentId = cameFromId[currentId];
                     path.Add(Nodes[currentId].Position);
                 }
-                path.Add(Nodes[startNodeId].Position);
             }
             return path;
         }
@@ -103,7 +102,6 @@ namespace Navigation {
             frontier.Enqueue(startNodeId, 0);
             cameFromId[startNodeId] = -1;
             int currentId = 0;
-
 
             for (int j = 0; j < distanceToId.Length; j++) {
                 distanceToId[j] = float.MaxValue;
@@ -135,7 +133,6 @@ namespace Navigation {
                     currentId = cameFromId[currentId];
                     path.Add(Nodes[currentId].Position);
                 }
-                path.Add(Nodes[startNodeId].Position);
             }
             return path;
         }

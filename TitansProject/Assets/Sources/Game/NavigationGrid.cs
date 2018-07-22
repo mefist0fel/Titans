@@ -4,6 +4,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Navigation;
 
+// Development class
 [ExecuteInEditMode]
 public sealed class NavigationGrid : MonoBehaviour {
     [SerializeField]
@@ -332,7 +333,7 @@ public sealed class NavigationGrid : MonoBehaviour {
             RaycastHit hit;
             if (baseCollider.Raycast(ray, out hit, 20)) {
                 NavigationBuildPoint point = points[graph.FindNearestId(hit.point)];
-                startObject.position = point.Position;
+                startObject.position = hit.point;
                 startPoint = point;
                 TryFindPath();
             }
@@ -342,7 +343,7 @@ public sealed class NavigationGrid : MonoBehaviour {
             RaycastHit hit;
             if (baseCollider.Raycast(ray, out hit, 20)) {
                 NavigationBuildPoint point = points[graph.FindNearestId(hit.point)];
-                endObject.position = point.Position;
+                endObject.position = hit.point;
                 endPoint = point;
                 TryFindPath();
             }
@@ -445,8 +446,8 @@ public sealed class NavigationGrid : MonoBehaviour {
         Gizmos.color = Color.red;
         // show path
         if (curve != null) {
-            for (int i = 0; i < curve.pathPoints.Length - 1; i++) {
-                Gizmos.DrawLine(curve.pathPoints[i], curve.pathPoints[i + 1]);
+            for (int i = 0; i < curve.PathPoints.Length - 1; i++) {
+                Gizmos.DrawLine(curve.PathPoints[i], curve.PathPoints[i + 1]);
             }
         }
     }
