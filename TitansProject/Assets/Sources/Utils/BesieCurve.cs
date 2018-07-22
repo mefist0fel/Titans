@@ -33,7 +33,7 @@ public class BesieCurve {
         FindPointDistancesParams();
     }
 
-    void GeneratePath(Vector3[] controlPoints, int pointsBetweenControlPoints = defaultPointsInCurve) {
+    private void GeneratePath(Vector3[] controlPoints, int pointsBetweenControlPoints = defaultPointsInCurve) {
         Vector3[] middleControlPoints = new Vector3[controlPoints.Length - 1];
         middleControlPoints[0] = controlPoints[0]; // first point
         middleControlPoints[middleControlPoints.Length - 1] = controlPoints[controlPoints.Length - 1]; // last point
@@ -55,7 +55,7 @@ public class BesieCurve {
         pathPoints[pathPoints.Length - 1] = controlPoints[controlPoints.Length - 1];
     }
 
-    void FindPointDistancesParams() {
+    private void FindPointDistancesParams() {
         pathLenghts = new float[pathPoints.Length];
         pathDistances = new float[pathPoints.Length];
         fullLenght = 0;

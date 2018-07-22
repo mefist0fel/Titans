@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Model {
-    [System.Serializable]
+    [Serializable]
     public sealed class Titan {
         public interface IComponent {
             void OnAttach(ModuleData module);
